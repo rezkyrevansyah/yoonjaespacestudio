@@ -1,18 +1,18 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { requireMenu } from "@/lib/require-menu";
-import nextDynamic from "next/dynamic";
+import { PhotoDeliveryDetailClient } from "./_components/photo-delivery-detail-client";
 
 export const dynamic = "force-dynamic";
 
-const PhotoDeliveryDetailClient = nextDynamic(
-  () => import("./_components/photo-delivery-detail-client").then((m) => ({ default: m.PhotoDeliveryDetailClient })),
-  { ssr: false }
-);
-
 export const metadata = { title: "Detail Foto — Yoonjaespace" };
 
-export default async function PhotoDeliveryDetailPage({ params }: { params: { id: string } }) {
+export default async function PhotoDeliveryDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const supabase = await createClient();
 
   const [currentUser, { data: booking }] = await Promise.all([
@@ -34,7 +34,7 @@ export default async function PhotoDeliveryDetailPage({ params }: { params: { id
         booking_custom_fields(custom_field_id, value, custom_fields(id, label, field_type, options)),
         booking_packages(id, package_id, quantity, price_snapshot, packages(id, name, price, duration_minutes, need_extra_time, extra_time_minutes))
       `)
-      .eq("id", params.id)
+      .eq("id", id)
       .single(),
   ]);
 

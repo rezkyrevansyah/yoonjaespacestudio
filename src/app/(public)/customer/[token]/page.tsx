@@ -3,7 +3,12 @@ import { createAdminClient } from "@/utils/supabase/admin";
 import { getCachedStudioInfo, getCachedSettingsGeneral } from "@/lib/cached-queries";
 import { CustomerPageClient } from "./_components/customer-page-client";
 
-export default async function CustomerPage({ params }: { params: { token: string } }) {
+export default async function CustomerPage({
+  params,
+}: {
+  params: Promise<{ token: string }>;
+}) {
+  const { token } = await params;
   const supabase = createAdminClient();
 
   const [{ data: booking }, studioInfo, settings] = await Promise.all([
@@ -19,7 +24,7 @@ export default async function CustomerPage({ params }: { params: { token: string
         booking_backgrounds(backgrounds(name)),
         invoices(invoice_number)
       `)
-      .eq("public_token", params.token)
+      .eq("public_token", token)
       .single(),
     getCachedStudioInfo(),
     getCachedSettingsGeneral(),

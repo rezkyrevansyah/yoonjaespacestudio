@@ -4,7 +4,12 @@ import { getCurrentUser } from "@/lib/get-current-user";
 import { getCachedStudioInfo } from "@/lib/cached-queries";
 import { InvoiceClient } from "./_components/invoice-client";
 
-export default async function InvoicePage({ params }: { params: { token: string } }) {
+export default async function InvoicePage({
+  params,
+}: {
+  params: Promise<{ token: string }>;
+}) {
+  const { token } = await params;
   const supabase = createAdminClient();
   const currentUser = await getCurrentUser();
 
@@ -21,7 +26,7 @@ export default async function InvoicePage({ params }: { params: { token: string 
         booking_packages(package_id, quantity, price_snapshot, packages(name)),
         invoices(invoice_number, invoice_date)
       `)
-      .eq("public_token", params.token)
+      .eq("public_token", token)
       .single(),
     getCachedStudioInfo(),
   ]);

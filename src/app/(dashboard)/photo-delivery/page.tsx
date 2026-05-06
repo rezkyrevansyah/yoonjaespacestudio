@@ -1,12 +1,7 @@
-import nextDynamic from "next/dynamic";
 import { requireMenu } from "@/lib/require-menu";
 import { createClient } from "@/utils/supabase/server";
 import type { BookingStatus, PrintOrderStatus } from "@/lib/types/database";
-
-const PhotoDeliveryClient = nextDynamic(
-  () => import("./_components/photo-delivery-client").then((m) => ({ default: m.PhotoDeliveryClient })),
-  { ssr: false }
-);
+import { PhotoDeliveryClient } from "./_components/photo-delivery-client";
 
 export const metadata = { title: "Photo Delivery — Yoonjaespace" };
 export const dynamic = "force-dynamic";

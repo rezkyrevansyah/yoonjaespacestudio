@@ -7,7 +7,12 @@ import { BookingDetailClient } from "./_components/booking-detail-client";
 export const metadata = { title: "Detail Booking — Yoonjaespace" };
 export const dynamic = "force-dynamic";
 
-export default async function BookingDetailPage({ params }: { params: { id: string } }) {
+export default async function BookingDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   // requireMenu wraps getCurrentUser (React.cache) — no duplicate DB hit vs layout.tsx
   const [currentUser, supabase] = await Promise.all([
     requireMenu("bookings"),
@@ -32,7 +37,7 @@ export default async function BookingDetailPage({ params }: { params: { id: stri
         booking_custom_fields(custom_field_id, value, custom_fields(id, label, field_type, options)),
         booking_packages(id, package_id, quantity, price_snapshot, packages(id, name, price, duration_minutes, need_extra_time, extra_time_minutes))
       `)
-      .eq("id", params.id)
+      .eq("id", id)
       .single(),
     getCachedAddons(),
     getCachedPackages(),

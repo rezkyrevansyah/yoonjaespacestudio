@@ -6,7 +6,12 @@ import { CustomerDetailClient } from "./_components/customer-detail-client";
 export const metadata = { title: "Detail Customer — Yoonjaespace" };
 export const dynamic = "force-dynamic";
 
-export default async function CustomerDetailPage({ params }: { params: { id: string } }) {
+export default async function CustomerDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const [currentUser, supabase] = await Promise.all([
     requireMenu("customers"),
     createClient(),
@@ -23,7 +28,7 @@ export default async function CustomerDetailPage({ params }: { params: { id: str
           packages(name)
         )
       `)
-      .eq("id", params.id)
+      .eq("id", id)
       .single(),
     supabase
       .from("leads")
