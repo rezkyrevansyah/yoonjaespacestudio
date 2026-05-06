@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,7 +27,7 @@ const VARIABLES = [
 
 export function TabReminders({ currentUser }: TabRemindersProps) {
   const { toast } = useToast();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -43,11 +43,7 @@ export function TabReminders({ currentUser }: TabRemindersProps) {
 
   const [activeField, setActiveField] = useState<"reminder" | "thank_you" | "thank_you_payment" | "custom">("reminder");
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase
       .from("settings_reminder_templates")
@@ -62,7 +58,11 @@ export function TabReminders({ currentUser }: TabRemindersProps) {
       setCustomMsg((data as Record<string, string | null>).custom_message ?? "");
     }
     setLoading(false);
-  }
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   function insertVariable(variable: string) {
     const refMap = {

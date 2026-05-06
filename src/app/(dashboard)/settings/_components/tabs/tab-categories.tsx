@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -92,7 +92,7 @@ function CategorySection({
   invalidateCache: () => Promise<void>;
 }) {
   const { toast } = useToast();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<CategoryItem[]>([]);
@@ -114,9 +114,7 @@ function CategorySection({
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  useEffect(() => { fetchItems(); }, []);
-
-  async function fetchItems() {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase
       .from(tableName)
@@ -129,7 +127,9 @@ function CategorySection({
       setHasReordered(false);
     }
     setLoading(false);
-  }
+  }, [supabase, tableName]);
+
+  useEffect(() => { fetchItems(); }, [fetchItems]);
 
   /* ── Drag & Drop ── */
   function handleDragEnd(event: DragEndEvent) {

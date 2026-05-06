@@ -4,6 +4,7 @@ import { createAdminClient } from "@/utils/supabase/admin";
 export const dynamic = "force-dynamic";
 
 const MAX_RANGE_DAYS = 90;
+const MS_PER_DAY = 1000*60*60*24;
 
 function diffDays(fromIso: string, toIso: string): number {
   const f = Date.UTC(
@@ -16,7 +17,7 @@ function diffDays(fromIso: string, toIso: string): number {
     parseInt(toIso.slice(5, 7)) - 1,
     parseInt(toIso.slice(8, 10))
   );
-  return Math.round((t - f) / (1000 * 60 * 60 * 24));
+  return Math.round((t - f) / MS_PER_DAY);
 }
 
 interface MuaBookingRow {

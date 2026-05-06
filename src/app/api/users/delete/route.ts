@@ -1,25 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/utils/supabase/admin";
 import { createClient } from "@/utils/supabase/server";
+import { getUserManagementCaller } from "@/lib/user-management-permission";
 
 export async function POST(req: NextRequest) {
-  // Verify caller is authenticated
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Verify caller has user-management permission
-  const { data: callerData } = await supabase
-    .from("users")
-    .select("id, name, is_primary, roles(name, menu_access)")
-    .eq("auth_id", user.id)
-    .single();
-  const callerRolesData = callerData?.roles as unknown;
-  const callerRole = (Array.isArray(callerRolesData) ? callerRolesData[0] : callerRolesData) as { name: string; menu_access: string[] } | null;
-  const hasPermission = callerData?.is_primary || callerRole?.menu_access?.includes("user-management");
-  if (!hasPermission) {
+  const caller = await getUserManagementCaller(supabase, user.id);
+  if (!caller.hasPermission) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -32,7 +24,6 @@ export async function POST(req: NextRequest) {
 
   const admin = createAdminClient();
 
-  // Get user info
   const { data: targetUser, error: fetchError } = await admin
     .from("users")
     .select("id, auth_id, name, email, is_primary")
@@ -68,11 +59,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Activity log
   await supabase.from("activity_log").insert({
-    user_id: callerData?.id ?? null,
-    user_name: callerData?.name ?? "System",
-    user_role: callerRole?.name ?? null,
+    user_id: caller.id,
+    user_name: caller.name ?? "System",
+    user_role: caller.roleName,
     action: "delete_user",
     entity: "users",
     entity_id: userId,

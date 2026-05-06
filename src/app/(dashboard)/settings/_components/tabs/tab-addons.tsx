@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -36,7 +36,7 @@ const emptyForm = {
 
 export function TabAddons({ currentUser }: TabAddonsProps) {
   const { toast } = useToast();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<Addon[]>([]);
@@ -47,14 +47,12 @@ export function TabAddons({ currentUser }: TabAddonsProps) {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState(emptyForm);
 
-  useEffect(() => { fetchItems(); fetchAddonCategories(); }, []);
-
-  async function fetchAddonCategories() {
+  const fetchAddonCategories = useCallback(async () => {
     const { data } = await supabase.from("addon_categories").select("id, name").eq("is_active", true).order("sort_order").order("name");
     if (data) setAddonCategories(data);
-  }
+  }, [supabase]);
 
-  async function fetchItems() {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase
       .from("addons")
@@ -63,7 +61,9 @@ export function TabAddons({ currentUser }: TabAddonsProps) {
       .order("name");
     if (data) setItems(data);
     setLoading(false);
-  }
+  }, [supabase]);
+
+  useEffect(() => { fetchItems(); fetchAddonCategories(); }, [fetchItems, fetchAddonCategories]);
 
   // Group addons by category
   const grouped = useMemo(() => {

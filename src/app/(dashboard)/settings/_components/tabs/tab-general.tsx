@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +18,7 @@ interface TabGeneralProps {
 
 export function TabGeneral({ currentUser }: TabGeneralProps) {
   const { toast } = useToast();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -38,11 +38,7 @@ export function TabGeneral({ currentUser }: TabGeneralProps) {
   const [holidayEnd, setHolidayEnd] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     const [generalRes, holidaysRes] = await Promise.all([
       supabase.from("settings_general").select("open_time, close_time, time_slot_interval, default_payment_status, commission_cutoff_day").eq("lock", true).maybeSingle(),
@@ -58,7 +54,11 @@ export function TabGeneral({ currentUser }: TabGeneralProps) {
     }
     if (holidaysRes.data) setHolidays(holidaysRes.data);
     setLoading(false);
-  }
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   async function handleSaveGeneral() {
     setSaving(true);

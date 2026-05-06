@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,7 @@ interface TabStudioInfoProps {
 
 export function TabStudioInfo({ currentUser }: TabStudioInfoProps) {
   const { toast } = useToast();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
   const logoInputRef = useRef<HTMLInputElement>(null);
   const frontPhotoInputRef = useRef<HTMLInputElement>(null);
 
@@ -40,11 +40,7 @@ export function TabStudioInfo({ currentUser }: TabStudioInfoProps) {
   const [instagram, setInstagram] = useState("");
   const [footerText, setFooterText] = useState("");
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase
       .from("settings_studio_info")
@@ -64,7 +60,11 @@ export function TabStudioInfo({ currentUser }: TabStudioInfoProps) {
       setFrontPhotoUrl(data.front_photo_url);
     }
     setLoading(false);
-  }
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   async function uploadImage(file: File, path: "studio/logo" | "studio/front-photo", setter: (url: string) => void, setUploading: (v: boolean) => void) {
     setUploading(true);

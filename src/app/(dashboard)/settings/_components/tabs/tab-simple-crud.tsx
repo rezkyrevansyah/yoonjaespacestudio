@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,7 @@ interface TabSimpleCrudProps {
 
 export function TabSimpleCrud({ currentUser, tableName, entityLabel, addLabel }: TabSimpleCrudProps) {
   const { toast } = useToast();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<SimpleItem[]>([]);
@@ -41,14 +41,14 @@ export function TabSimpleCrud({ currentUser, tableName, entityLabel, addLabel }:
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({ name: "", is_active: true });
 
-  useEffect(() => { fetchItems(); }, [tableName]);
-
-  async function fetchItems() {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase.from(tableName).select("id, name, is_active, created_at").order("name");
     if (data) setItems(data as SimpleItem[]);
     setLoading(false);
-  }
+  }, [supabase, tableName]);
+
+  useEffect(() => { fetchItems(); }, [fetchItems]);
 
   function openAdd() { setEditingId(null); setForm({ name: "", is_active: true }); setModalOpen(true); }
   function openEdit(item: SimpleItem) { setEditingId(item.id); setForm({ name: item.name, is_active: item.is_active }); setModalOpen(true); }

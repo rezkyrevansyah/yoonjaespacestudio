@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,7 @@ interface TabBackgroundsProps {
 
 export function TabBackgrounds({ currentUser }: TabBackgroundsProps) {
   const { toast } = useToast();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<Background[]>([]);
@@ -32,14 +32,14 @@ export function TabBackgrounds({ currentUser }: TabBackgroundsProps) {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({ name: "", description: "", is_available: true });
 
-  useEffect(() => { fetch(); }, []);
-
-  async function fetch() {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase.from("backgrounds").select("id, name, description, is_available, created_at").order("name");
     if (data) setItems(data);
     setLoading(false);
-  }
+  }, [supabase]);
+
+  useEffect(() => { fetchItems(); }, [fetchItems]);
 
   function openAdd() { setEditingId(null); setForm({ name: "", description: "", is_available: true }); setModalOpen(true); }
   function openEdit(item: Background) { setEditingId(item.id); setForm({ name: item.name, description: item.description ?? "", is_available: item.is_available }); setModalOpen(true); }
@@ -73,7 +73,7 @@ export function TabBackgrounds({ currentUser }: TabBackgroundsProps) {
     const item = items.find((i) => i.id === id);
     setItems((prev) => prev.filter((i) => i.id !== id));
     const { error } = await supabase.from("backgrounds").delete().eq("id", id);
-    if (error) { toast({ title: "Gagal hapus", variant: "destructive" }); fetch(); }
+    if (error) { toast({ title: "Gagal hapus", variant: "destructive" }); fetchItems(); }
     else {
       await invalidateBackgrounds();
       await supabase.from("activity_log").insert({ user_id: currentUser.id, user_name: currentUser.name, user_role: currentUser.role_name, action: "delete_background", entity: "backgrounds", entity_id: id, description: `Deleted background: ${item?.name}` });

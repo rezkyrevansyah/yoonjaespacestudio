@@ -3,58 +3,62 @@
 import { revalidateTag } from "next/cache";
 import { CACHE_TAGS } from "./cached-queries";
 
+async function invalidateTag(tag: string) {
+  revalidateTag(tag, "max");
+}
+
 export async function invalidatePackages() {
-  revalidateTag(CACHE_TAGS.PACKAGES, "max");
+  await invalidateTag(CACHE_TAGS.PACKAGES);
 }
 
 export async function invalidateBackgrounds() {
-  revalidateTag(CACHE_TAGS.BACKGROUNDS, "max");
+  await invalidateTag(CACHE_TAGS.BACKGROUNDS);
 }
 
 export async function invalidateAddons() {
-  revalidateTag(CACHE_TAGS.ADDONS, "max");
+  await invalidateTag(CACHE_TAGS.ADDONS);
 }
 
 export async function invalidateLeads() {
-  revalidateTag(CACHE_TAGS.LEADS, "max");
+  await invalidateTag(CACHE_TAGS.LEADS);
 }
 
 export async function invalidateDomiciles() {
-  revalidateTag(CACHE_TAGS.DOMICILES, "max");
+  await invalidateTag(CACHE_TAGS.DOMICILES);
 }
 
 export async function invalidatePhotoFor() {
-  revalidateTag(CACHE_TAGS.PHOTO_FOR, "max");
+  await invalidateTag(CACHE_TAGS.PHOTO_FOR);
 }
 
 export async function invalidateCustomFields() {
-  revalidateTag(CACHE_TAGS.CUSTOM_FIELDS, "max");
+  await invalidateTag(CACHE_TAGS.CUSTOM_FIELDS);
 }
 
 export async function invalidateSettingsGeneral() {
-  revalidateTag(CACHE_TAGS.SETTINGS_GENERAL, "max");
+  await invalidateTag(CACHE_TAGS.SETTINGS_GENERAL);
 }
 
 export async function invalidateStudioInfo() {
-  revalidateTag(CACHE_TAGS.SETTINGS_STUDIO_INFO, "max");
+  await invalidateTag(CACHE_TAGS.SETTINGS_STUDIO_INFO);
 }
 
 export async function invalidateReminderTemplates() {
-  revalidateTag(CACHE_TAGS.SETTINGS_REMINDER_TEMPLATES, "max");
+  await invalidateTag(CACHE_TAGS.SETTINGS_REMINDER_TEMPLATES);
 }
 
 export async function invalidateHolidays() {
-  revalidateTag(CACHE_TAGS.STUDIO_HOLIDAYS, "max");
+  await invalidateTag(CACHE_TAGS.STUDIO_HOLIDAYS);
 }
 
 export async function invalidateRoles() {
-  revalidateTag(CACHE_TAGS.ROLES, "max");
+  await invalidateTag(CACHE_TAGS.ROLES);
 }
 
 export async function invalidateActiveUsers() {
-  revalidateTag(CACHE_TAGS.USERS_ACTIVE, "max");
+  await invalidateTag(CACHE_TAGS.USERS_ACTIVE);
 }
 
 export async function invalidateActiveVendors() {
-  revalidateTag(CACHE_TAGS.VENDORS_ACTIVE, "max");
+  await invalidateTag(CACHE_TAGS.VENDORS_ACTIVE);
 }

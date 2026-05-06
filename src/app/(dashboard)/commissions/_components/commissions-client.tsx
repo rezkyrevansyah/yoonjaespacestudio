@@ -244,7 +244,7 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
     } finally {
       setLoading(false);
     }
-  }, [selectedMonth, selectedYear, period.start, period.end, staffUsers, toast]);
+  }, [period.start, period.end, staffUsers, toast]);
 
   useEffect(() => {
     if (isInitialMount.current) {

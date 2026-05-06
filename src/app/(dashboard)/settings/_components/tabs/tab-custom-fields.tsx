@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +30,7 @@ const FIELD_TYPE_LABELS: Record<FieldType, string> = {
 
 export function TabCustomFields({ currentUser }: TabCustomFieldsProps) {
   const { toast } = useToast();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<CustomField[]>([]);
@@ -42,14 +42,14 @@ export function TabCustomFields({ currentUser }: TabCustomFieldsProps) {
   const [optionInput, setOptionInput] = useState("");
   const [options, setOptions] = useState<string[]>([]);
 
-  useEffect(() => { fetchItems(); }, []);
-
-  async function fetchItems() {
+  const fetchItems = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase.from("custom_fields").select("id, label, field_type, options, is_active, created_at").order("created_at");
     if (data) setItems(data);
     setLoading(false);
-  }
+  }, [supabase]);
+
+  useEffect(() => { fetchItems(); }, [fetchItems]);
 
   function openAdd() {
     setEditingId(null);

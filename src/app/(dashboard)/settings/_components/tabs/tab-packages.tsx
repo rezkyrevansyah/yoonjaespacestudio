@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -41,7 +41,7 @@ const emptyForm = {
 
 export function TabPackages({ currentUser }: TabPackagesProps) {
   const { toast } = useToast();
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const [loading, setLoading] = useState(true);
   const [packages, setPackages] = useState<Package[]>([]);
@@ -52,14 +52,12 @@ export function TabPackages({ currentUser }: TabPackagesProps) {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState(emptyForm);
 
-  useEffect(() => { fetchPackages(); fetchPkgCategories(); }, []);
-
-  async function fetchPkgCategories() {
+  const fetchPkgCategories = useCallback(async () => {
     const { data } = await supabase.from("package_categories").select("id, name").eq("is_active", true).order("sort_order").order("name");
     if (data) setPkgCategories(data);
-  }
+  }, [supabase]);
 
-  async function fetchPackages() {
+  const fetchPackages = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase
       .from("packages")
@@ -68,7 +66,9 @@ export function TabPackages({ currentUser }: TabPackagesProps) {
       .order("name");
     if (data) setPackages(data);
     setLoading(false);
-  }
+  }, [supabase]);
+
+  useEffect(() => { fetchPackages(); fetchPkgCategories(); }, [fetchPackages, fetchPkgCategories]);
 
   // Group packages by category
   const grouped = useMemo(() => {
