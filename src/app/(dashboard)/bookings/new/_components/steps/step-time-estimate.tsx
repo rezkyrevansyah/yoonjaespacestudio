@@ -66,9 +66,9 @@ export function StepTimeEstimate({
         <p className="text-sm text-gray-500">Berdasarkan paket dan add-on yang dipilih</p>
       </div>
 
-      <div className="rounded-xl border-2 border-maroon-200 bg-maroon-50 p-5">
-        <div className="flex items-center gap-3 mb-4">
-          <Clock className="h-8 w-8 text-maroon-700" />
+      <div className="rounded-lg border-2 border-maroon-200 bg-maroon-50 p-5">
+        <div className="flex items-center gap-4 mb-4">
+          <Clock className="h-10 w-10 text-maroon-700" />
           <div>
             <p className="text-2xl font-bold text-maroon-900">
               {formatTime(displayStart)} — {endTime}
@@ -82,7 +82,7 @@ export function StepTimeEstimate({
           </div>
         </div>
 
-        <div className="space-y-1.5 text-sm">
+        <div className="space-y-1 text-sm">
           {beforePackages.map(({ package: pkg, quantity }) => (
             <div key={`pkg-before-${pkg.id}`} className="flex justify-between text-amber-700">
               <span>Extra time: {pkg.name}{quantity > 1 ? ` ×${quantity}` : ""} (sebelum sesi)</span>
@@ -125,7 +125,7 @@ export function StepTimeEstimate({
       )}
 
       {conflictingBookings.length > 0 && (
-        <div className="flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-300 px-4 py-3">
+        <div className="flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-300 px-4 py-3">
           <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
           <div className="space-y-1">
             <p className="text-sm font-semibold text-amber-800">Waktu Efektif Bertabrakan</p>

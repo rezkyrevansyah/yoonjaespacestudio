@@ -131,7 +131,7 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
     : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#8B1A1A] via-[#6b1414] to-[#3d0a0a]">
+    <div className="min-h-screen bg-gradient-to-b from-primary via-primary/90 to-primary/70">
       {/* Header */}
       <header className="flex flex-col items-center pt-10 pb-6 px-6">
         {studio?.logo_url ? (
@@ -158,14 +158,14 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
       <main className="px-4 pb-16 max-w-md mx-auto space-y-4">
 
         {/* Greeting */}
-        <FadeUp i={0} className="bg-white rounded-2xl p-5 text-center shadow-lg">
+        <FadeUp i={0} className="bg-white rounded-lg p-5 text-center shadow-sm">
           <p className="text-gray-500 text-sm">Halo,</p>
           <h2 className="text-2xl font-bold text-gray-900 mt-1">{customerName} 👋</h2>
-          <p className="text-xs text-gray-400 mt-1 font-mono">{booking.booking_number}</p>
+          <p className="text-xs text-gray-400 mt-1 font-sans">{booking.booking_number}</p>
         </FadeUp>
 
         {/* Status Booking — Horizontal Stepper */}
-        <FadeUp i={1} className="bg-white rounded-2xl p-5 shadow-lg space-y-4">
+        <FadeUp i={1} className="bg-white rounded-lg p-5 shadow-sm space-y-4">
           <h3 className="font-semibold text-gray-800">Status Booking</h3>
 
           <div className="relative">
@@ -173,7 +173,7 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
             <div className="absolute top-4 left-4 right-4 h-0.5 bg-gray-200" />
             {/* Progress line */}
             <div
-              className="absolute top-4 left-4 h-0.5 bg-[#8B1A1A] transition-all"
+              className="absolute top-4 left-4 h-0.5 bg-primary transition-all"
               style={{
                 width: isCanceled
                   ? "0%"
@@ -188,19 +188,19 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
                   <div key={status} className="flex flex-col items-center gap-1">
                     <div
                       className={`h-8 w-8 rounded-full border-2 flex items-center justify-center bg-white z-10 ${
-                        isPast || isCurrent ? "border-[#8B1A1A]" : "border-gray-300"
+                        isPast || isCurrent ? "border-primary" : "border-gray-300"
                       }`}
                     >
                       {isPast ? (
-                        <CheckCircle2 className="h-5 w-5 text-[#8B1A1A]" />
+                        <CheckCircle2 className="h-5 w-5 text-primary" />
                       ) : isCurrent ? (
-                        <Circle className="h-3 w-3 fill-[#8B1A1A] text-[#8B1A1A]" />
+                        <Circle className="h-3 w-3 fill-primary text-primary" />
                       ) : (
                         <Circle className="h-3 w-3 text-gray-300" />
                       )}
                     </div>
-                    <span className={`text-[10px] text-center leading-tight max-w-[56px] ${
-                      isCurrent ? "text-[#8B1A1A] font-semibold" : isPast ? "text-[#8B1A1A]/70" : "text-gray-400"
+                    <span className={`text-xs leading-5 text-center leading-5 max-w-[56px] ${
+                      isCurrent ? "text-primary font-semibold" : isPast ? "text-primary/70" : "text-gray-400"
                     }`}>
                       {BOOKING_STATUS_LABEL[status]}
                     </span>
@@ -211,14 +211,14 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
           </div>
 
           {isCanceled && (
-            <div className="flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 p-3 text-red-700">
+            <div className="flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 p-4 text-red-700">
               <XCircle className="h-4 w-4 shrink-0" />
               <span className="text-sm font-medium">Booking ini telah dibatalkan</span>
             </div>
           )}
 
           {booking.status === "ADDON_UNPAID" && (
-            <div className="flex items-center gap-2 rounded-lg bg-orange-50 border border-orange-200 p-3 text-orange-700 text-sm">
+            <div className="flex items-center gap-2 rounded-lg bg-orange-50 border border-orange-200 p-4 text-orange-700 text-sm">
               <AlertCircle className="h-4 w-4 shrink-0" />
               Ada tambahan yang belum dibayar
             </div>
@@ -227,7 +227,7 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
 
         {/* Print Order — Horizontal Stepper (customer-facing, no VENDOR/RECEIVE) */}
         {booking.print_order_status && (
-          <FadeUp i={2} className="bg-white rounded-2xl p-5 shadow-lg space-y-4">
+          <FadeUp i={2} className="bg-white rounded-lg p-5 shadow-sm space-y-4">
             <h3 className="font-semibold text-gray-800 flex items-center gap-2">
               <Printer className="h-4 w-4 text-blue-600" />
               Print Order
@@ -262,7 +262,7 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
                           <Circle className="h-3 w-3 text-gray-300" />
                         )}
                       </div>
-                      <span className={`text-[10px] text-center leading-tight max-w-[56px] ${
+                      <span className={`text-xs leading-5 text-center leading-5 max-w-[56px] ${
                         isCurrent ? "text-blue-700 font-semibold" : isPast ? "text-blue-400" : "text-gray-400"
                       }`}>
                         {PRINT_ORDER_STATUS_LABEL[status]}
@@ -282,7 +282,7 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
               href={/^https?:\/\//i.test(booking.google_drive_link) ? booking.google_drive_link : `https://${booking.google_drive_link}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full bg-[#8B1A1A] hover:bg-[#B22222] text-white rounded-2xl p-4 shadow-lg font-semibold transition-colors"
+              className="flex items-center justify-center gap-2 w-full bg-primary hover:bg-primary/90 text-white rounded-lg p-4 shadow-sm font-semibold transition-colors"
             >
               <Images className="h-5 w-5" />
               Lihat Foto Kamu
@@ -291,31 +291,31 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
         )}
 
         {/* Booking Details */}
-        <FadeUp i={4} className="bg-white rounded-2xl p-5 shadow-lg space-y-3">
+        <FadeUp i={4} className="bg-white rounded-lg p-5 shadow-sm space-y-4">
           <h3 className="font-semibold text-gray-800 mb-1">Detail Booking</h3>
 
-          <div className="flex items-center gap-3">
-            <CalendarDays className="h-4 w-4 text-[#8B1A1A] flex-shrink-0" />
+          <div className="flex items-center gap-4">
+            <CalendarDays className="h-4 w-4 text-primary flex-shrink-0" />
             <span className="text-sm text-gray-700">{formatDate(booking.booking_date)}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <Clock className="h-4 w-4 text-[#8B1A1A] flex-shrink-0" />
+          <div className="flex items-center gap-4">
+            <Clock className="h-4 w-4 text-primary flex-shrink-0" />
             <span className="text-sm text-gray-700">
               {formatTime(booking.start_time)} — {formatTime(booking.end_time)}
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            <Package className="h-4 w-4 text-[#8B1A1A] flex-shrink-0" />
+          <div className="flex items-center gap-4">
+            <Package className="h-4 w-4 text-primary flex-shrink-0" />
             <span className="text-sm text-gray-700">{booking.packages?.name ?? "-"}</span>
           </div>
 
           {/* Backgrounds */}
           {booking.booking_backgrounds.length > 0 && (
-            <div className="pt-1 flex flex-wrap gap-1.5">
+            <div className="pt-1 flex flex-wrap gap-2">
               {booking.booking_backgrounds.map((b, i) => (
                 <span
                   key={i}
-                  className="text-xs bg-[#FEF2F2] text-[#8B1A1A] px-2 py-1 rounded-full border border-[#8B1A1A]/20"
+                  className="text-xs bg-accent text-primary px-2 py-1 rounded-full border border-primary/20"
                 >
                   {b.backgrounds?.name}
                 </span>
@@ -326,17 +326,17 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
 
         {/* Invoice section */}
         {invoiceNumber && (
-          <FadeUp i={5} className="bg-white rounded-2xl p-5 shadow-lg">
+          <FadeUp i={5} className="bg-white rounded-lg p-5 shadow-sm">
             <h3 className="font-semibold text-gray-800 mb-3">Invoice</h3>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-500">Nomor Invoice</p>
-                <p className="font-mono font-medium text-gray-800">{invoiceNumber}</p>
+                <p className="font-sans font-medium text-gray-800">{invoiceNumber}</p>
               </div>
               <Link
                 href={`/invoice/${booking.public_token}`}
                 target="_blank"
-                className="flex items-center gap-1.5 bg-[#8B1A1A] text-white text-sm px-4 py-2 rounded-lg hover:bg-[#B22222] transition-colors"
+                className="flex items-center gap-2 bg-primary text-white text-sm px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
               >
                 <FileText className="h-4 w-4" />
                 Lihat Invoice
@@ -347,7 +347,7 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
 
         {/* Studio Info */}
         {studio && (
-          <FadeUp i={6} className="rounded-2xl overflow-hidden shadow-lg">
+          <FadeUp i={6} className="rounded-lg overflow-hidden shadow-sm">
             {/* Studio front photo */}
             {studio.front_photo_url && (
               <div className="relative h-40 w-full">
@@ -364,21 +364,21 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
               </div>
             )}
 
-            <div className="bg-white p-5 space-y-3">
+            <div className="bg-white p-5 space-y-4">
               {!studio.front_photo_url && (
                 <h3 className="font-semibold text-gray-800">{studio.studio_name}</h3>
               )}
 
               {studio.address && (
-                <div className="flex items-start gap-3">
-                  <MapPin className="h-4 w-4 text-[#8B1A1A] mt-0.5 flex-shrink-0" />
+                <div className="flex items-start gap-4">
+                  <MapPin className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                   <p className="text-sm text-gray-600">{studio.address}</p>
                 </div>
               )}
 
               {settings && (
-                <div className="flex items-center gap-3">
-                  <Clock className="h-4 w-4 text-[#8B1A1A] flex-shrink-0" />
+                <div className="flex items-center gap-4">
+                  <Clock className="h-4 w-4 text-primary flex-shrink-0" />
                   <p className="text-sm text-gray-600">
                     {settings.open_time} — {settings.close_time}
                   </p>
@@ -392,7 +392,7 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
                     href={waLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-1.5 bg-green-500 text-white text-sm py-2.5 rounded-xl hover:bg-green-600 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 bg-green-500 text-white text-sm py-2 rounded-lg hover:bg-green-600 transition-colors"
                   >
                     <Phone className="h-4 w-4" />
                     WhatsApp
@@ -403,7 +403,7 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
                     href={igLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-1.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm py-2.5 rounded-xl hover:opacity-90 transition-opacity"
+                    className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm py-2 rounded-lg hover:opacity-90 transition-opacity"
                   >
                     <Instagram className="h-4 w-4" />
                     Instagram
@@ -414,7 +414,7 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
                     href={studio.google_maps_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-1.5 bg-blue-500 text-white text-sm py-2.5 rounded-xl hover:bg-blue-600 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 bg-blue-500 text-white text-sm py-2 rounded-lg hover:bg-blue-600 transition-colors"
                   >
                     <Map className="h-4 w-4" />
                     Maps
@@ -436,7 +436,7 @@ export function CustomerPageClient({ booking, studioInfo, settings }: Props) {
               href={`${waLink}?text=Halo, saya ingin booking sesi foto baru!`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-white text-[#8B1A1A] font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center gap-2 bg-white text-primary font-semibold px-6 py-3 rounded-full shadow-sm hover:bg-gray-50 transition-colors"
             >
               <MessageCircle className="h-4 w-4" />
               Book Again

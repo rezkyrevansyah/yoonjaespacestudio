@@ -60,7 +60,7 @@ export function StepCustomerType({ customerData, onChange }: Props) {
         <p className="text-sm text-gray-500">Pilih apakah ini customer baru atau lama</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-4">
         <button
           onClick={() => onChange({ ...customerData, isExisting: false, existingCustomerId: undefined })}
           className={`rounded-lg border-2 p-4 text-left transition-colors ${
@@ -93,7 +93,7 @@ export function StepCustomerType({ customerData, onChange }: Props) {
       </div>
 
       {customerData.isExisting && (
-        <div className="space-y-3">
+        <div className="space-y-4">
           <Label>Cari Customer</Label>
           <div className="flex gap-2">
             <Input
@@ -108,7 +108,7 @@ export function StepCustomerType({ customerData, onChange }: Props) {
           </div>
 
           {customerData.existingCustomerId && (
-            <div className="rounded-lg bg-green-50 border border-green-200 p-3 flex items-center justify-between">
+            <div className="rounded-lg bg-green-50 border border-green-200 p-4 flex items-center justify-between">
               <div>
                 <p className="font-medium text-green-800">{customerData.existingCustomerName}</p>
                 <p className="text-sm text-green-600">{customerData.existingCustomerPhone}</p>

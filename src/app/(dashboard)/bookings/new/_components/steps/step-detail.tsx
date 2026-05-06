@@ -76,7 +76,7 @@ export function StepDetail({
               type="button"
               onClick={() => toggleBackground(bg.id)}
               className={cn(
-                "rounded-lg border px-3 py-2 text-sm text-left transition-colors",
+                "rounded-lg border px-4 py-2 text-sm text-left transition-colors",
                 detailData.background_ids.includes(bg.id)
                   ? "bg-maroon-50 border-maroon-400 text-maroon-700 font-medium"
                   : "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
@@ -116,7 +116,7 @@ export function StepDetail({
         />
       </div>
 
-      <div className="flex items-center gap-3 rounded-lg border p-3">
+      <div className="flex items-center gap-4 rounded-lg border p-4">
         <Checkbox
           id="bts"
           checked={detailData.behind_the_scenes}

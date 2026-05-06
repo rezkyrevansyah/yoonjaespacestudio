@@ -70,10 +70,10 @@ export function CalendarMonthView({ month, bookings, onSelectBooking }: Props) {
             return (
               <div
                 key={i}
-                className={`bg-white min-h-[90px] p-1 ${isToday ? "ring-2 ring-inset ring-[#8B1A1A]" : ""}`}
+                className={`bg-white min-h-[90px] p-1 ${isToday ? "ring-2 ring-inset ring-primary" : ""}`}
               >
                 <div className={`text-xs font-medium mb-1 h-5 w-5 flex items-center justify-center rounded-full ${
-                  isToday ? "bg-[#8B1A1A] text-white" : "text-gray-700"
+                  isToday ? "bg-primary text-white" : "text-gray-700"
                 }`}>
                   {cell.getDate()}
                 </div>

@@ -265,12 +265,12 @@ export function RemindersClient({ currentUser, templates, studioName, initialBoo
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-gray-100 p-1 rounded-xl w-fit">
+      <div className="flex gap-1 bg-gray-100 p-1 rounded-lg w-fit">
         {tabs.map(t => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`px-4 py-1.5 text-sm font-medium rounded-lg transition-all ${
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
               tab === t.key
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-500 hover:text-gray-700"
@@ -283,7 +283,7 @@ export function RemindersClient({ currentUser, templates, studioName, initialBoo
 
       {/* No template warning */}
       {(!templates.reminder_message && !templates.thank_you_message && !templates.thank_you_payment_message && !templates.custom_message) && (
-        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800">
+        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-sm text-amber-800">
           <Bell className="h-4 w-4 flex-shrink-0" />
           <span>Template pesan belum diatur. Silakan atur di <strong>Settings → Reminder Templates</strong>.</span>
         </div>
@@ -305,17 +305,17 @@ export function RemindersClient({ currentUser, templates, studioName, initialBoo
       ) : (
         <>
           {/* Desktop table */}
-          <div className="hidden lg:block bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+          <div className="hidden lg:block bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-100">
                 <tr>
-                  <th className="text-left px-5 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Customer</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Customer</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Tanggal & Jam</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Paket</th>
                   <th className="text-center px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Status</th>
                   <th className="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Waktu</th>
                   <th className="text-center px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Sudah Di-remind</th>
-                  <th className="text-right px-5 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Aksi</th>
+                  <th className="text-right px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wide">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -327,27 +327,27 @@ export function RemindersClient({ currentUser, templates, studioName, initialBoo
 
                   return (
                     <tr key={b.id} className="hover:bg-gray-50/60 transition-colors">
-                      <td className="px-5 py-3.5">
+                      <td className="px-4 py-2">
                         <p className="font-semibold text-gray-900">{b.customers?.name ?? "-"}</p>
-                        <p className="text-xs text-gray-400 font-mono mt-0.5">{b.customers?.phone}</p>
+                        <p className="text-xs text-gray-400 font-sans mt-0.5">{b.customers?.phone}</p>
                       </td>
-                      <td className="px-4 py-3.5">
+                      <td className="px-4 py-2">
                         <p className="text-gray-700 text-xs">{formatDate(b.booking_date)}</p>
                         <p className="text-gray-500 text-xs">{formatTime(b.start_time)} — {formatTime(b.end_time)}</p>
                       </td>
-                      <td className="px-4 py-3.5 text-gray-700 text-xs">{b.packages?.name ?? "-"}</td>
-                      <td className="px-4 py-3.5 text-center">
-                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${BOOKING_STATUS_COLOR[b.status]}`}>
+                      <td className="px-4 py-2 text-gray-700 text-xs">{b.packages?.name ?? "-"}</td>
+                      <td className="px-4 py-2 text-center">
+                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${BOOKING_STATUS_COLOR[b.status]}`}>
                           {BOOKING_STATUS_LABEL[b.status]}
                         </span>
                       </td>
-                      <td className="px-4 py-3.5">
+                      <td className="px-4 py-2">
                         <div className="flex items-center gap-1 text-xs text-gray-500">
                           <Clock className="h-3.5 w-3.5 flex-shrink-0" />
                           <span>{hoursLeft(b.booking_date, b.start_time)}</span>
                         </div>
                       </td>
-                      <td className="px-4 py-3.5">
+                      <td className="px-4 py-2">
                         <div className="flex items-center justify-center gap-2 flex-wrap">
                           <RemindedBadge active={isMarked(b.id, "reminder")} label="Reminder" onCancel={() => unmarkReminded(b, "reminder")} />
                           <RemindedBadge active={isMarked(b.id, "thank_you_payment")} label="TY Payment" onCancel={() => unmarkReminded(b, "thank_you_payment")} />
@@ -355,7 +355,7 @@ export function RemindersClient({ currentUser, templates, studioName, initialBoo
                           <RemindedBadge active={isMarked(b.id, "custom")} label="Custom" onCancel={() => unmarkReminded(b, "custom")} />
                         </div>
                       </td>
-                      <td className="px-5 py-3.5">
+                      <td className="px-4 py-2">
                         <div className="flex items-center gap-1 justify-end flex-wrap">
                           <ActionButton
                             href={reminderLink}
@@ -403,7 +403,7 @@ export function RemindersClient({ currentUser, templates, studioName, initialBoo
           </div>
 
           {/* Mobile cards */}
-          <div className="lg:hidden space-y-3">
+          <div className="lg:hidden space-y-4">
             {bookings.map(b => {
               const reminderLink = buildWaLink(b, templates.reminder_message);
               const tyPayLink = buildWaLink(b, templates.thank_you_payment_message);
@@ -411,14 +411,14 @@ export function RemindersClient({ currentUser, templates, studioName, initialBoo
               const customLink = buildWaLink(b, templates.custom_message);
 
               return (
-                <div key={b.id} className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 space-y-3">
+                <div key={b.id} className="bg-white rounded-lg border border-gray-200 shadow-sm p-4 space-y-4">
                   {/* Customer + status */}
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <p className="font-semibold text-gray-900">{b.customers?.name ?? "-"}</p>
-                      <p className="text-xs text-gray-400 font-mono">{b.customers?.phone}</p>
+                      <p className="text-xs text-gray-400 font-sans">{b.customers?.phone}</p>
                     </div>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium flex-shrink-0 ${BOOKING_STATUS_COLOR[b.status]}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full font-medium flex-shrink-0 ${BOOKING_STATUS_COLOR[b.status]}`}>
                       {BOOKING_STATUS_LABEL[b.status]}
                     </span>
                   </div>
@@ -449,7 +449,7 @@ export function RemindersClient({ currentUser, templates, studioName, initialBoo
                   </div>
 
                   {/* Action buttons */}
-                  <div className="grid grid-cols-4 gap-1.5 pt-1 border-t border-gray-50">
+                  <div className="grid grid-cols-4 gap-2 pt-1 border-t border-gray-50">
                     <MobileActionButton
                       href={reminderLink}
                       icon={<Bell className="h-3.5 w-3.5" />}
@@ -510,7 +510,7 @@ function RemindedBadge({ active, label, onCancel }: { active: boolean; label: st
     <button
       onClick={onCancel}
       title="Batalkan tandai"
-      className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-1.5 py-0.5 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors group"
+      className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-1.5 py-0.5 rounded-full hover:bg-accent hover:text-red-600 transition-colors group"
     >
       <CheckCircle className="h-3 w-3 group-hover:hidden" />
       <X className="h-3 w-3 hidden group-hover:inline" />
@@ -543,20 +543,20 @@ function ActionButton({
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className={`inline-flex items-center gap-1 text-white text-xs px-2.5 py-1.5 rounded-lg ${color} transition-colors`}
+          className={`inline-flex items-center gap-1 text-white text-xs px-2.5 py-2 rounded-lg ${color} transition-colors`}
         >
           {icon}
           {label}
         </a>
       ) : (
-        <span className="inline-flex items-center gap-1 text-white text-xs px-2.5 py-1.5 rounded-lg bg-gray-300 cursor-not-allowed opacity-60">
+        <span className="inline-flex items-center gap-1 text-white text-xs px-2.5 py-2 rounded-lg bg-gray-300 cursor-not-allowed opacity-60">
           {icon}
           {label}
         </span>
       )}
       <button
         onClick={marked ? onUnmark : onMark}
-        className={`text-xs px-2 py-0.5 rounded transition-colors ${
+        className={`text-xs px-2 py-1 rounded transition-colors ${
           marked
             ? "text-green-600 hover:text-red-500"
             : "text-gray-400 hover:text-green-600"
@@ -593,13 +593,13 @@ function MobileActionButton({
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className={`w-full flex items-center justify-center gap-1 text-xs py-2 rounded-xl ${color} transition-colors`}
+          className={`w-full flex items-center justify-center gap-1 text-xs py-2 rounded-lg ${color} transition-colors`}
         >
           {icon}
           <span>{label}</span>
         </a>
       ) : (
-        <span className="w-full flex items-center justify-center gap-1 text-xs py-2 rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed">
+        <span className="w-full flex items-center justify-center gap-1 text-xs py-2 rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed">
           {icon}
           <span>{label}</span>
         </span>

@@ -566,7 +566,7 @@ export function NewBookingClient({
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" onClick={() => router.push("/bookings")}>
           <ArrowLeft className="h-5 w-5" />
         </Button>
@@ -583,7 +583,7 @@ export function NewBookingClient({
             key={s.id}
             onClick={() => step > s.id && setStep(s.id)}
             className={cn(
-              "flex-shrink-0 flex items-center gap-1.5 px-2 py-1 rounded text-xs transition-colors",
+              "flex-shrink-0 flex items-center gap-2 px-2 py-1 rounded text-xs transition-colors",
               s.id === step
                 ? "bg-maroon-700 text-white"
                 : s.id < step
@@ -594,7 +594,7 @@ export function NewBookingClient({
             {s.id < step ? (
               <CheckCircle2 className="h-3 w-3" />
             ) : (
-              <span className="h-3 w-3 flex items-center justify-center rounded-full border text-[10px]">
+              <span className="h-3 w-3 flex items-center justify-center rounded-full border text-xs leading-5">
                 {s.id}
               </span>
             )}
@@ -605,7 +605,7 @@ export function NewBookingClient({
 
       {/* Draft restore banner */}
       {hasDraft && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 p-3 rounded-xl border border-amber-200 bg-amber-50 text-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 p-4 rounded-lg border border-amber-200 bg-amber-50 text-sm">
           <span className="flex-1 text-amber-800 text-sm">
             📋 Ada draft booking yang belum selesai. Ingin dilanjutkan?
           </span>
@@ -614,7 +614,7 @@ export function NewBookingClient({
               size="sm"
               variant="outline"
               onClick={restoreDraft}
-              className="border-amber-300 text-amber-800 hover:bg-amber-100 h-8"
+              className="border-amber-300 text-amber-800 hover:bg-amber-100 h-10"
             >
               Lanjutkan
             </Button>
@@ -622,7 +622,7 @@ export function NewBookingClient({
               size="sm"
               variant="ghost"
               onClick={clearDraft}
-              className="text-amber-600 hover:bg-amber-100 h-8"
+              className="text-amber-600 hover:bg-amber-100 h-10"
             >
               Mulai Baru
             </Button>
@@ -631,7 +631,7 @@ export function NewBookingClient({
       )}
 
       {/* Step content */}
-      <div className="bg-white rounded-xl border shadow-sm p-6">
+      <div className="bg-white rounded-lg border shadow-sm p-6">
         {step === 1 && (
           <StepCustomerType customerData={customerData} onChange={setCustomerData} />
         )}
@@ -734,7 +734,7 @@ export function NewBookingClient({
 
       {/* Sticky price bar — visible after packages are selected */}
       {pricing.subtotal > 0 && step < 10 && (
-        <div className="sticky bottom-0 -mx-0 bg-white border-t border-maroon-100 rounded-b-xl px-4 py-2.5 flex items-center justify-between shadow-sm">
+        <div className="sticky bottom-0 -mx-0 bg-white border-t border-maroon-100 rounded-b-xl px-4 py-2 flex items-center justify-between shadow-sm">
           <span className="text-xs text-gray-500">Estimasi total</span>
           <div className="text-right">
             {pricing.discount > 0 && (
@@ -746,7 +746,7 @@ export function NewBookingClient({
       )}
 
       {/* Navigation */}
-      <div className="flex gap-3">
+      <div className="flex gap-4">
         {step > 1 && (
           <Button variant="outline" onClick={() => setStep((s) => s - 1)} className="flex-1">
             <ArrowLeft className="h-4 w-4 mr-2" />

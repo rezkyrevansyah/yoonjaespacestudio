@@ -32,7 +32,7 @@ export function CalendarWeekView({ weekStart, bookings, onSelectBooking }: Props
             <div key={i} className="text-center pb-2">
               <p className="text-xs text-gray-500">{DAYS_ID[i]}</p>
               <div className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium mx-auto ${
-                isToday ? "bg-[#8B1A1A] text-white" : "text-gray-700"
+                isToday ? "bg-primary text-white" : "text-gray-700"
               }`}>
                 {d.getDate()}
               </div>
@@ -49,7 +49,7 @@ export function CalendarWeekView({ weekStart, bookings, onSelectBooking }: Props
             <div
               key={i}
               className={`min-h-[200px] rounded-lg p-1 space-y-1 ${
-                isToday ? "bg-[#FEF2F2]" : "bg-gray-50"
+                isToday ? "bg-accent" : "bg-gray-50"
               }`}
             >
               {dayBookings.length === 0 ? (
@@ -61,7 +61,7 @@ export function CalendarWeekView({ weekStart, bookings, onSelectBooking }: Props
                   <button
                     key={b.id}
                     onClick={() => onSelectBooking(b)}
-                    className={`w-full text-left rounded-md px-2 py-1.5 text-xs hover:opacity-80 transition-opacity ${BOOKING_STATUS_COLOR[b.status]}`}
+                    className={`w-full text-left rounded-md px-2 py-2 text-xs hover:opacity-80 transition-opacity ${BOOKING_STATUS_COLOR[b.status]}`}
                   >
                     <p className="font-semibold truncate">
                       {formatTime(b.start_time)}

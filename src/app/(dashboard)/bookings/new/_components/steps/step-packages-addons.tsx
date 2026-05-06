@@ -62,19 +62,25 @@ function QuantityControl({
   onDecrease: () => void;
 }) {
   return (
-    <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+    <div className="flex items-center gap-2">
       <button
         type="button"
-        onClick={onDecrease}
-        className="h-8 w-8 sm:h-7 sm:w-7 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 transition-colors"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDecrease();
+        }}
+        className="h-10 w-10 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 transition-colors"
       >
         <Minus className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
       </button>
       <span className="w-7 text-center text-sm font-semibold">{value}</span>
       <button
         type="button"
-        onClick={onIncrease}
-        className="h-8 w-8 sm:h-7 sm:w-7 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 transition-colors"
+        onClick={(e) => {
+          e.stopPropagation();
+          onIncrease();
+        }}
+        className="h-10 w-10 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 transition-colors"
       >
         <Plus className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
       </button>
@@ -182,12 +188,12 @@ export function StepPackagesAddons({ data, onChange, packages, addons, packageCa
                             : "bg-white border-gray-200 hover:border-gray-300"
                         )}
                       >
-                        <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center justify-between gap-4">
                           <div className="flex-1 min-w-0">
                             <p className={cn("font-medium", isSelected ? "text-maroon-800" : "text-gray-800")}>
                               {pkg.name}
                             </p>
-                            <div className="flex items-center gap-3 mt-0.5">
+                            <div className="flex items-center gap-4 mt-0.5">
                               <p className={cn("text-sm font-semibold", isSelected ? "text-maroon-700" : "text-gray-600")}>
                                 {formatRupiah(pkg.price)}
                               </p>
@@ -272,12 +278,12 @@ export function StepPackagesAddons({ data, onChange, packages, addons, packageCa
                             : "bg-white border-gray-200 hover:border-gray-300"
                         )}
                       >
-                        <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center justify-between gap-4">
                           <div className="flex-1 min-w-0">
                             <p className={cn("font-medium", isSelected ? "text-maroon-800" : "text-gray-800")}>
                               {addon.name}
                             </p>
-                            <div className="flex items-center gap-3 mt-0.5">
+                            <div className="flex items-center gap-4 mt-0.5">
                               <p className={cn("text-sm font-semibold", isSelected ? "text-maroon-700" : "text-gray-600")}>
                                 {formatRupiah(addon.price)}
                               </p>
@@ -314,7 +320,7 @@ export function StepPackagesAddons({ data, onChange, packages, addons, packageCa
 
       {/* Running subtotal */}
       {runningSubtotal > 0 && (
-        <div className="rounded-lg bg-maroon-50 border border-maroon-200 p-3 flex justify-between items-center">
+        <div className="rounded-lg bg-maroon-50 border border-maroon-200 p-4 flex justify-between items-center">
           <span className="text-sm text-maroon-700 font-medium">Estimasi subtotal</span>
           <span className="text-base font-bold text-maroon-900">{formatRupiah(runningSubtotal)}</span>
         </div>

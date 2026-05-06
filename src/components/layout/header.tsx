@@ -22,7 +22,7 @@ export function Header({ user, logoUrl, studioName }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-40 flex items-center justify-between h-14 px-4 bg-white border-b border-border md:px-6">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         {/* Mobile nav trigger */}
         <MobileNav user={user} logoUrl={logoUrl} studioName={studioName} />
         <h1 className="font-semibold text-base">{pageTitle}</h1>

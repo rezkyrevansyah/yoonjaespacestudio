@@ -129,8 +129,8 @@ export default async function DashboardPage() {
       {/* Quick Menu */}
       <div>
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Menu Cepat</p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <QuickMenuCard href="/bookings/new"  icon={<CalendarPlus className="w-5 h-5" />}  label="Buat Booking" color="bg-[#8B1A1A]" />
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <QuickMenuCard href="/bookings/new"  icon={<CalendarPlus className="w-5 h-5" />}  label="Buat Booking" color="bg-primary" />
           <QuickMenuCard href="/bookings"      icon={<CalendarCheck className="w-5 h-5" />} label="Lihat Booking" color="bg-blue-600" />
           <QuickMenuCard href="/calendar"      icon={<Calendar className="w-5 h-5" />}      label="Kalender"      color="bg-indigo-600" />
           <QuickMenuCard href="/reminders"     icon={<Bell className="w-5 h-5" />}          label="Reminder"      color="bg-orange-500" />
@@ -140,7 +140,7 @@ export default async function DashboardPage() {
       {/* Stats this month */}
       <div>
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Statistik Bulan Ini</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <StatCard
             icon={<Users className="w-5 h-5 text-blue-600" />}
             iconBg="bg-blue-50"
@@ -171,7 +171,7 @@ export default async function DashboardPage() {
       {(printCounts.SELECTION + printCounts.VENDOR + printCounts.PACKING + printCounts.SHIPPED) > 0 && (
         <div>
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Print Order — Perlu Tindakan</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {printCounts.SELECTION > 0 && (
               <ActionCard
                 href="/bookings?print=SELECTION"
@@ -219,10 +219,10 @@ export default async function DashboardPage() {
       {/* Today's Schedule */}
       <div>
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Jadwal Hari Ini</p>
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
           {!todayBookings || todayBookings.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 gap-2">
-              <Calendar className="w-8 h-8 text-gray-200" />
+              <Calendar className="w-10 h-10 text-gray-200" />
               <p className="text-sm text-gray-400">Tidak ada sesi foto hari ini</p>
             </div>
           ) : (
@@ -231,16 +231,16 @@ export default async function DashboardPage() {
                 <Link
                   key={b.id}
                   href={`/bookings/${b.id}`}
-                  className="flex items-center gap-4 px-4 py-3.5 hover:bg-gray-50 transition-colors group"
+                  className="flex items-center gap-4 px-4 py-2 hover:bg-gray-50 transition-colors group"
                 >
                   {/* Time */}
                   <div className="flex-shrink-0 text-center min-w-[48px]">
-                    <p className="text-sm font-bold text-[#8B1A1A]">{formatTime(b.start_time)}</p>
+                    <p className="text-sm font-bold text-primary">{formatTime(b.start_time)}</p>
                     <p className="text-xs text-gray-400">{formatTime(b.end_time)}</p>
                   </div>
 
                   {/* Divider dot */}
-                  <div className="flex-shrink-0 w-2 h-2 rounded-full bg-[#8B1A1A]" />
+                  <div className="flex-shrink-0 w-2 h-2 rounded-full bg-primary" />
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
@@ -252,7 +252,7 @@ export default async function DashboardPage() {
 
                   {/* Status */}
                   <div className="flex-shrink-0">
-                    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${BOOKING_STATUS_COLOR[b.status as BookingStatus] ?? ""}`}>
+                    <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${BOOKING_STATUS_COLOR[b.status as BookingStatus] ?? ""}`}>
                       {BOOKING_STATUS_LABEL[b.status as BookingStatus] ?? b.status}
                     </span>
                   </div>
@@ -288,12 +288,12 @@ function QuickMenuCard({ href, icon, label, color }: {
   return (
     <Link
       href={href}
-      className="flex flex-col items-center gap-2.5 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 active:translate-y-0"
+      className="flex flex-col items-center gap-2 p-4 bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 active:translate-y-0"
     >
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-white ${color}`}>
+      <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-white ${color}`}>
         {icon}
       </div>
-      <p className="text-xs font-semibold text-gray-700 text-center leading-tight">{label}</p>
+      <p className="text-xs font-semibold text-gray-700 text-center leading-5">{label}</p>
     </Link>
   );
 }
@@ -307,8 +307,8 @@ function StatCard({ icon, iconBg, label, value, sub, valueColor = "text-gray-900
   valueColor?: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
-      <div className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${iconBg}`}>
+    <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 flex items-center gap-4">
+      <div className={`flex-shrink-0 w-11 h-11 rounded-lg flex items-center justify-center ${iconBg}`}>
         {icon}
       </div>
       <div className="min-w-0">
@@ -331,13 +331,13 @@ function ActionCard({ href, icon, iconBg, label, count, countColor }: {
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 p-3.5 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all"
+      className="flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-all"
     >
-      <div className={`flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center ${iconBg}`}>
+      <div className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center ${iconBg}`}>
         {icon}
       </div>
       <div className="min-w-0">
-        <p className="text-xs text-gray-500 truncate leading-tight">{label}</p>
+        <p className="text-xs text-gray-500 truncate leading-5">{label}</p>
         <p className={`text-lg font-bold ${countColor}`}>{count}</p>
       </div>
     </Link>

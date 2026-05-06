@@ -65,7 +65,7 @@ export function StepPayment({ data, onChange }: Props) {
                 type="button"
                 onClick={() => onChange({ ...data, payment_method: isSelected ? "" : m.value })}
                 className={cn(
-                  "flex flex-col items-center gap-1.5 rounded-lg border p-3 text-xs font-medium transition-colors",
+                  "flex flex-col items-center gap-2 rounded-lg border p-4 text-xs font-medium transition-colors",
                   isSelected
                     ? "bg-maroon-50 border-maroon-300 text-maroon-800"
                     : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"

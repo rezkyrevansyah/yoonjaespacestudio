@@ -212,15 +212,15 @@ export function PhotoDeliveryDetailClient({ booking: initialBooking, currentUser
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-start gap-3">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex items-start gap-4">
           <Button asChild variant="ghost" size="icon" className="shrink-0 mt-0.5">
             <Link href="/photo-delivery">
               <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
           <div>
-            <p className="font-mono text-sm text-gray-500">{booking.booking_number}</p>
+            <p className="font-sans text-sm text-gray-500">{booking.booking_number}</p>
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-xl font-bold text-gray-900">
                 {booking.customers?.name ?? "—"}
@@ -233,14 +233,14 @@ export function PhotoDeliveryDetailClient({ booking: initialBooking, currentUser
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           {waPhone && (
-            <Button asChild size="sm" variant="outline" className="gap-1.5 text-green-600 border-green-200 hover:bg-green-50">
+            <Button asChild size="sm" variant="outline" className="gap-2 text-green-600 border-green-200 hover:bg-green-50">
               <a href={`https://wa.me/${waPhone}`} target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="h-3.5 w-3.5" />
                 WA
               </a>
             </Button>
           )}
-          <Button asChild size="sm" variant="outline" className="gap-1.5">
+          <Button asChild size="sm" variant="outline" className="gap-2">
             <Link href={`/customer/${booking.public_token}`} target="_blank">
               <User className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Customer</span>
@@ -260,14 +260,14 @@ export function PhotoDeliveryDetailClient({ booking: initialBooking, currentUser
         {/* Foto & Print Tab */}
         <TabsContent value="foto" className="space-y-4 pt-2">
           {/* Google Drive Link Section */}
-          <div className="bg-white rounded-xl border p-5 space-y-4">
+          <div className="bg-white rounded-lg border p-5 space-y-4">
             <h3 className="font-semibold text-gray-800 flex items-center gap-2">
               <LinkIcon className="h-4 w-4 text-maroon-700" />
               Google Drive Link
             </h3>
 
             {booking.status === "SHOOT_DONE" ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <p className="text-sm text-gray-500">Foto belum dikirim. Input link dan deliver ke customer.</p>
                 <Button
                   className="w-full gap-2 bg-maroon-700 hover:bg-maroon-600 text-white disabled:opacity-50"
@@ -279,7 +279,7 @@ export function PhotoDeliveryDetailClient({ booking: initialBooking, currentUser
                 </Button>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {booking.google_drive_link && (
                   <a
                     href={/^https?:\/\//i.test(booking.google_drive_link) ? booking.google_drive_link : `https://${booking.google_drive_link}`}
@@ -313,14 +313,14 @@ export function PhotoDeliveryDetailClient({ booking: initialBooking, currentUser
           </div>
 
           {/* Print Order Section */}
-          <div className="bg-white rounded-xl border p-5 space-y-4">
+          <div className="bg-white rounded-lg border p-5 space-y-4">
             <h3 className="font-semibold text-gray-800 flex items-center gap-2">
               <Printer className="h-4 w-4 text-maroon-700" />
               Print Order
             </h3>
 
             {!booking.print_order_status ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <p className="text-sm text-gray-500">Belum ada print order untuk booking ini.</p>
                 <div className="flex items-end gap-2">
                   <div className="flex-1">
@@ -331,7 +331,7 @@ export function PhotoDeliveryDetailClient({ booking: initialBooking, currentUser
                       type="date"
                       value={printDate}
                       onChange={(e) => setPrintDate(e.target.value)}
-                      className="w-full rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                      className="w-full rounded-md border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
                     />
                   </div>
                   <Button
@@ -385,13 +385,13 @@ export function PhotoDeliveryDetailClient({ booking: initialBooking, currentUser
                             )}
                           </div>
                           <span className={cn(
-                            "text-xs text-center leading-tight max-w-[50px]",
+                            "text-xs text-center leading-5 max-w-[50px]",
                             isCurrent ? "text-blue-700 font-semibold" : isPast ? "text-blue-400" : "text-gray-400"
                           )}>
                             {PRINT_ORDER_STATUS_LABEL[status]}
                           </span>
                           {savedDate && (
-                            <span className="text-[10px] text-gray-400 leading-none text-center max-w-[50px]">
+                            <span className="text-xs leading-5 text-gray-400 leading-5 text-center max-w-[50px]">
                               {formatDate(savedDate)}
                             </span>
                           )}
@@ -412,7 +412,7 @@ export function PhotoDeliveryDetailClient({ booking: initialBooking, currentUser
                         type="date"
                         value={printDate}
                         onChange={(e) => setPrintDate(e.target.value)}
-                        className="w-full rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                        className="w-full rounded-md border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
                       />
                     </div>
                     <Button
@@ -477,7 +477,7 @@ export function PhotoDeliveryDetailClient({ booking: initialBooking, currentUser
               Input Link Foto & Deliver
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-3 py-1">
+          <div className="space-y-4 py-1">
             <div>
               <Label className="mb-2 block">Google Drive Link</Label>
               <Input
@@ -494,7 +494,7 @@ export function PhotoDeliveryDetailClient({ booking: initialBooking, currentUser
                   type="date"
                   value={deliverDate}
                   onChange={(e) => setDeliverDate(e.target.value)}
-                  className="flex-1 min-w-0 rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-maroon-400"
+                  className="flex-1 min-w-0 rounded-md border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-maroon-400"
                 />
                 <Button
                   variant="outline"

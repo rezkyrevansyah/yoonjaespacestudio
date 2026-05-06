@@ -77,7 +77,7 @@ export function StepCustomerData({ customerData, onChange, leads, domicileOption
         <p className="text-sm text-gray-500">Isi informasi customer</p>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         <div>
           <Label>Nama <span className="text-red-500">*</span></Label>
           <Input

@@ -98,25 +98,25 @@ export function ExpenseModal({ open, expense, vendors, onClose, onSave }: Props)
       />
 
       {/* Modal */}
-      <div className="relative z-10 w-full sm:max-w-md bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl">
+      <div className="relative z-10 w-full sm:max-w-md bg-white rounded-t-lg sm:rounded-lg shadow-sm">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-100">
+        <div className="flex items-center justify-between px-4 pt-5 pb-4 border-b border-gray-100">
           <h2 className="text-base font-semibold text-gray-900">
             {expense ? "Edit Pengeluaran" : "Tambah Pengeluaran"}
           </h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="px-5 py-4 space-y-4">
+        <form onSubmit={handleSubmit} className="px-4 py-4 space-y-4">
           {/* Date */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               Tanggal <span className="text-red-500">*</span>
             </label>
             <input
@@ -124,13 +124,13 @@ export function ExpenseModal({ open, expense, vendors, onClose, onSave }: Props)
               value={form.date}
               onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
               required
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               Deskripsi
             </label>
             <input
@@ -138,13 +138,13 @@ export function ExpenseModal({ open, expense, vendors, onClose, onSave }: Props)
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               placeholder="Contoh: Beli kertas foto, listrik, dll"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring"
             />
           </div>
 
           {/* Amount */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               Jumlah (Rp) <span className="text-red-500">*</span>
             </label>
             <div className="relative">
@@ -156,7 +156,7 @@ export function ExpenseModal({ open, expense, vendors, onClose, onSave }: Props)
                 onChange={e => handleAmountChange(e.target.value)}
                 placeholder="0"
                 required
-                className="w-full border border-gray-200 rounded-xl pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]"
+                className="w-full border border-gray-200 rounded-lg pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring"
               />
             </div>
             {form.amount > 0 && (
@@ -168,7 +168,7 @@ export function ExpenseModal({ open, expense, vendors, onClose, onSave }: Props)
 
           {/* Category */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               Kategori
             </label>
             <input
@@ -176,19 +176,19 @@ export function ExpenseModal({ open, expense, vendors, onClose, onSave }: Props)
               value={form.category}
               onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
               placeholder="Contoh: Operasional, Peralatan, dll"
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring"
             />
           </div>
 
           {/* Vendor */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               Vendor <span className="text-gray-400">(opsional)</span>
             </label>
             <select
               value={form.vendor_id ?? ""}
               onChange={e => setForm(f => ({ ...f, vendor_id: e.target.value || null }))}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring"
             >
               <option value="">— Tidak ada vendor —</option>
               {vendors.map(v => (
@@ -199,7 +199,7 @@ export function ExpenseModal({ open, expense, vendors, onClose, onSave }: Props)
 
           {/* Notes */}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            <label className="block text-xs font-medium text-gray-700 mb-1">
               Catatan
             </label>
             <textarea
@@ -207,7 +207,7 @@ export function ExpenseModal({ open, expense, vendors, onClose, onSave }: Props)
               onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
               rows={2}
               placeholder="Catatan tambahan..."
-              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring"
             />
           </div>
 
@@ -216,14 +216,14 @@ export function ExpenseModal({ open, expense, vendors, onClose, onSave }: Props)
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 border border-gray-200 text-sm font-medium text-gray-700 rounded-xl py-2.5 hover:bg-gray-50 transition-colors"
+              className="flex-1 border border-gray-200 text-sm font-medium text-gray-700 rounded-lg py-2 hover:bg-gray-50 transition-colors"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={saving || form.amount <= 0}
-              className="flex-1 bg-[#8B1A1A] text-white text-sm font-medium rounded-xl py-2.5 hover:bg-[#B22222] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-primary text-white text-sm font-medium rounded-lg py-2 hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? "Menyimpan..." : "Simpan"}
             </button>

@@ -224,7 +224,7 @@ export function RoleManagementClient({ currentUser, initialRoles }: RoleManageme
                     <Button
                       size="icon"
                       variant="ghost"
-                      className="h-7 w-7 text-gray-500 hover:text-gray-700"
+                      className="h-10 w-10 text-gray-500 hover:text-gray-700"
                       onClick={() => openEdit(role)}
                     >
                       <Pencil className="h-3.5 w-3.5" />
@@ -233,7 +233,7 @@ export function RoleManagementClient({ currentUser, initialRoles }: RoleManageme
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-7 w-7 text-red-500 hover:text-red-700 hover:bg-red-50"
+                        className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent"
                         onClick={() => setDeleteId(role.id)}
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -306,11 +306,11 @@ export function RoleManagementClient({ currentUser, initialRoles }: RoleManageme
                   </button>
                 </div>
               </div>
-              <div className="border rounded-lg p-3 space-y-2 max-h-60 overflow-y-auto">
+              <div className="border rounded-lg p-4 space-y-2 max-h-60 overflow-y-auto">
                 {MENU_ITEMS.map((item) => (
                   <label
                     key={item.slug}
-                    className="flex items-center gap-3 cursor-pointer py-1 hover:bg-gray-50 rounded px-1"
+                    className="flex items-center gap-4 cursor-pointer py-1 hover:bg-gray-50 rounded px-1"
                   >
                     <Checkbox
                       checked={form.menu_access.includes(item.slug)}
@@ -328,8 +328,8 @@ export function RoleManagementClient({ currentUser, initialRoles }: RoleManageme
             {/* Feature Permissions */}
             <div className="space-y-2">
               <Label>Hak Akses Fitur</Label>
-              <div className="border rounded-lg p-3 space-y-2">
-                <label className="flex items-center gap-3 cursor-pointer py-1 hover:bg-gray-50 rounded px-1">
+              <div className="border rounded-lg p-4 space-y-2">
+                <label className="flex items-center gap-4 cursor-pointer py-1 hover:bg-gray-50 rounded px-1">
                   <Checkbox
                     checked={form.menu_access.includes("booking_full_access")}
                     onCheckedChange={() => toggleMenu("booking_full_access")}
@@ -348,7 +348,7 @@ export function RoleManagementClient({ currentUser, initialRoles }: RoleManageme
                 <Label>Izin Perubahan Status Booking</Label>
                 <p className="text-xs text-gray-400 mt-0.5">Diabaikan jika role memiliki Full Access Booking</p>
               </div>
-              <div className="border rounded-lg p-3 space-y-3">
+              <div className="border rounded-lg p-4 space-y-4">
                 <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                   <p className="text-xs font-medium text-gray-500 col-span-2 mb-1">Transisi Maju (Next)</p>
                   {([

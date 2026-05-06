@@ -10,11 +10,11 @@ export default function ActivitiesLoading() {
       </div>
 
       {/* Activity list */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50">
+      <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50">
         {Array.from({ length: 10 }).map((_, i) => (
-          <div key={i} className="flex items-start gap-3 px-4 py-3.5">
-            <Skeleton className="h-8 w-8 rounded-full flex-shrink-0 mt-0.5" />
-            <div className="flex-1 space-y-1.5">
+          <div key={i} className="flex items-start gap-4 px-4 py-2">
+            <Skeleton className="h-10 w-10 rounded-full flex-shrink-0 mt-0.5" />
+            <div className="flex-1 space-y-1">
               <div className="flex items-center justify-between gap-4">
                 <Skeleton className="h-4 w-48" />
                 <Skeleton className="h-3.5 w-24 flex-shrink-0" />

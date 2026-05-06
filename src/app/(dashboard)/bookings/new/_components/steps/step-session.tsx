@@ -226,7 +226,7 @@ export function StepSession({ sessionData, onChange, settingsGeneral, holidays, 
       </div>
 
       {effectiveAllowPast && (
-        <div className="flex items-center gap-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+        <div className="flex items-center gap-2 rounded-lg bg-amber-50 border border-amber-200 px-4 py-2">
           <AlertTriangle className="h-4 w-4 text-amber-600 flex-shrink-0" />
           <p className="text-sm text-amber-700">Mode Booking Lama — tanggal masa lalu diizinkan</p>
         </div>
@@ -234,7 +234,7 @@ export function StepSession({ sessionData, onChange, settingsGeneral, holidays, 
 
       {/* Toggle past dates — hanya tampil jika prop allowPastDates belum aktif */}
       {!allowPastDates && (
-        <div className="flex items-center justify-between rounded-lg border border-dashed border-gray-300 px-3 py-2">
+        <div className="flex items-center justify-between rounded-lg border border-dashed border-gray-300 px-4 py-2">
           <div>
             <p className="text-sm font-medium text-gray-700">Input tanggal masa lalu</p>
             <p className="text-xs text-gray-500">Aktifkan jika booking ini sudah terjadi sebelumnya</p>
@@ -296,7 +296,7 @@ export function StepSession({ sessionData, onChange, settingsGeneral, holidays, 
       </div>
 
       {holidayMatch && (
-        <div className="flex items-start gap-2 rounded-lg bg-red-50 border border-red-200 p-3">
+        <div className="flex items-start gap-2 rounded-lg bg-red-50 border border-red-200 p-4">
           <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-sm font-medium text-red-700">Studio Tutup</p>
@@ -353,20 +353,20 @@ export function StepSession({ sessionData, onChange, settingsGeneral, holidays, 
             </p>
           )}
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-gray-500 mt-4">
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center gap-2">
               <span className="w-3 h-3 rounded bg-maroon-700 border-2 border-maroon-700 inline-block" /> Dipilih
             </span>
             {newBookingRange && (
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded bg-maroon-100 border-2 border-maroon-200 inline-block" /> Durasi booking ini
               </span>
             )}
             {existingBookings.length > 0 && (
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded bg-gray-200 border-2 border-gray-200 inline-block" /> Sudah ada booking
               </span>
             )}
-            <span className="flex items-center gap-1.5">
+            <span className="flex items-center gap-2">
               <span className="w-3 h-3 rounded bg-white border-2 border-gray-200 inline-block" /> Tersedia
             </span>
           </div>
@@ -374,7 +374,7 @@ export function StepSession({ sessionData, onChange, settingsGeneral, holidays, 
       )}
 
       {conflictInfo && (
-        <div className="flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-300 px-4 py-3">
+        <div className="flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-300 px-4 py-3">
           <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-sm font-semibold text-amber-800">Perhatian: Jam Bertabrakan</p>

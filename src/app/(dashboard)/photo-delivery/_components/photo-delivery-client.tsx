@@ -152,7 +152,7 @@ export function PhotoDeliveryClient({ initialData }: Props) {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
             <Camera className="h-6 w-6 text-maroon-700" />
@@ -163,7 +163,7 @@ export function PhotoDeliveryClient({ initialData }: Props) {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 items-center">
+      <div className="flex flex-wrap gap-4 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
@@ -220,7 +220,7 @@ export function PhotoDeliveryClient({ initialData }: Props) {
       </div>
 
       {/* Table — desktop only */}
-      <div className="hidden md:block rounded-xl border bg-white overflow-hidden">
+      <div className="hidden md:block rounded-lg border bg-white overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="bg-gray-50">
@@ -253,7 +253,7 @@ export function PhotoDeliveryClient({ initialData }: Props) {
               rows.map((row) => (
                 <TableRow key={row.id} className="hover:bg-gray-50">
                   <TableCell>
-                    <p className="font-mono text-xs text-gray-500">{row.booking_number}</p>
+                    <p className="font-sans text-xs text-gray-500">{row.booking_number}</p>
                     <p className="text-sm font-medium text-gray-800">{row.packages?.name ?? "—"}</p>
                   </TableCell>
                   <TableCell>
@@ -294,7 +294,7 @@ export function PhotoDeliveryClient({ initialData }: Props) {
                     )}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button asChild size="sm" variant="outline" className="gap-1.5">
+                    <Button asChild size="sm" variant="outline" className="gap-2">
                       <Link href={`/photo-delivery/${row.id}`}>
                         <Eye className="h-3.5 w-3.5" />
                         Lihat
@@ -309,7 +309,7 @@ export function PhotoDeliveryClient({ initialData }: Props) {
       </div>
 
       {/* Mobile card list */}
-      <div className="md:hidden space-y-3">
+      <div className="md:hidden space-y-4">
         {loading ? (
           <div className="text-center py-12 text-gray-400 text-sm">Memuat data...</div>
         ) : rows.length === 0 ? (
@@ -319,10 +319,10 @@ export function PhotoDeliveryClient({ initialData }: Props) {
           </div>
         ) : (
           rows.map((row) => (
-            <div key={row.id} className="rounded-xl border bg-white p-4 space-y-3">
+            <div key={row.id} className="rounded-lg border bg-white p-4 space-y-4">
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <p className="font-mono text-xs text-gray-400">{row.booking_number}</p>
+                  <p className="font-sans text-xs text-gray-400">{row.booking_number}</p>
                   <p className="text-sm font-semibold text-gray-900 mt-0.5">{row.customers?.name ?? "—"}</p>
                   <p className="text-xs text-gray-500">{row.packages?.name ?? "—"}</p>
                 </div>
@@ -336,7 +336,7 @@ export function PhotoDeliveryClient({ initialData }: Props) {
                 <span className="text-xs">{formatTime(row.start_time)} — {formatTime(row.end_time)}</span>
               </div>
               <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-3 text-xs">
+                <div className="flex items-center gap-4 text-xs">
                   {row.google_drive_link ? (
                     <a
                       href={/^https?:\/\//i.test(row.google_drive_link) ? row.google_drive_link : `https://${row.google_drive_link}`}
@@ -357,7 +357,7 @@ export function PhotoDeliveryClient({ initialData }: Props) {
                     </span>
                   )}
                 </div>
-                <Button asChild size="sm" variant="outline" className="gap-1.5 flex-shrink-0">
+                <Button asChild size="sm" variant="outline" className="gap-2 flex-shrink-0">
                   <Link href={`/photo-delivery/${row.id}`}>
                     <Eye className="h-3.5 w-3.5" />
                     Lihat

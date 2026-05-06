@@ -132,7 +132,7 @@ export function ActivitiesClient({ initialData }: Props) {
             value={searchInput}
             onChange={e => setSearchInput(e.target.value)}
             placeholder="Cari deskripsi atau user..."
-            className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]"
+            className="w-full pl-9 pr-4 py-2 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring"
           />
         </form>
 
@@ -141,7 +141,7 @@ export function ActivitiesClient({ initialData }: Props) {
           <select
             value={filterEntity}
             onChange={e => setFilterEntity(e.target.value)}
-            className="appearance-none text-sm font-medium border border-gray-200 rounded-xl pl-3 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 cursor-pointer"
+            className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 cursor-pointer"
           >
             <option value="">Semua Entitas</option>
             {ENTITY_OPTIONS.map(([key, label]) => (
@@ -156,7 +156,7 @@ export function ActivitiesClient({ initialData }: Props) {
           <select
             value={filterAction}
             onChange={e => setFilterAction(e.target.value)}
-            className="appearance-none text-sm font-medium border border-gray-200 rounded-xl pl-3 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 cursor-pointer"
+            className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 cursor-pointer"
           >
             <option value="">Semua Aksi</option>
             <option value="CREATE">Create</option>
@@ -169,12 +169,12 @@ export function ActivitiesClient({ initialData }: Props) {
       </div>
 
       {/* Log list */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
         {loading ? (
           <div className="p-6 space-y-4">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse flex-shrink-0" />
+              <div key={i} className="flex gap-4">
+                <div className="w-10 h-10 rounded-full bg-gray-100 animate-pulse flex-shrink-0" />
                 <div className="flex-1 space-y-2">
                   <div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" />
                   <div className="h-3 bg-gray-100 rounded animate-pulse w-1/2" />
@@ -183,7 +183,7 @@ export function ActivitiesClient({ initialData }: Props) {
             ))}
           </div>
         ) : logs.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 gap-3">
+          <div className="flex flex-col items-center justify-center py-16 gap-4">
             <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center">
               <Activity className="w-6 h-6 text-gray-300" />
             </div>
@@ -217,7 +217,7 @@ export function ActivitiesClient({ initialData }: Props) {
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-semibold ${ACTION_COLORS[log.action] ?? "bg-gray-100 text-gray-600"}`}>
+                        <span className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${ACTION_COLORS[log.action] ?? "bg-gray-100 text-gray-600"}`}>
                           {log.action}
                         </span>
                       </td>
@@ -236,7 +236,7 @@ export function ActivitiesClient({ initialData }: Props) {
             {/* Mobile timeline */}
             <div className="md:hidden divide-y divide-gray-50">
               {logs.map(log => (
-                <div key={log.id} className="px-4 py-3 flex gap-3">
+                <div key={log.id} className="px-4 py-3 flex gap-4">
                   {/* Action dot */}
                   <div className={`flex-shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${ACTION_COLORS[log.action] ?? "bg-gray-100 text-gray-600"}`}>
                     {log.action[0]}
@@ -277,7 +277,7 @@ export function ActivitiesClient({ initialData }: Props) {
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="px-3 py-1.5 text-xs font-medium text-gray-600">
+            <span className="px-4 py-2 text-xs font-medium text-gray-600">
               {page + 1} / {totalPages}
             </span>
             <button

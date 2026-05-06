@@ -186,7 +186,7 @@ export function TabPackages({ currentUser }: TabPackagesProps) {
     setDeleteId(null);
   }
 
-  if (loading) return <div className="space-y-3">{[1,2,3].map(i => <Skeleton key={i} className="h-20 w-full" />)}</div>;
+  if (loading) return <div className="space-y-4">{[1,2,3].map(i => <Skeleton key={i} className="h-20 w-full" />)}</div>;
 
   return (
     <div className="space-y-4">
@@ -219,7 +219,7 @@ export function TabPackages({ currentUser }: TabPackagesProps) {
                       </Badge>
                     </div>
                     <p className="text-maroon-700 font-bold">{formatRupiah(pkg.price)}</p>
-                    <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
                       <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{pkg.duration_minutes} mnt</span>
                       {pkg.need_extra_time && (
                         <span className="flex items-center gap-1">
@@ -233,7 +233,7 @@ export function TabPackages({ currentUser }: TabPackagesProps) {
                       <Button size="sm" variant="outline" className="flex-1" onClick={() => openEdit(pkg)}>
                         <Pencil className="h-3 w-3 mr-1" />Edit
                       </Button>
-                      <Button size="sm" variant="outline" className="text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeleteId(pkg.id)}>
+                      <Button size="sm" variant="outline" className="text-red-500 hover:text-red-700 hover:bg-accent" onClick={() => setDeleteId(pkg.id)}>
                         <Trash2 className="h-3 w-3" />
                       </Button>
                     </div>
@@ -260,7 +260,7 @@ export function TabPackages({ currentUser }: TabPackagesProps) {
               <Label>Deskripsi</Label>
               <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} placeholder="Deskripsi singkat..." />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Kategori</Label>
                 <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v === "__none" ? "" : v })}>
@@ -280,7 +280,7 @@ export function TabPackages({ currentUser }: TabPackagesProps) {
                 <Input type="number" min={0} value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: e.target.value })} placeholder="0" />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Harga (Rp) <span className="text-red-500">*</span></Label>
                 <Input
@@ -296,7 +296,7 @@ export function TabPackages({ currentUser }: TabPackagesProps) {
             </div>
             <div className="flex items-center gap-2">
               <Checkbox id="incl-print" checked={form.include_print} onCheckedChange={(v) => setForm({ ...form, include_print: !!v })} />
-              <Label htmlFor="incl-print" className="cursor-pointer flex items-center gap-1.5"><Printer className="h-3.5 w-3.5" />Include Print</Label>
+              <Label htmlFor="incl-print" className="cursor-pointer flex items-center gap-2"><Printer className="h-3.5 w-3.5" />Include Print</Label>
             </div>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
@@ -310,25 +310,25 @@ export function TabPackages({ currentUser }: TabPackagesProps) {
                     <p className="text-xs text-muted-foreground">menit tambahan</p>
                   </div>
                   <div className="flex gap-4 text-sm">
-                    <label className="flex items-center gap-1.5 cursor-pointer">
+                    <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="radio"
                         name="pkg_extra_time_position"
                         value="before"
                         checked={form.extra_time_position === "before"}
                         onChange={() => setForm({ ...form, extra_time_position: "before" })}
-                        className="accent-[#8B1A1A]"
+                        className="accent-primary"
                       />
                       Sebelum sesi
                     </label>
-                    <label className="flex items-center gap-1.5 cursor-pointer">
+                    <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="radio"
                         name="pkg_extra_time_position"
                         value="after"
                         checked={form.extra_time_position === "after"}
                         onChange={() => setForm({ ...form, extra_time_position: "after" })}
-                        className="accent-[#8B1A1A]"
+                        className="accent-primary"
                       />
                       Setelah sesi
                     </label>
@@ -347,15 +347,15 @@ export function TabPackages({ currentUser }: TabPackagesProps) {
               />
               <p className="text-xs text-muted-foreground">Kosongkan atau isi 0 untuk pakai bonus default dari Pengaturan Umum</p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />
               <Label>Aktif</Label>
             </div>
-            <div className="flex items-start gap-3 rounded-lg border border-pink-100 bg-pink-50/50 p-3">
+            <div className="flex items-start gap-4 rounded-lg border border-pink-100 bg-pink-50/50 p-4">
               <Switch checked={form.is_mua} onCheckedChange={(v) => setForm({ ...form, is_mua: v })} />
               <div className="space-y-0.5">
                 <Label className="cursor-pointer">Tampilkan di Jadwal MUA Publik</Label>
-                <p className="text-xs text-gray-500">Booking dengan paket ini akan muncul di halaman <code className="text-[10px]">/mua</code> sebagai slot terbooking.</p>
+                <p className="text-xs text-gray-500">Booking dengan paket ini akan muncul di halaman <code className="text-xs leading-5">/mua</code> sebagai slot terbooking.</p>
               </div>
             </div>
           </div>

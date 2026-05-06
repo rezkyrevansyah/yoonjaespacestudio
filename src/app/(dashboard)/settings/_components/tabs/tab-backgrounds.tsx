@@ -95,7 +95,7 @@ export function TabBackgrounds({ currentUser }: TabBackgroundsProps) {
       ) : (
         <div className="space-y-2">
           {items.map((item) => (
-            <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg bg-white">
+            <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg bg-white">
               <div className="min-w-0">
                 <p className="text-sm font-medium">{item.name}</p>
                 {item.description && <p className="text-xs text-muted-foreground">{item.description}</p>}
@@ -104,8 +104,8 @@ export function TabBackgrounds({ currentUser }: TabBackgroundsProps) {
                 <Badge variant={item.is_available ? "default" : "secondary"} className={item.is_available ? "bg-green-100 text-green-800 border-green-200" : ""}>
                   {item.is_available ? "Tersedia" : "Tidak Tersedia"}
                 </Badge>
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => openEdit(item)}><Pencil className="h-3 w-3" /></Button>
-                <Button size="icon" variant="ghost" className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeleteId(item.id)}><Trash2 className="h-3 w-3" /></Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10" onClick={() => openEdit(item)}><Pencil className="h-3 w-3" /></Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent" onClick={() => setDeleteId(item.id)}><Trash2 className="h-3 w-3" /></Button>
               </div>
             </div>
           ))}
@@ -124,7 +124,7 @@ export function TabBackgrounds({ currentUser }: TabBackgroundsProps) {
               <Label>Deskripsi</Label>
               <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={2} />
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Switch checked={form.is_available} onCheckedChange={(v) => setForm({ ...form, is_available: v })} />
               <Label>Tersedia untuk Digunakan</Label>
             </div>

@@ -148,13 +148,13 @@ export function BookingDetailClient({ currentUser, booking: initialBooking, avai
   return (
     <div className="space-y-4 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex items-start justify-between gap-3 flex-wrap">
-        <div className="flex items-start gap-3">
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex items-start gap-4">
           <Button variant="ghost" size="icon" onClick={() => router.push("/bookings")} className="flex-shrink-0 mt-0.5">
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-            <p className="font-mono text-sm text-gray-500">{booking.booking_number}</p>
+            <p className="font-sans text-sm text-gray-500">{booking.booking_number}</p>
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-xl font-bold text-gray-900">
                 {booking.customers?.name ?? "Customer"}
@@ -174,20 +174,20 @@ export function BookingDetailClient({ currentUser, booking: initialBooking, avai
         <div className="flex items-center gap-2 flex-wrap">
           {waLink && (
             <a href={waLink} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline" size="sm" className="gap-1.5">
+              <Button variant="outline" size="sm" className="gap-2">
                 <MessageCircle className="h-4 w-4 text-green-600" />
                 WA
               </Button>
             </a>
           )}
           <Link href={`/customer/${booking.public_token}`} target="_blank">
-            <Button variant="outline" size="sm" className="gap-1.5">
+            <Button variant="outline" size="sm" className="gap-2">
               <User className="h-4 w-4" />
               <span className="hidden sm:inline">Customer Page</span>
             </Button>
           </Link>
           <Link href={`/invoice/${booking.public_token}`} target="_blank">
-            <Button variant="outline" size="sm" className="gap-1.5">
+            <Button variant="outline" size="sm" className="gap-2">
               <FileText className="h-4 w-4" />
               <span className="hidden sm:inline">Invoice</span>
             </Button>
@@ -197,7 +197,7 @@ export function BookingDetailClient({ currentUser, booking: initialBooking, avai
               <Button
                 variant="outline"
                 size="sm"
-                className="gap-1.5 text-blue-600 border-blue-200 hover:bg-blue-50"
+                className="gap-2 text-blue-600 border-blue-200 hover:bg-blue-50"
                 onClick={() => setShowEditDetail(true)}
               >
                 <Pencil className="h-4 w-4" />
@@ -206,7 +206,7 @@ export function BookingDetailClient({ currentUser, booking: initialBooking, avai
               <Button
                 variant="outline"
                 size="sm"
-                className="gap-1.5 text-orange-600 border-orange-200 hover:bg-orange-50"
+                className="gap-2 text-orange-600 border-orange-200 hover:bg-orange-50"
                 onClick={() => setShowReschedule(true)}
               >
                 <CalendarClock className="h-4 w-4" />
@@ -215,7 +215,7 @@ export function BookingDetailClient({ currentUser, booking: initialBooking, avai
               <Button
                 variant="outline"
                 size="sm"
-                className="gap-1.5 text-red-500 border-red-200 hover:bg-red-50"
+                className="gap-2 text-red-500 border-red-200 hover:bg-accent"
                 onClick={() => setShowDelete(true)}
               >
                 <Trash2 className="h-4 w-4" />
@@ -296,7 +296,7 @@ export function BookingDetailClient({ currentUser, booking: initialBooking, avai
           <AlertDialogHeader>
             <AlertDialogTitle>Hapus Booking?</AlertDialogTitle>
             <AlertDialogDescription>
-              Booking <span className="font-mono font-medium">{booking.booking_number}</span> akan
+              Booking <span className="font-sans font-medium">{booking.booking_number}</span> akan
               dihapus beserta semua data terkait. Tindakan ini tidak dapat dibatalkan.
             </AlertDialogDescription>
           </AlertDialogHeader>

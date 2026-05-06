@@ -13,14 +13,14 @@ export default function CustomersLoading() {
       <Skeleton className="h-9 w-full max-w-sm rounded-lg" />
 
       {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
         <div className="grid grid-cols-4 gap-4 px-4 py-3 border-b border-gray-100">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-3.5 w-full" />
           ))}
         </div>
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="grid grid-cols-4 gap-4 px-4 py-3.5 border-b border-gray-50">
+          <div key={i} className="grid grid-cols-4 gap-4 px-4 py-2 border-b border-gray-50">
             <Skeleton className="h-4 w-28" />
             <Skeleton className="h-4 w-32" />
             <Skeleton className="h-4 w-16 mx-auto" />

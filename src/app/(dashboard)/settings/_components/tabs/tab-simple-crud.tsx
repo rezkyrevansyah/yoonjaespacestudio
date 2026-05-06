@@ -104,14 +104,14 @@ export function TabSimpleCrud({ currentUser, tableName, entityLabel, addLabel }:
       ) : (
         <div className="space-y-2">
           {items.map((item) => (
-            <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg bg-white">
+            <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg bg-white">
               <p className="text-sm font-medium">{item.name}</p>
               <div className="flex items-center gap-2">
                 <Badge variant={item.is_active ? "default" : "secondary"} className={item.is_active ? "bg-green-100 text-green-800 border-green-200" : ""}>
                   {item.is_active ? "Aktif" : "Nonaktif"}
                 </Badge>
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => openEdit(item)}><Pencil className="h-3 w-3" /></Button>
-                <Button size="icon" variant="ghost" className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeleteId(item.id)}><Trash2 className="h-3 w-3" /></Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10" onClick={() => openEdit(item)}><Pencil className="h-3 w-3" /></Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent" onClick={() => setDeleteId(item.id)}><Trash2 className="h-3 w-3" /></Button>
               </div>
             </div>
           ))}
@@ -126,7 +126,7 @@ export function TabSimpleCrud({ currentUser, tableName, entityLabel, addLabel }:
               <Label>Nama <span className="text-red-500">*</span></Label>
               <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder={`Nama ${entityLabel}...`} />
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} /><Label>Aktif</Label>
             </div>
           </div>

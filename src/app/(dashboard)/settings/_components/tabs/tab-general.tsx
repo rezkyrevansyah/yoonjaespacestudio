@@ -179,7 +179,7 @@ export function TabGeneral({ currentUser }: TabGeneralProps) {
           <CardTitle className="text-base">Jam Operasional & Pengaturan Booking</CardTitle>
         </CardHeader>
         <CardContent className="space-y-5">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Jam Buka</Label>
               <Input type="time" value={openTime} onChange={(e) => setOpenTime(e.target.value)} />
@@ -230,7 +230,7 @@ export function TabGeneral({ currentUser }: TabGeneralProps) {
                   value="paid"
                   checked={defaultStatus === "paid"}
                   onChange={() => setDefaultStatus("paid")}
-                  className="accent-[#8B1A1A]"
+                  className="accent-primary"
                 />
                 <span className="text-sm">Paid — Booking langsung PAID</span>
               </label>
@@ -241,7 +241,7 @@ export function TabGeneral({ currentUser }: TabGeneralProps) {
                   value="unpaid"
                   checked={defaultStatus === "unpaid"}
                   onChange={() => setDefaultStatus("unpaid")}
-                  className="accent-[#8B1A1A]"
+                  className="accent-primary"
                 />
                 <span className="text-sm">Unpaid — Booking mulai BOOKED</span>
               </label>
@@ -275,7 +275,7 @@ export function TabGeneral({ currentUser }: TabGeneralProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           {addingHoliday && (
-            <div className="border rounded-lg p-4 bg-gray-50 space-y-3">
+            <div className="border rounded-lg p-4 bg-gray-50 space-y-4">
               <div className="space-y-2">
                 <Label>Keterangan / Label</Label>
                 <Input
@@ -284,7 +284,7 @@ export function TabGeneral({ currentUser }: TabGeneralProps) {
                   onChange={(e) => setHolidayLabel(e.target.value)}
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Tanggal Mulai</Label>
                   <Input type="date" value={holidayStart} onChange={(e) => setHolidayStart(e.target.value)} />
@@ -310,7 +310,7 @@ export function TabGeneral({ currentUser }: TabGeneralProps) {
           ) : (
             <div className="space-y-2">
               {holidays.map((h) => (
-                <div key={h.id} className="flex items-center justify-between p-3 border rounded-lg bg-white">
+                <div key={h.id} className="flex items-center justify-between p-4 border rounded-lg bg-white">
                   <div>
                     <p className="text-sm font-medium">{h.label}</p>
                     <p className="text-xs text-muted-foreground">{formatDateRange(h.start_date, h.end_date)}</p>
@@ -318,7 +318,7 @@ export function TabGeneral({ currentUser }: TabGeneralProps) {
                   <Button
                     size="icon"
                     variant="ghost"
-                    className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                    className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent"
                     onClick={() => handleDeleteHoliday(h.id, h.label)}
                     disabled={deletingId === h.id}
                   >

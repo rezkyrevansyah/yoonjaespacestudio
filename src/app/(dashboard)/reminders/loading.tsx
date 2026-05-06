@@ -14,14 +14,14 @@ export default function RemindersLoading() {
       </div>
 
       {/* Reminder cards */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4">
+          <div key={i} className="bg-white rounded-lg border border-gray-100 shadow-sm p-4 flex items-center gap-4">
             <div className="flex-shrink-0 space-y-1 text-center min-w-[52px]">
               <Skeleton className="h-3 w-10" />
               <Skeleton className="h-5 w-10" />
             </div>
-            <div className="flex-1 space-y-1.5">
+            <div className="flex-1 space-y-1">
               <Skeleton className="h-4 w-36" />
               <Skeleton className="h-3.5 w-24" />
               <Skeleton className="h-3.5 w-48" />

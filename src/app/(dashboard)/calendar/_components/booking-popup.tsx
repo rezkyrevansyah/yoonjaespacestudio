@@ -150,20 +150,22 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <button
+        type="button"
+        aria-label="Tutup detail booking"
+        className="absolute inset-0 bg-black/40"
+        onClick={onClose}
+      />
 
-      {/* Panel */}
-      <div className="relative bg-white w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-        {/* Header */}
-        <div className={`px-5 py-4 ${BOOKING_STATUS_COLOR[status]} relative`}>
-          <button onClick={onClose} className="absolute top-4 right-4 h-7 w-7 flex items-center justify-center rounded-full hover:bg-black/10 transition-colors">
+      <div className="relative bg-white w-full sm:max-w-md sm:rounded-lg rounded-t-lg shadow-sm overflow-hidden max-h-[90vh] flex flex-col">
+        <div className={`px-4 py-4 ${BOOKING_STATUS_COLOR[status]} relative`}>
+          <button onClick={onClose} className="absolute top-4 right-4 h-10 w-10 flex items-center justify-center rounded-full hover:bg-black/10 transition-colors">
             <X className="h-4 w-4" />
           </button>
           <div className="text-center">
-            <p className="text-xs font-mono opacity-70">{booking.booking_number}</p>
+            <p className="text-xs font-sans opacity-70">{booking.booking_number}</p>
             {/* Customer name with copy */}
-            <div className="flex items-center justify-center gap-1.5 mt-0.5">
+            <div className="flex items-center justify-center gap-2 mt-0.5">
               <h2 className="font-bold text-base truncate">{booking.customers?.name ?? "Customer"}</h2>
               <button
                 onClick={() => copyToClipboard(booking.customers?.name ?? "", "name")}
@@ -175,8 +177,8 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
             </div>
             {/* Catalog name (session name) with copy */}
             {sessionName && (
-              <div className="flex items-center justify-center gap-1.5 mt-1">
-                <span className="font-mono text-xs opacity-70 truncate">{sessionName}</span>
+              <div className="flex items-center justify-center gap-2 mt-1">
+                <span className="font-sans text-xs opacity-70 truncate">{sessionName}</span>
                 <button
                   onClick={() => copyToClipboard(sessionName, "session")}
                   className="flex-shrink-0 p-0.5 rounded hover:bg-black/10 transition-colors"
@@ -186,14 +188,14 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
                 </button>
               </div>
             )}
-            <span className={`mt-2 inline-flex text-xs px-2 py-0.5 rounded-full font-medium ${BOOKING_STATUS_COLOR[status]}`}>
+            <span className={`mt-2 inline-flex text-xs px-2 py-1 rounded-full font-medium ${BOOKING_STATUS_COLOR[status]}`}>
               {BOOKING_STATUS_LABEL[status]}
             </span>
           </div>
         </div>
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-3">
+        <div className="flex-1 overflow-y-auto p-5 space-y-4">
           <InfoRow icon={<CalendarDays className="h-4 w-4" />} value={formatDate(booking.booking_date)} />
           <InfoRow
             icon={<Clock className="h-4 w-4" />}
@@ -223,9 +225,9 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
 
           {/* Backgrounds */}
           {(booking.booking_backgrounds?.length ?? 0) > 0 && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
+            <div className="flex flex-wrap gap-2 pt-1">
               {booking.booking_backgrounds.map((b, i) => (
-                <span key={i} className="text-xs bg-[#FEF2F2] text-[#8B1A1A] px-2 py-0.5 rounded-full border border-[#8B1A1A]/20">
+                <span key={i} className="text-xs bg-accent text-primary px-2 py-1 rounded-full border border-primary/20">
                   {b.backgrounds?.name}
                 </span>
               ))}
@@ -236,9 +238,9 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
           {(booking.booking_addons?.length ?? 0) > 0 && (
             <div className="pt-1">
               <p className="text-xs text-gray-500 mb-1">Add-ons</p>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-2">
                 {booking.booking_addons.map((a, i) => (
-                  <span key={i} className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">
+                  <span key={i} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-full">
                     {a.addons?.name}
                   </span>
                 ))}
@@ -261,9 +263,9 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
           {(booking.booking_custom_fields?.length ?? 0) > 0 && (
             <div className="pt-1 border-t border-gray-100">
               <p className="text-xs text-gray-500 mb-2">Informasi Tambahan</p>
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 {booking.booking_custom_fields.map((cf) => (
-                  <div key={cf.custom_field_id} className="flex justify-between text-sm gap-3">
+                  <div key={cf.custom_field_id} className="flex justify-between text-sm gap-4">
                     <span className="text-gray-500 flex-shrink-0">{cf.custom_fields?.label ?? cf.custom_field_id}</span>
                     <span className="text-gray-800 text-right">{cf.value ?? "—"}</span>
                   </div>
@@ -274,7 +276,7 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
         </div>
 
         {/* Actions */}
-        <div className="border-t border-gray-100 p-4 space-y-3">
+        <div className="border-t border-gray-100 p-4 space-y-4">
           {/* Status navigation */}
           {status === "SHOOT_DONE" ? (
             <div className="space-y-2">
@@ -293,7 +295,7 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
                   size="sm"
                   disabled={loading || !hasStatusPermission("SHOOT_DONE", "PHOTOS_DELIVERED")}
                   onClick={() => setShowDriveDialog(true)}
-                  className="flex-1 bg-[#8B1A1A] hover:bg-[#B22222] disabled:opacity-50"
+                  className="flex-1 bg-primary hover:bg-primary/90 disabled:opacity-50"
                 >
                   <LinkIcon className="h-3.5 w-3.5 mr-1" />
                   Deliver Foto
@@ -316,7 +318,7 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
                 size="sm"
                 disabled={!canNext || loading || (canNext && !hasStatusPermission(status, BOOKING_FLOW[currentIdx + 1]))}
                 onClick={() => changeStatus(BOOKING_FLOW[currentIdx + 1])}
-                className="flex-1 bg-[#8B1A1A] hover:bg-[#B22222] disabled:opacity-50"
+                className="flex-1 bg-primary hover:bg-primary/90 disabled:opacity-50"
               >
                 {canNext ? BOOKING_STATUS_LABEL[BOOKING_FLOW[currentIdx + 1]] : "Next"}
                 <ChevronRight className="h-4 w-4 ml-1" />
@@ -344,7 +346,7 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <LinkIcon className="h-4 w-4 text-[#8B1A1A]" />
+              <LinkIcon className="h-4 w-4 text-primary" />
               Input Link Foto & Deliver
             </DialogTitle>
           </DialogHeader>
@@ -362,7 +364,7 @@ export function BookingPopup({ booking, currentUser, onClose, onStatusUpdate }: 
               Batal
             </Button>
             <Button
-              className="bg-[#8B1A1A] hover:bg-[#B22222] text-white"
+              className="bg-primary hover:bg-primary/90 text-white"
               onClick={handleDeliver}
               disabled={loading}
             >

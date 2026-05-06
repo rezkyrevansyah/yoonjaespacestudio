@@ -322,7 +322,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
   return (
     <div className="p-4 md:p-6 space-y-4">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-gray-900">Finance</h1>
           <p className="text-sm text-gray-500">Laporan keuangan bulanan</p>
@@ -334,7 +334,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(Number(e.target.value))}
-              className="appearance-none text-sm font-medium border border-gray-200 rounded-xl pl-3 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A] cursor-pointer"
+              className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer"
             >
               {MONTHS.map((m, i) => (
                 <option key={i} value={i}>{m}</option>
@@ -348,7 +348,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className="appearance-none text-sm font-medium border border-gray-200 rounded-xl pl-3 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A] cursor-pointer"
+              className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer"
             >
               {yearOptions.map((y) => (
                 <option key={y} value={y}>{y}</option>
@@ -359,7 +359,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
 
           <button
             onClick={handleExportExcel}
-            className="flex items-center gap-2 text-sm font-medium border border-gray-200 rounded-xl px-3.5 py-2 bg-white hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 text-sm font-medium border border-gray-200 rounded-lg px-4 py-2 bg-white hover:bg-gray-50 transition-colors"
           >
             <Download className="w-4 h-4 text-gray-500" />
             <span className="hidden sm:inline text-gray-700">Export Excel</span>
@@ -369,16 +369,16 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
 
       {/* Package filter */}
       {packageOptions.length > 0 && (
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <Package className="w-4 h-4 text-gray-500" />
             <span className="text-sm font-medium text-gray-700">Filter Paket</span>
           </div>
           <Select value={packageFilter} onValueChange={setPackageFilter}>
-            <SelectTrigger className="w-48 h-9 bg-white border-gray-200 hover:border-gray-300 focus:border-maroon-500 focus:ring-maroon-500/20">
+            <SelectTrigger className="w-48 h-10 bg-white border-gray-200 hover:border-gray-300 focus:border-maroon-500 focus:ring-maroon-500/20">
               <SelectValue placeholder="Pilih paket..." />
             </SelectTrigger>
-            <SelectContent className="bg-white border border-gray-200 shadow-lg">
+            <SelectContent className="bg-white border border-gray-200 shadow-sm">
               <SelectItem value="all" className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-gray-400"></span>

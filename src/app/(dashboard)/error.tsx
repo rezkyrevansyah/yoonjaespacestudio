@@ -21,7 +21,7 @@ export default function DashboardError({ error, reset }: Props) {
         <h2 className="text-lg font-semibold text-gray-900">Terjadi Kesalahan</h2>
         <p className="text-sm text-gray-500 mt-1">Halaman ini mengalami error. Coba muat ulang.</p>
         {process.env.NODE_ENV === "development" && (
-          <p className="text-xs text-gray-400 mt-2 font-mono max-w-sm break-all">
+          <p className="text-xs text-gray-400 mt-2 font-sans max-w-sm break-all">
             {error.message}
             {error.digest && ` (digest: ${error.digest})`}
           </p>

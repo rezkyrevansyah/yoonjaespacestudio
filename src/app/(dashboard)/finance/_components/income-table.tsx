@@ -80,8 +80,8 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="px-4 py-2.5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-2">
+    <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
+      <div className="px-4 py-2 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center gap-2">
         <div className="flex items-center justify-between flex-1 min-w-0">
           <h2 className="text-sm font-semibold text-gray-900">Income dari Booking</h2>
           <span className="text-xs text-gray-500">
@@ -95,13 +95,13 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
             placeholder="Cari customer / booking..."
-            className="w-full h-8 pl-8 pr-3 text-xs border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-[#8B1A1A] focus:border-[#8B1A1A]"
+            className="w-full h-10 pl-8 pr-4 text-xs border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring"
           />
         </div>
       </div>
 
       {loading ? (
-        <div className="p-6 space-y-3">
+        <div className="p-6 space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="h-10 bg-gray-100 rounded-lg animate-pulse" />
           ))}
@@ -146,19 +146,19 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
               <tbody className="divide-y divide-gray-50">
                 {paginated.map((b) => (
                   <tr key={b.id} className="hover:bg-gray-50/50 transition-colors group">
-                    <td className="px-4 py-2.5 font-mono text-xs text-gray-600">
+                    <td className="px-4 py-2 font-sans text-xs text-gray-600">
                       {b.booking_number}
                     </td>
-                    <td className="px-4 py-2.5 font-medium text-gray-900">
+                    <td className="px-4 py-2 font-medium text-gray-900">
                       {b.customers?.name ?? "-"}
                     </td>
-                    <td className="px-4 py-2.5 text-gray-600">
+                    <td className="px-4 py-2 text-gray-600">
                       {formatDate(b.transaction_date ?? b.created_at)}
                     </td>
-                    <td className="px-4 py-2.5 text-gray-600">
+                    <td className="px-4 py-2 text-gray-600">
                       {b.packages?.name ?? "-"}
                     </td>
-                    <td className="px-4 py-2.5 text-gray-600">
+                    <td className="px-4 py-2 text-gray-600">
                       {b.payment_method ? (
                         <div>
                           <span className="capitalize text-xs font-medium">{b.payment_method}</span>
@@ -170,15 +170,15 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
                         <span className="text-gray-300">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-2.5">
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${BOOKING_STATUS_COLOR[b.status as BookingStatus] ?? ""}`}>
+                    <td className="px-4 py-2">
+                      <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${BOOKING_STATUS_COLOR[b.status as BookingStatus] ?? ""}`}>
                         {BOOKING_STATUS_LABEL[b.status as BookingStatus] ?? b.status}
                       </span>
                     </td>
-                    <td className="px-4 py-2.5 text-right font-semibold text-gray-900">
+                    <td className="px-4 py-2 text-right font-semibold text-gray-900">
                       {formatRupiah(b.total)}
                     </td>
-                    <td className="px-4 py-2.5">
+                    <td className="px-4 py-2">
                       <div className="flex items-center gap-1">
                         {onCloseBooking && b.status !== "CLOSED" && (
                           <button
@@ -188,7 +188,7 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
                               setClosingId(null);
                             }}
                             disabled={closingId === b.id}
-                            className="p-1.5 rounded-md text-gray-400 hover:text-green-600 hover:bg-green-50 transition-colors disabled:opacity-40"
+                            className="p-2 rounded-md text-gray-400 hover:text-green-600 hover:bg-green-50 transition-colors disabled:opacity-40"
                             title="Tutup Booking"
                           >
                             <CheckSquare2 className="w-4 h-4" />
@@ -197,7 +197,7 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
                         <button
                           onClick={() => handleOpenInvoice(b.id)}
                           disabled={loadingTokenForId === b.id}
-                          className="p-1.5 rounded-md text-gray-400 hover:text-[#8B1A1A] hover:bg-red-50 transition-colors disabled:opacity-40"
+                          className="p-2 rounded-md text-gray-400 hover:text-primary hover:bg-accent transition-colors disabled:opacity-40"
                           title="Lihat Invoice"
                         >
                           {loadingTokenForId === b.id ? (
@@ -209,7 +209,7 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
                         <Link
                           href={`/bookings/${b.id}`}
                           target="_blank"
-                          className="p-1.5 rounded-md text-gray-400 hover:text-[#8B1A1A] hover:bg-red-50 transition-colors"
+                          className="p-2 rounded-md text-gray-400 hover:text-primary hover:bg-accent transition-colors"
                           title="Lihat Detail Booking"
                         >
                           <ExternalLink className="w-4 h-4" />
@@ -221,10 +221,10 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
               </tbody>
               <tfoot>
                 <tr className="border-t border-gray-200 bg-gray-50">
-                  <td colSpan={6} className="px-4 py-2.5 text-sm font-semibold text-gray-700">
+                  <td colSpan={6} className="px-4 py-2 text-sm font-semibold text-gray-700">
                     Total
                   </td>
-                  <td className="px-4 py-2.5 text-right text-sm font-bold text-green-700">
+                  <td className="px-4 py-2 text-right text-sm font-bold text-green-700">
                     {formatRupiah(total)}
                   </td>
                   <td />
@@ -255,7 +255,7 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
                   </div>
                   <div className="flex-shrink-0 text-right">
                     <p className="text-sm font-bold text-gray-900">{formatRupiah(b.total)}</p>
-                    <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${BOOKING_STATUS_COLOR[b.status as BookingStatus] ?? ""}`}>
+                    <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${BOOKING_STATUS_COLOR[b.status as BookingStatus] ?? ""}`}>
                       {BOOKING_STATUS_LABEL[b.status as BookingStatus] ?? b.status}
                     </span>
                   </div>
@@ -266,7 +266,7 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
                     <button
                       onClick={async () => { setClosingId(b.id); await onCloseBooking(b.id); setClosingId(null); }}
                       disabled={closingId === b.id}
-                      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-green-700 bg-green-50 hover:bg-green-100 active:bg-green-200 transition-colors disabled:opacity-40"
+                      className="flex items-center gap-2 px-2.5 py-2 rounded-md text-xs font-medium text-green-700 bg-green-50 hover:bg-green-100 active:bg-green-200 transition-colors disabled:opacity-40"
                     >
                       <CheckSquare2 className="w-3.5 h-3.5" />
                       Closed
@@ -275,7 +275,7 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
                   <button
                     onClick={() => handleOpenInvoice(b.id)}
                     disabled={loadingTokenForId === b.id}
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors disabled:opacity-40"
+                    className="flex items-center gap-2 px-2.5 py-2 rounded-md text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors disabled:opacity-40"
                   >
                     {loadingTokenForId === b.id ? (
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -287,7 +287,7 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
                   <Link
                     href={`/bookings/${b.id}`}
                     target="_blank"
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors"
+                    className="flex items-center gap-2 px-2.5 py-2 rounded-md text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     Detail
@@ -305,7 +305,7 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
           {!expanded && hiddenCount > 0 ? (
             <button
               onClick={() => setExpanded(true)}
-              className="w-full px-4 py-3 border-t border-gray-100 text-xs text-center text-[#8B1A1A] font-medium hover:bg-gray-50 transition-colors"
+              className="w-full px-4 py-3 border-t border-gray-100 text-xs text-center text-primary font-medium hover:bg-gray-50 transition-colors"
             >
               Tampilkan {hiddenCount} lainnya ↓
             </button>
@@ -326,17 +326,17 @@ export function IncomeTable({ bookings, loading, onCloseBooking }: Props) {
                 <button
                   onClick={() => setPage(p => p - 1)}
                   disabled={page === 0}
-                  className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
-                <span className="px-3 py-1.5 text-xs font-medium text-gray-600">
+                <span className="px-4 py-2 text-xs font-medium text-gray-600">
                   {page + 1} / {totalPages}
                 </span>
                 <button
                   onClick={() => setPage(p => p + 1)}
                   disabled={page >= totalPages - 1}
-                  className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>

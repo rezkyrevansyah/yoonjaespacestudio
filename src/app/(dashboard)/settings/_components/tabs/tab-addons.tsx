@@ -171,7 +171,7 @@ export function TabAddons({ currentUser }: TabAddonsProps) {
               </div>
               <div className="space-y-2">
                 {groupItems.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg bg-white">
+                  <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg bg-white">
                     <div className="min-w-0">
                       <p className="text-sm font-medium">{item.name}</p>
                       <div className="flex items-center gap-2 mt-0.5">
@@ -188,8 +188,8 @@ export function TabAddons({ currentUser }: TabAddonsProps) {
                       <Badge variant={item.is_active ? "default" : "secondary"} className={item.is_active ? "bg-green-100 text-green-800 border-green-200" : ""}>
                         {item.is_active ? "Aktif" : "Nonaktif"}
                       </Badge>
-                      <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => openEdit(item)}><Pencil className="h-3 w-3" /></Button>
-                      <Button size="icon" variant="ghost" className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeleteId(item.id)}><Trash2 className="h-3 w-3" /></Button>
+                      <Button size="icon" variant="ghost" className="h-10 w-10" onClick={() => openEdit(item)}><Pencil className="h-3 w-3" /></Button>
+                      <Button size="icon" variant="ghost" className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent" onClick={() => setDeleteId(item.id)}><Trash2 className="h-3 w-3" /></Button>
                     </div>
                   </div>
                 ))}
@@ -207,7 +207,7 @@ export function TabAddons({ currentUser }: TabAddonsProps) {
               <Label>Nama <span className="text-red-500">*</span></Label>
               <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="MUA, Dekorasi, dll." />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Kategori</Label>
                 <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v === "__none" ? "" : v })}>
@@ -237,14 +237,14 @@ export function TabAddons({ currentUser }: TabAddonsProps) {
                 <Label htmlFor="addon-extra" className="cursor-pointer">Need Extra Time</Label>
               </div>
               {form.need_extra_time && (
-                <div className="pl-6 space-y-3">
+                <div className="pl-6 space-y-4">
                   <div>
                     <Input type="number" min={15} value={form.extra_time_minutes} onChange={(e) => setForm({ ...form, extra_time_minutes: e.target.value })} className="w-32" />
                     <p className="text-xs text-muted-foreground mt-1">menit tambahan</p>
                   </div>
-                  <div className="space-y-1.5">
+                  <div className="space-y-1">
                     <p className="text-xs font-medium text-gray-700">Posisi waktu tambahan</p>
-                    <div className="flex gap-3">
+                    <div className="flex gap-4">
                       <label className="flex items-center gap-2 cursor-pointer">
                         <input
                           type="radio"
@@ -252,7 +252,7 @@ export function TabAddons({ currentUser }: TabAddonsProps) {
                           value="before"
                           checked={form.extra_time_position === "before"}
                           onChange={() => setForm({ ...form, extra_time_position: "before" })}
-                          className="accent-[#8B1A1A]"
+                          className="accent-primary"
                         />
                         <span className="text-xs text-gray-700">Sebelum sesi</span>
                       </label>
@@ -263,7 +263,7 @@ export function TabAddons({ currentUser }: TabAddonsProps) {
                           value="after"
                           checked={form.extra_time_position === "after"}
                           onChange={() => setForm({ ...form, extra_time_position: "after" })}
-                          className="accent-[#8B1A1A]"
+                          className="accent-primary"
                         />
                         <span className="text-xs text-gray-700">Setelah sesi</span>
                       </label>
@@ -272,14 +272,14 @@ export function TabAddons({ currentUser }: TabAddonsProps) {
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} /><Label>Aktif</Label>
             </div>
-            <div className="flex items-start gap-3 rounded-lg border border-pink-100 bg-pink-50/50 p-3">
+            <div className="flex items-start gap-4 rounded-lg border border-pink-100 bg-pink-50/50 p-4">
               <Switch checked={form.is_mua} onCheckedChange={(v) => setForm({ ...form, is_mua: v })} />
               <div className="space-y-0.5">
                 <Label className="cursor-pointer">Tampilkan di Jadwal MUA Publik</Label>
-                <p className="text-xs text-gray-500">Booking dengan add-on ini akan muncul di halaman <code className="text-[10px]">/mua</code> sebagai slot terbooking.</p>
+                <p className="text-xs text-gray-500">Booking dengan add-on ini akan muncul di halaman <code className="text-xs leading-5">/mua</code> sebagai slot terbooking.</p>
               </div>
             </div>
           </div>

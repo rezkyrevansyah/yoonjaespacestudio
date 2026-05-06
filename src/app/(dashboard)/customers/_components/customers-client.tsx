@@ -346,7 +346,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
   return (
     <div className="space-y-4">
       {/* Header */}
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Customers</h1>
           <p className="text-sm text-gray-500">{total} pelanggan terdaftar</p>
@@ -365,7 +365,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
               <DropdownMenuItem onClick={exportExcel}>Export Excel (.xlsx)</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button size="sm" className="bg-[#8B1A1A] hover:bg-[#B22222]" onClick={() => setShowAdd(true)}>
+          <Button size="sm" className="bg-primary hover:bg-primary/90" onClick={() => setShowAdd(true)}>
             <Plus className="h-4 w-4 mr-1.5" />
             Add Client
           </Button>
@@ -404,7 +404,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
       </div>
 
       {/* Desktop table */}
-      <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+      <div className="hidden md:block bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
@@ -429,7 +429,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
             ) : customers.length === 0 ? (
               <tr>
                 <td colSpan={9} className="px-4 py-12 text-center">
-                  <Users className="h-8 w-8 text-gray-200 mx-auto mb-2" />
+                  <Users className="h-10 w-10 text-gray-200 mx-auto mb-2" />
                   <p className="text-gray-400 text-sm">Tidak ada customer</p>
                 </td>
               </tr>
@@ -437,14 +437,14 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
               customers.map(c => (
                 <tr key={c.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-4 py-3">
-                    <Link href={`/customers/${c.id}`} className="font-medium text-gray-900 hover:text-[#8B1A1A]">
+                    <Link href={`/customers/${c.id}`} className="font-medium text-gray-900 hover:text-primary">
                       {c.name}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-gray-600 font-mono text-xs">{c.phone}</td>
+                  <td className="px-4 py-3 text-gray-600 font-sans text-xs">{c.phone}</td>
                   <td className="px-4 py-3 text-gray-500 text-xs">{c.email ?? "-"}</td>
                   <td className="px-4 py-3 text-right text-gray-700">{c.total_bookings}</td>
-                  <td className="px-4 py-3 text-right text-gray-700 font-mono text-xs">
+                  <td className="px-4 py-3 text-right text-gray-700 font-sans text-xs">
                     {c.total_spend > 0 ? formatRupiah(c.total_spend) : "-"}
                   </td>
                   <td className="px-4 py-3 text-gray-500 text-xs">
@@ -459,20 +459,20 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
                           href={`https://wa.me/${c.phone.replace(/^0/, "62").replace(/\D/g, "")}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-green-50 text-gray-400 hover:text-green-600 transition-colors"
+                          className="h-10 w-10 flex items-center justify-center rounded-md hover:bg-green-50 text-gray-400 hover:text-green-600 transition-colors"
                         >
                           <MessageCircle className="h-4 w-4" />
                         </a>
                       )}
                       <Link
                         href={`/customers/${c.id}`}
-                        className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
+                        className="h-10 w-10 flex items-center justify-center rounded-md hover:bg-gray-100 text-gray-500 transition-colors"
                       >
                         <Eye className="h-4 w-4" />
                       </Link>
                       <button
                         onClick={() => setDeleteTarget(c)}
-                        className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-red-50 text-gray-400 hover:text-red-600 transition-colors"
+                        className="h-10 w-10 flex items-center justify-center rounded-md hover:bg-accent text-gray-400 hover:text-red-600 transition-colors"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -491,18 +491,18 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
           <p className="text-center text-gray-400 text-sm py-8 animate-pulse">Memuat...</p>
         ) : customers.length === 0 ? (
           <div className="text-center py-12">
-            <Users className="h-8 w-8 text-gray-200 mx-auto mb-2" />
+            <Users className="h-10 w-10 text-gray-200 mx-auto mb-2" />
             <p className="text-gray-400 text-sm">Tidak ada customer</p>
           </div>
         ) : (
           customers.map(c => (
-            <div key={c.id} className="bg-white rounded-xl border border-gray-200 p-4 space-y-2">
+            <div key={c.id} className="bg-white rounded-lg border border-gray-200 p-4 space-y-2">
               <div className="flex items-start justify-between">
                 <div>
-                  <Link href={`/customers/${c.id}`} className="font-semibold text-gray-900 hover:text-[#8B1A1A]">
+                  <Link href={`/customers/${c.id}`} className="font-semibold text-gray-900 hover:text-primary">
                     {c.name}
                   </Link>
-                  <p className="text-xs text-gray-500 font-mono">{c.phone}</p>
+                  <p className="text-xs text-gray-500 font-sans">{c.phone}</p>
                 </div>
                 <div className="flex gap-1">
                   {c.phone && (
@@ -510,15 +510,15 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
                       href={`https://wa.me/${c.phone.replace(/^0/, "62").replace(/\D/g, "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-green-50 text-gray-400 hover:text-green-600"
+                      className="h-10 w-10 flex items-center justify-center rounded-md hover:bg-green-50 text-gray-400 hover:text-green-600"
                     >
                       <MessageCircle className="h-4 w-4" />
                     </a>
                   )}
-                  <Link href={`/customers/${c.id}`} className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-gray-100 text-gray-500">
+                  <Link href={`/customers/${c.id}`} className="h-10 w-10 flex items-center justify-center rounded-md hover:bg-gray-100 text-gray-500">
                     <Eye className="h-4 w-4" />
                   </Link>
-                  <button onClick={() => setDeleteTarget(c)} className="h-7 w-7 flex items-center justify-center rounded-md hover:bg-red-50 text-gray-400 hover:text-red-600">
+                  <button onClick={() => setDeleteTarget(c)} className="h-10 w-10 flex items-center justify-center rounded-md hover:bg-accent text-gray-400 hover:text-red-600">
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
@@ -543,14 +543,14 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
             <button
               disabled={page === 0}
               onClick={() => setPage(p => p - 1)}
-              className="h-8 w-8 flex items-center justify-center rounded-md border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="h-10 w-10 flex items-center justify-center rounded-md border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               disabled={page >= totalPages - 1}
               onClick={() => setPage(p => p + 1)}
-              className="h-8 w-8 flex items-center justify-center rounded-md border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="h-10 w-10 flex items-center justify-center rounded-md border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -566,7 +566,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2 space-y-1.5">
+              <div className="col-span-2 space-y-1">
                 <Label>Nama <span className="text-red-500">*</span></Label>
                 <Input
                   value={form.name}
@@ -575,7 +575,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
                 />
               </div>
 
-              <div className="col-span-2 space-y-1.5">
+              <div className="col-span-2 space-y-1">
                 <Label>WhatsApp <span className="text-red-500">*</span></Label>
                 <Input
                   value={form.phone}
@@ -586,7 +586,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
                 {phoneError && <p className="text-xs text-red-500">{phoneError}</p>}
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <Label>Email</Label>
                 <Input
                   type="email"
@@ -596,7 +596,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
                 />
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <Label>Instagram</Label>
                 <Input
                   value={form.instagram}
@@ -605,7 +605,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
                 />
               </div>
 
-              <div className="col-span-2 space-y-1.5">
+              <div className="col-span-2 space-y-1">
                 <Label>Alamat</Label>
                 <Input
                   value={form.address}
@@ -614,7 +614,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
                 />
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <Label>Domisili</Label>
                 {domicileOptions.length > 0 ? (
                   <DomicileCombobox
@@ -631,7 +631,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
                 )}
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <Label>Leads</Label>
                 <Select value={form.lead_id || "none"} onValueChange={v => setForm(f => ({ ...f, lead_id: v === "none" ? "" : v }))}>
                   <SelectTrigger>
@@ -646,7 +646,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
                 </Select>
               </div>
 
-              <div className="col-span-2 space-y-1.5">
+              <div className="col-span-2 space-y-1">
                 <Label>Notes</Label>
                 <Textarea
                   value={form.notes}
@@ -662,7 +662,7 @@ export function CustomersClient({ currentUser, leads, domicileOptions, initialDa
                 Batal
               </Button>
               <Button
-                className="flex-1 bg-[#8B1A1A] hover:bg-[#B22222]"
+                className="flex-1 bg-primary hover:bg-primary/90"
                 disabled={saving || !!phoneError}
                 onClick={handleAdd}
               >

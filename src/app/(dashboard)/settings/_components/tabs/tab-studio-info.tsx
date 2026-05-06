@@ -175,13 +175,13 @@ export function TabStudioInfo({ currentUser }: TabStudioInfoProps) {
           <CardHeader>
             <CardTitle className="text-sm">Logo Studio</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-4">
             <div className="flex items-center justify-center h-32 border-2 border-dashed rounded-lg bg-gray-50 overflow-hidden">
               {logoUrl ? (
                 <Image src={logoUrl} alt="Logo" width={120} height={120} className="object-contain max-h-28" unoptimized />
               ) : (
                 <div className="flex flex-col items-center text-muted-foreground">
-                  <ImageIcon className="h-8 w-8 mb-1" />
+                  <ImageIcon className="h-10 w-10 mb-1" />
                   <span className="text-xs">Belum ada logo</span>
                 </div>
               )}
@@ -214,13 +214,13 @@ export function TabStudioInfo({ currentUser }: TabStudioInfoProps) {
           <CardHeader>
             <CardTitle className="text-sm">Foto Tampak Depan</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-4">
             <div className="flex items-center justify-center h-32 border-2 border-dashed rounded-lg bg-gray-50 overflow-hidden">
               {frontPhotoUrl ? (
                 <Image src={frontPhotoUrl} alt="Front" width={120} height={120} className="object-cover w-full h-full max-h-28" unoptimized />
               ) : (
                 <div className="flex flex-col items-center text-muted-foreground">
-                  <ImageIcon className="h-8 w-8 mb-1" />
+                  <ImageIcon className="h-10 w-10 mb-1" />
                   <span className="text-xs">Belum ada foto</span>
                 </div>
               )}

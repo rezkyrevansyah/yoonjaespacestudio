@@ -167,7 +167,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
           {currentUser && (
             <Link
               href={`/bookings/${booking.id}`}
-              className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors mr-auto"
+              className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors mr-auto"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Kembali</span>
@@ -176,7 +176,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
 
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 bg-white border border-gray-300 text-gray-700 text-sm px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 text-sm px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
           >
             {copied ? (
               <><Check className="h-4 w-4 text-green-500" /><span>Tersalin</span></>
@@ -187,7 +187,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
 
           <button
             onClick={handleShare}
-            className="flex items-center gap-1.5 bg-green-500 text-white text-sm px-3 py-2 rounded-lg hover:bg-green-600 transition-colors"
+            className="flex items-center gap-2 bg-green-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-green-600 transition-colors"
           >
             <Share2 className="h-4 w-4" />
             <span>Bagikan</span>
@@ -195,7 +195,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
 
           <button
             onClick={handlePrint}
-            className="flex items-center gap-1.5 bg-[#8B1A1A] text-white text-sm px-3 py-2 rounded-lg hover:bg-[#B22222] transition-colors"
+            className="flex items-center gap-2 bg-primary text-white text-sm px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
           >
             <Printer className="h-4 w-4" />
             <span>Print / Download</span>
@@ -224,10 +224,10 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
           }}
         >
           {/* ---- Header ---- */}
-          <div className="border-b-2 border-[#8B1A1A] p-8 pb-6">
+          <div className="border-b-2 border-primary p-8 pb-6">
             <div className="flex items-start justify-between gap-4">
               {/* Studio identity */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 {studioInfo?.logo_url ? (
                   <Image
                     src={studioInfo.logo_url}
@@ -237,7 +237,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
                     className="rounded-full object-cover border border-gray-200"
                   />
                 ) : (
-                  <div className="h-14 w-14 rounded-full bg-[#8B1A1A] flex items-center justify-center">
+                  <div className="h-14 w-14 rounded-full bg-primary flex items-center justify-center">
                     <span className="text-white text-xl font-bold">
                       {studioInfo?.studio_name?.[0] ?? "Y"}
                     </span>
@@ -262,11 +262,11 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
 
               {/* INVOICE title */}
               <div className="text-right">
-                <p className="text-3xl font-black text-[#8B1A1A] tracking-wider">
+                <p className="text-3xl font-black text-primary tracking-wider">
                   INVOICE
                 </p>
                 {invoice?.invoice_number && (
-                  <p className="text-sm font-mono text-gray-600 mt-1">
+                  <p className="text-sm font-sans text-gray-600 mt-1">
                     {invoice.invoice_number}
                   </p>
                 )}
@@ -294,7 +294,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
                     <td className="py-0.5 text-gray-500 pr-4 align-top">Status</td>
                     <td className="py-0.5 align-top">
                       <span
-                        className={`inline-flex text-xs px-2 py-0.5 rounded-full font-medium ${BOOKING_STATUS_COLOR[booking.status]}`}
+                        className={`inline-flex text-xs px-2 py-1 rounded-full font-medium ${BOOKING_STATUS_COLOR[booking.status]}`}
                       >
                         {BOOKING_STATUS_LABEL[booking.status]}
                       </span>
@@ -345,7 +345,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
                           <span className="ml-2 text-xs text-gray-400">(x{bp.quantity})</span>
                         )}
                       </td>
-                      <td className="py-3 text-right text-gray-800 font-mono">
+                      <td className="py-3 text-right text-gray-800 font-sans">
                         {formatRupiah(bp.price_snapshot * bp.quantity)}
                       </td>
                     </tr>
@@ -355,7 +355,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
                     <td className="py-3 text-gray-800">
                       Paket {booking.packages.name}
                     </td>
-                    <td className="py-3 text-right text-gray-800 font-mono">
+                    <td className="py-3 text-right text-gray-800 font-sans">
                       {formatRupiah(booking.packages.price)}
                     </td>
                   </tr>
@@ -382,7 +382,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
                         </span>
                       )}
                     </td>
-                    <td className="py-3 text-right text-gray-800 font-mono">
+                    <td className="py-3 text-right text-gray-800 font-sans">
                       {formatRupiah(ba.price * (ba.quantity ?? 1))}
                     </td>
                   </tr>
@@ -395,14 +395,14 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
               {/* Subtotal awal (packages + original addons - discount) */}
               <div className="flex justify-between text-sm text-gray-600">
                 <span>Subtotal</span>
-                <span className="font-mono">{formatRupiah(booking.subtotal)}</span>
+                <span className="font-sans">{formatRupiah(booking.subtotal)}</span>
               </div>
 
               {/* Extra Add-on (hanya jika ada) */}
               {extraAddonsTotal > 0 && (
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>Extra Add-on</span>
-                  <span className="font-mono">{formatRupiah(extraAddonsTotal)}</span>
+                  <span className="font-sans">{formatRupiah(extraAddonsTotal)}</span>
                 </div>
               )}
 
@@ -410,14 +410,14 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
               {discountAmount > 0 && (
                 <div className="flex justify-between text-sm text-green-700">
                   <span>{discountLabel}</span>
-                  <span className="font-mono">- {formatRupiah(discountAmount)}</span>
+                  <span className="font-sans">- {formatRupiah(discountAmount)}</span>
                 </div>
               )}
 
               {/* Total */}
               <div className="flex justify-between border-t border-gray-200 pt-3 mt-1">
                 <span className="font-bold text-gray-900 text-base">Total</span>
-                <span className="font-bold text-[#8B1A1A] text-base font-mono">
+                <span className="font-bold text-primary text-base font-sans">
                   {formatRupiah(booking.total)}
                 </span>
               </div>
@@ -426,18 +426,18 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
               {booking.dp_amount != null && booking.dp_amount > 0 && (
                 booking.dp_paid_at ? (
                   <div className="flex justify-between text-sm text-green-700 border-t border-gray-100 pt-2">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-2">
                       DP
                       <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">
                         ✓ Sudah Dibayar
                       </span>
                     </span>
-                    <span className="font-mono">{formatRupiah(booking.dp_amount)}</span>
+                    <span className="font-sans">{formatRupiah(booking.dp_amount)}</span>
                   </div>
                 ) : (
                   <div className="flex justify-between text-sm text-blue-700 border-t border-gray-100 pt-2">
                     <span>DP Dibayar</span>
-                    <span className="font-mono">− {formatRupiah(booking.dp_amount)}</span>
+                    <span className="font-sans">− {formatRupiah(booking.dp_amount)}</span>
                   </div>
                 )
               )}
@@ -446,7 +446,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
               {sisaTagihan > 0 && (
                 <div className="flex justify-between text-sm font-semibold text-gray-800 border-t border-gray-100 pt-2">
                   <span>Sisa Tagihan</span>
-                  <span className="font-mono">{formatRupiah(sisaTagihan)}</span>
+                  <span className="font-sans">{formatRupiah(sisaTagihan)}</span>
                 </div>
               )}
 
@@ -454,7 +454,7 @@ export function InvoiceClient({ booking, studioInfo, currentUser }: Props) {
               {isPaidOrClosed && sisaTagihan === 0 && (
                 <div className="flex justify-between text-sm font-semibold text-green-700 border-t border-gray-100 pt-2">
                   <span>Sisa Tagihan</span>
-                  <span className="font-mono flex items-center gap-1.5">
+                  <span className="font-sans flex items-center gap-2">
                     <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium">LUNAS</span>
                     {formatRupiah(0)}
                   </span>
@@ -520,7 +520,7 @@ function InfoRow({
   return (
     <tr>
       <td className="py-0.5 text-gray-500 pr-4 align-top whitespace-nowrap">{label}</td>
-      <td className={`py-0.5 text-gray-800 align-top ${mono ? "font-mono text-xs" : ""}`}>
+      <td className={`py-0.5 text-gray-800 align-top ${mono ? "font-sans text-xs" : ""}`}>
         {value}
       </td>
     </tr>

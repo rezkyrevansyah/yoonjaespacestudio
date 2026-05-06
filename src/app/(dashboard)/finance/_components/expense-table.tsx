@@ -53,12 +53,12 @@ export function ExpenseTable({ expenses, loading, onAdd, onEdit, onDelete }: Pro
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="px-4 py-2.5 border-b border-gray-100 flex items-center justify-between">
+    <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
+      <div className="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
         <h2 className="text-sm font-semibold text-gray-900">Pengeluaran</h2>
         <button
           onClick={onAdd}
-          className="flex items-center gap-1.5 text-xs font-medium bg-[#8B1A1A] text-white px-3 py-1.5 rounded-lg hover:bg-[#B22222] transition-colors"
+          className="flex items-center gap-2 text-xs font-medium bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
         >
           <Plus className="w-3.5 h-3.5" />
           Tambah
@@ -66,7 +66,7 @@ export function ExpenseTable({ expenses, loading, onAdd, onEdit, onDelete }: Pro
       </div>
 
       {loading ? (
-        <div className="p-6 space-y-3">
+        <div className="p-6 space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="h-10 bg-gray-100 rounded-lg animate-pulse" />
           ))}
@@ -112,10 +112,10 @@ export function ExpenseTable({ expenses, loading, onAdd, onEdit, onDelete }: Pro
                   const vendor = e.vendors as { name: string } | null | undefined;
                   return (
                     <tr key={e.id} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="px-4 py-2.5 text-gray-600 whitespace-nowrap">
+                      <td className="px-4 py-2 text-gray-600 whitespace-nowrap">
                         {formatDate(e.date)}
                       </td>
-                      <td className="px-4 py-2.5">
+                      <td className="px-4 py-2">
                         <div className="flex items-center gap-2">
                           <span className="text-gray-900">{e.description}</span>
                           {isAuto && (
@@ -129,21 +129,21 @@ export function ExpenseTable({ expenses, loading, onAdd, onEdit, onDelete }: Pro
                           <p className="text-xs text-gray-400 mt-0.5 truncate max-w-xs">{e.notes}</p>
                         )}
                       </td>
-                      <td className="px-4 py-2.5 text-gray-600">
+                      <td className="px-4 py-2 text-gray-600">
                         {e.category ?? <span className="text-gray-300">—</span>}
                       </td>
-                      <td className="px-4 py-2.5 text-gray-600">
+                      <td className="px-4 py-2 text-gray-600">
                         {vendor?.name ?? <span className="text-gray-300">—</span>}
                       </td>
-                      <td className="px-4 py-2.5 text-right font-semibold text-gray-900">
+                      <td className="px-4 py-2 text-right font-semibold text-gray-900">
                         {formatRupiah(e.amount)}
                       </td>
-                      <td className="px-4 py-2.5">
+                      <td className="px-4 py-2">
                         <div className="flex items-center justify-center gap-1">
                           <button
                             onClick={() => onEdit(e)}
                             disabled={isAuto}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                            className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                             title={isAuto ? "Auto-generated, tidak bisa diedit" : "Edit"}
                           >
                             <Pencil className="w-3.5 h-3.5" />
@@ -151,7 +151,7 @@ export function ExpenseTable({ expenses, loading, onAdd, onEdit, onDelete }: Pro
                           <button
                             onClick={() => onDelete(e)}
                             disabled={isAuto}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                            className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-accent transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                             title={isAuto ? "Auto-generated, tidak bisa dihapus" : "Hapus"}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -185,7 +185,7 @@ export function ExpenseTable({ expenses, loading, onAdd, onEdit, onDelete }: Pro
                 <div key={e.id} className="px-4 py-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5 flex-wrap">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <p className="text-sm font-semibold text-gray-900">{e.description}</p>
                         {isAuto && (
                           <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs bg-purple-50 text-purple-700 border border-purple-100">
@@ -209,13 +209,13 @@ export function ExpenseTable({ expenses, loading, onAdd, onEdit, onDelete }: Pro
                         <div className="flex gap-1">
                           <button
                             onClick={() => onEdit(e)}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                            className="p-2 rounded-lg text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                           >
                             <Pencil className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => onDelete(e)}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                            className="p-2 rounded-lg text-gray-400 hover:text-red-600 hover:bg-accent transition-colors"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -236,7 +236,7 @@ export function ExpenseTable({ expenses, loading, onAdd, onEdit, onDelete }: Pro
           {!expanded && hiddenCount > 0 ? (
             <button
               onClick={() => setExpanded(true)}
-              className="w-full px-4 py-3 border-t border-gray-100 text-xs text-center text-[#8B1A1A] font-medium hover:bg-gray-50 transition-colors"
+              className="w-full px-4 py-3 border-t border-gray-100 text-xs text-center text-primary font-medium hover:bg-gray-50 transition-colors"
             >
               Tampilkan {hiddenCount} lainnya ↓
             </button>
@@ -257,17 +257,17 @@ export function ExpenseTable({ expenses, loading, onAdd, onEdit, onDelete }: Pro
                 <button
                   onClick={() => setPage(p => p - 1)}
                   disabled={page === 0}
-                  className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
-                <span className="px-3 py-1.5 text-xs font-medium text-gray-600">
+                <span className="px-4 py-2 text-xs font-medium text-gray-600">
                   {page + 1} / {totalPages}
                 </span>
                 <button
                   onClick={() => setPage(p => p + 1)}
                   disabled={page >= totalPages - 1}
-                  className="p-1.5 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>

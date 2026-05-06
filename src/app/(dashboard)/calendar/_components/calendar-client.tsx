@@ -216,9 +216,9 @@ export function CalendarClient({ currentUser, openTime, closeTime, timeSlotInter
               <button
                 key={v}
                 onClick={() => setView(v)}
-                className={`px-3 py-1.5 text-sm font-medium capitalize transition-colors ${
+                className={`px-4 py-2 text-sm font-medium capitalize transition-colors ${
                   view === v
-                    ? "bg-[#8B1A1A] text-white"
+                    ? "bg-primary text-white"
                     : "bg-white text-gray-600 hover:bg-gray-50"
                 }`}
               >
@@ -231,19 +231,19 @@ export function CalendarClient({ currentUser, openTime, closeTime, timeSlotInter
           <div className="flex items-center gap-1 flex-shrink-0">
             <button
               onClick={() => navigate(-1)}
-              className="h-8 w-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+              className="h-10 w-10 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={goToday}
-              className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
               Hari Ini
             </button>
             <button
               onClick={() => navigate(1)}
-              className="h-8 w-8 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+              className="h-10 w-10 flex items-center justify-center rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -259,7 +259,7 @@ export function CalendarClient({ currentUser, openTime, closeTime, timeSlotInter
                   setCursor(new Date(e.target.value + "T00:00:00"));
                 }
               }}
-              className="h-8 px-2 text-sm border border-gray-200 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-1 focus:ring-[#8B1A1A] focus:border-[#8B1A1A] flex-shrink-0"
+              className="h-10 px-4 text-sm border border-gray-200 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-1 focus:ring-ring focus:border-ring flex-shrink-0"
             />
           )}
 
@@ -279,7 +279,7 @@ export function CalendarClient({ currentUser, openTime, closeTime, timeSlotInter
             variant="outline"
             size="sm"
             onClick={() => setShowAvailability(true)}
-            className="flex items-center gap-1.5"
+            className="flex items-center gap-2"
           >
             <CalendarSearch className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">Cek Ketersediaan</span>
@@ -287,12 +287,12 @@ export function CalendarClient({ currentUser, openTime, closeTime, timeSlotInter
           <Link
             href="/mua"
             target="_blank"
-            className="flex items-center gap-1.5 text-sm border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 text-sm border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors"
           >
             <ExternalLink className="h-3.5 w-3.5" />
             <span className="hidden sm:inline">MUA Page</span>
           </Link>
-          <Button asChild size="sm" className="bg-[#8B1A1A] hover:bg-[#B22222] ml-auto">
+          <Button asChild size="sm" className="bg-primary hover:bg-primary/90 ml-auto">
             <Link href="/bookings/new">
               <Plus className="h-4 w-4 mr-1" />
               New Booking
@@ -362,7 +362,7 @@ export function CalendarClient({ currentUser, openTime, closeTime, timeSlotInter
             {(Object.entries(BOOKING_STATUS_LABEL) as [BookingStatus, string][])
               .filter(([s]) => s !== "CANCELED")
               .map(([status, label]) => (
-                <span key={status} className={`text-xs px-2 py-0.5 rounded-full ${BOOKING_STATUS_COLOR[status]}`}>
+                <span key={status} className={`text-xs px-2 py-1 rounded-full ${BOOKING_STATUS_COLOR[status]}`}>
                   {label}
                 </span>
               ))}

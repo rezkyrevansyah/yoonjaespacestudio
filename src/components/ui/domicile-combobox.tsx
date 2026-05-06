@@ -61,7 +61,7 @@ export function DomicileCombobox({ options, value, onChange, placeholder = "Pili
         onClick={handleOpen}
         disabled={disabled}
         className={cn(
-          "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
+          "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-4 py-2 text-sm ring-offset-background",
           "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
           "disabled:cursor-not-allowed disabled:opacity-50",
           !value && "text-muted-foreground"
@@ -83,7 +83,7 @@ export function DomicileCombobox({ options, value, onChange, placeholder = "Pili
       {open && (
         <div className="absolute z-[200] mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md">
           {/* Search input */}
-          <div className="flex items-center border-b px-3">
+          <div className="flex items-center border-b px-4">
             <input
               ref={inputRef}
               value={query}
@@ -102,7 +102,7 @@ export function DomicileCombobox({ options, value, onChange, placeholder = "Pili
                 {/* Clear option */}
                 <button
                   type="button"
-                  className="relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+                  className="relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
                   onClick={() => { onChange(""); setOpen(false); setQuery(""); }}
                 >
                   <Check className={cn("mr-2 h-4 w-4", !value ? "opacity-100" : "opacity-0")} />
@@ -112,7 +112,7 @@ export function DomicileCombobox({ options, value, onChange, placeholder = "Pili
                   <button
                     key={opt}
                     type="button"
-                    className="relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
+                    className="relative flex w-full cursor-pointer select-none items-center rounded-sm px-2 py-2 text-sm outline-none hover:bg-accent hover:text-accent-foreground"
                     onClick={() => handleSelect(opt)}
                   >
                     <Check className={cn("mr-2 h-4 w-4", value === opt ? "opacity-100" : "opacity-0")} />

@@ -390,7 +390,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
               bookings.map((b) => (
                 <TableRow key={b.id} className="hover:bg-gray-50">
                   <TableCell>
-                    <p className="font-mono text-xs text-gray-500">{b.booking_number}</p>
+                    <p className="font-sans text-xs text-gray-500">{b.booking_number}</p>
                     <p className="text-sm font-medium text-gray-800 mt-0.5">{getPackageNames(b)}</p>
                   </TableCell>
                   <TableCell className="font-medium">{b.customers?.name ?? "-"}</TableCell>
@@ -412,7 +412,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
                   </TableCell>
                   <TableCell>
                     {b.print_order_status ? (
-                      <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                      <span className="inline-flex px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
                         {PRINT_ORDER_STATUS_LABEL[b.print_order_status as keyof typeof PRINT_ORDER_STATUS_LABEL] ?? b.print_order_status}
                       </span>
                     ) : (
@@ -426,7 +426,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8"
+                        className="h-10 w-10"
                         onClick={() => router.push(`/bookings/${b.id}`)}
                       >
                         <Eye className="h-4 w-4" />
@@ -434,7 +434,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                        className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent"
                         onClick={() => { setDeleteId(b.id); setDeleteNumber(b.booking_number); }}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -449,7 +449,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
       </div>
 
       {/* Cards — mobile */}
-      <div className="md:hidden space-y-3">
+      <div className="md:hidden space-y-4">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="bg-white rounded-lg border p-4 space-y-2">
@@ -467,7 +467,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
             <div key={b.id} className="bg-white rounded-lg border p-4">
               <div className="flex items-start justify-between mb-2">
                 <div>
-                  <p className="font-mono text-xs text-gray-500">{b.booking_number}</p>
+                  <p className="font-sans text-xs text-gray-500">{b.booking_number}</p>
                   <p className="font-semibold text-gray-900">{b.customers?.name ?? "-"}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1">
@@ -485,9 +485,9 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
                 <p>{formatDate(b.booking_date)} · {formatTime(b.start_time)} – {formatTime(b.end_time)}</p>
                 <p>{getPackageNames(b)}</p>
                 {b.print_order_status && (
-                  <p className="flex items-center gap-1.5">
+                  <p className="flex items-center gap-2">
                     <span className="text-xs text-gray-400">Print:</span>
-                    <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                    <span className="inline-flex px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
                       {PRINT_ORDER_STATUS_LABEL[b.print_order_status as keyof typeof PRINT_ORDER_STATUS_LABEL] ?? b.print_order_status}
                     </span>
                   </p>
@@ -507,7 +507,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
                 <Button
                   variant="outline"
                   size="sm"
-                  className="text-red-500 border-red-200 hover:bg-red-50"
+                  className="text-red-500 border-red-200 hover:bg-accent"
                   onClick={() => { setDeleteId(b.id); setDeleteNumber(b.booking_number); }}
                 >
                   <Trash2 className="h-3.5 w-3.5" />
@@ -520,14 +520,14 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
 
       {/* Pagination */}
       {total > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-500">Tampilkan</span>
             <Select
               value={String(pageSize)}
               onValueChange={(v) => setPageSize(Number(v))}
             >
-              <SelectTrigger className="w-16 h-8">
+              <SelectTrigger className="w-16 h-10">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -545,7 +545,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
             <Button
               variant="outline"
               size="icon"
-              className="h-8 w-8"
+              className="h-10 w-10"
               onClick={() => setPage((p) => p - 1)}
               disabled={page === 0}
             >
@@ -554,7 +554,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
             <Button
               variant="outline"
               size="icon"
-              className="h-8 w-8"
+              className="h-10 w-10"
               onClick={() => setPage((p) => p + 1)}
               disabled={page >= totalPages - 1}
             >
@@ -570,7 +570,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
           <AlertDialogHeader>
             <AlertDialogTitle>Hapus Booking?</AlertDialogTitle>
             <AlertDialogDescription>
-              Booking <span className="font-mono font-medium">{deleteNumber}</span> akan dihapus
+              Booking <span className="font-sans font-medium">{deleteNumber}</span> akan dihapus
               beserta semua data terkait (invoice, addon, background, custom fields). Tindakan ini
               tidak dapat dibatalkan.
             </AlertDialogDescription>

@@ -14,11 +14,11 @@ export default function SettingsLoading() {
       </div>
 
       {/* Tab content */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+      <div className="bg-white rounded-lg border border-gray-100 shadow-sm p-5 space-y-4">
         <Skeleton className="h-5 w-40" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="space-y-1.5">
+            <div key={i} className="space-y-1">
               <Skeleton className="h-3.5 w-24" />
               <Skeleton className="h-9 w-full rounded-lg" />
             </div>

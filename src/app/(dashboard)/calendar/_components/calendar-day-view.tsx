@@ -107,7 +107,7 @@ export function CalendarDayView({ date, bookings, onSelectBooking }: Props) {
 
       {/* Conflict banner */}
       {hasConflict && (
-        <div className="flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-300 px-4 py-3">
+        <div className="flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-300 px-4 py-3">
           <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-sm font-semibold text-amber-800">Ada Jadwal Bertabrakan</p>
@@ -120,7 +120,7 @@ export function CalendarDayView({ date, bookings, onSelectBooking }: Props) {
 
       {/* Empty state */}
       {dayBookings.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-16 gap-3">
+        <div className="flex flex-col items-center justify-center py-16 gap-4">
           <div className="w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center">
             <Clock className="w-6 h-6 text-gray-300" />
           </div>
@@ -129,7 +129,7 @@ export function CalendarDayView({ date, bookings, onSelectBooking }: Props) {
       )}
 
       {/* Booking cards */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {dayBookings.map((b) => {
           const style = STATUS_STYLE[b.status] ?? STATUS_STYLE.PENDING;
           const dot = STATUS_DOT[b.status] ?? "bg-gray-400";
@@ -147,7 +147,7 @@ export function CalendarDayView({ date, bookings, onSelectBooking }: Props) {
             <button
               key={b.id}
               onClick={() => onSelectBooking(b)}
-              className={`w-full text-left rounded-2xl border p-4 transition-all hover:shadow-md active:scale-[0.99] ${
+              className={`w-full text-left rounded-lg border p-4 transition-all hover:shadow-md active:scale-[0.99] ${
                 isConflict
                   ? "bg-amber-50 border-amber-300"
                   : `${style.bg} ${style.border}`
@@ -155,7 +155,7 @@ export function CalendarDayView({ date, bookings, onSelectBooking }: Props) {
             >
               {/* Conflict label */}
               {isConflict && (
-                <div className="flex items-center gap-1.5 mb-3 pb-2.5 border-b border-amber-200">
+                <div className="flex items-center gap-2 mb-3 pb-2.5 border-b border-amber-200">
                   <AlertTriangle className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
                   <span className="text-xs font-semibold text-amber-700">Jadwal Bertabrakan</span>
                   {beforeAddons.length > 0 && (
@@ -166,10 +166,10 @@ export function CalendarDayView({ date, bookings, onSelectBooking }: Props) {
                 </div>
               )}
 
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start justify-between gap-4">
                 {/* Left: time block */}
                 <div className="flex-shrink-0 text-center min-w-[52px]">
-                  <p className={`text-base font-bold leading-none ${isConflict ? "text-amber-800" : style.text}`}>
+                  <p className={`text-base font-bold leading-5 ${isConflict ? "text-amber-800" : style.text}`}>
                     {formatTime(b.start_time)}
                   </p>
                   <p className="text-xs text-gray-400 mt-1">{formatTime(b.end_time)}</p>

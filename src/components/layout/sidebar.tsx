@@ -69,16 +69,16 @@ export function Sidebar({ user, logoUrl, studioName }: SidebarProps) {
   return (
     <aside className="hidden md:flex flex-col w-64 h-screen sticky top-0 shrink-0 bg-white border-r border-border">
       {/* Logo */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-border">
+      <div className="flex items-center gap-4 px-6 py-5 border-b border-border">
         <StudioLogo logoUrl={logoUrl} studioName={studioName} />
         <div>
-          <p className="font-bold text-sm text-maroon-700 leading-tight">{studioName ?? "Yoonjaespace"}</p>
+          <p className="font-bold text-sm text-maroon-700 leading-5">{studioName ?? "Yoonjaespace"}</p>
           <p className="text-xs text-muted-foreground">Studio Management</p>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
         {visibleMenus.map((item) => {
           const Icon = ICON_MAP[item.icon] ?? LayoutDashboard;
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -87,7 +87,7 @@ export function Sidebar({ user, logoUrl, studioName }: SidebarProps) {
               key={item.slug}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+                "flex items-center gap-4 px-4 py-2 rounded-md text-sm font-medium transition-colors",
                 isActive
                   ? "bg-maroon-50 text-maroon-700"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
@@ -106,9 +106,9 @@ export function Sidebar({ user, logoUrl, studioName }: SidebarProps) {
       </nav>
 
       {/* User info + Logout */}
-      <div className="px-3 py-4 border-t border-border">
+      <div className="px-4 py-4 border-t border-border">
         {user && (
-          <div className="flex items-center gap-3 px-3 py-2 mb-2">
+          <div className="flex items-center gap-4 px-4 py-2 mb-2">
             <div className="flex items-center justify-center w-8 h-8 rounded-full bg-maroon-100 text-maroon-700 text-sm font-semibold shrink-0">
               {user.name.charAt(0).toUpperCase()}
             </div>
@@ -121,7 +121,7 @@ export function Sidebar({ user, logoUrl, studioName }: SidebarProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-start gap-3 text-gray-600 hover:text-red-600 hover:bg-red-50"
+          className="w-full justify-start gap-4 text-gray-600 hover:text-red-600 hover:bg-accent"
           onClick={handleLogout}
         >
           <LogOut className="h-4 w-4" />

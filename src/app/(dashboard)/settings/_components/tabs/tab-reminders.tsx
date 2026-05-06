@@ -150,7 +150,7 @@ export function TabReminders({ currentUser }: TabRemindersProps) {
               <button
                 key={v}
                 onClick={() => insertVariable(v)}
-                className="px-3 py-1 text-xs font-mono bg-maroon-50 text-maroon-700 border border-maroon-200 rounded-full hover:bg-maroon-100 transition-colors"
+                className="px-4 py-1 text-xs font-sans bg-maroon-50 text-maroon-700 border border-maroon-200 rounded-full hover:bg-maroon-100 transition-colors"
               >
                 {v}
               </button>

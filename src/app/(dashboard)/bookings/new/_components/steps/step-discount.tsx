@@ -99,7 +99,7 @@ export function StepDiscount({ discountData, onChange, subtotal }: Props) {
 
       {/* Voucher */}
       <div className={cn(
-        "rounded-lg border p-4 space-y-3 transition-opacity",
+        "rounded-lg border p-4 space-y-4 transition-opacity",
         discountData.discount_type === "manual" ? "opacity-40 pointer-events-none" : ""
       )}>
         <div className="flex items-center gap-2 font-medium text-gray-800">
@@ -113,7 +113,7 @@ export function StepDiscount({ discountData, onChange, subtotal }: Props) {
               value={voucherInput}
               onChange={(e) => setVoucherInput(e.target.value.toUpperCase())}
               placeholder="CONTOH2024"
-              className="font-mono"
+              className="font-sans"
               onKeyDown={(e) => e.key === "Enter" && checkVoucher()}
             />
             <Button
@@ -127,11 +127,11 @@ export function StepDiscount({ discountData, onChange, subtotal }: Props) {
             </Button>
           </div>
         ) : (
-          <div className="flex items-center justify-between rounded-lg bg-green-50 border border-green-200 p-3">
+          <div className="flex items-center justify-between rounded-lg bg-green-50 border border-green-200 p-4">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-green-600" />
               <div>
-                <p className="font-mono font-medium text-green-800">{discountData.voucher_code}</p>
+                <p className="font-sans font-medium text-green-800">{discountData.voucher_code}</p>
                 <p className="text-xs text-green-600">
                   Diskon:{" "}
                   {discountData.voucher_discount_type === "percentage"
@@ -156,7 +156,7 @@ export function StepDiscount({ discountData, onChange, subtotal }: Props) {
 
       {/* Manual discount */}
       <div className={cn(
-        "rounded-lg border p-4 space-y-3 transition-opacity",
+        "rounded-lg border p-4 space-y-4 transition-opacity",
         discountData.discount_type === "voucher" ? "opacity-40 pointer-events-none" : ""
       )}>
         <div className="flex items-center gap-2 font-medium text-gray-800">

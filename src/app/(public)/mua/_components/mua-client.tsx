@@ -128,7 +128,7 @@ export function MuaClient({ studioInfo }: Props) {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 py-4">
-        <div className="max-w-lg mx-auto flex items-center gap-3">
+        <div className="max-w-lg mx-auto flex items-center gap-4">
           {studioInfo?.logo_url ? (
             <Image
               src={studioInfo.logo_url}
@@ -138,7 +138,7 @@ export function MuaClient({ studioInfo }: Props) {
               className="rounded-full object-cover border border-gray-200"
             />
           ) : (
-            <div className="h-10 w-10 rounded-full bg-[#8B1A1A] flex items-center justify-center flex-shrink-0">
+            <div className="h-10 w-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
               <span className="text-white font-bold text-base">
                 {studioInfo?.studio_name?.[0] ?? "Y"}
               </span>
@@ -160,8 +160,8 @@ export function MuaClient({ studioInfo }: Props) {
               <button
                 key={v}
                 onClick={() => setView(v)}
-                className={`px-3 py-1.5 text-sm font-medium transition-colors ${
-                  view === v ? "bg-[#8B1A1A] text-white" : "bg-white text-gray-600 hover:bg-gray-50"
+                className={`px-4 py-2 text-sm font-medium transition-colors ${
+                  view === v ? "bg-primary text-white" : "bg-white text-gray-600 hover:bg-gray-50"
                 }`}
               >
                 {v === "day" ? "Hari" : v === "week" ? "Minggu" : "Bulan"}
@@ -172,13 +172,13 @@ export function MuaClient({ studioInfo }: Props) {
           <div className="flex items-center gap-1">
             <button
               onClick={() => navigate(-1)}
-              className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+              className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
             >
               <ChevronLeft className="h-5 w-5 text-gray-600" />
             </button>
             <button
               onClick={() => navigate(1)}
-              className="h-8 w-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+              className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
             >
               <ChevronRight className="h-5 w-5 text-gray-600" />
             </button>
@@ -191,7 +191,7 @@ export function MuaClient({ studioInfo }: Props) {
             {formatNavLabel(cursor, view)}
           </p>
           {inRange && view === "day" && (
-            <span className="text-xs text-[#8B1A1A] font-medium">Hari Ini</span>
+            <span className="text-xs text-primary font-medium">Hari Ini</span>
           )}
         </div>
 
@@ -200,7 +200,7 @@ export function MuaClient({ studioInfo }: Props) {
           <div className="max-w-lg mx-auto text-center">
             <button
               onClick={() => setCursor(new Date())}
-              className="text-xs text-[#8B1A1A] hover:underline"
+              className="text-xs text-primary hover:underline"
             >
               Kembali ke Hari Ini
             </button>
@@ -223,7 +223,7 @@ export function MuaClient({ studioInfo }: Props) {
               <p className="text-gray-300 text-xs mt-1">{formatDate(toDateStr(cursor))}</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {slots.map(s => <SlotCard key={s.id} slot={s} />)}
             </div>
           )
@@ -243,17 +243,17 @@ export function MuaClient({ studioInfo }: Props) {
                 const isToday = dateStr === toDateStr(new Date());
                 return (
                   <div key={dateStr}>
-                    <div className={`flex items-center gap-2 mb-2 ${isToday ? "text-[#8B1A1A]" : "text-gray-500"}`}>
-                      <span className={`text-xs font-semibold uppercase tracking-wide ${isToday ? "text-[#8B1A1A]" : "text-gray-400"}`}>
+                    <div className={`flex items-center gap-2 mb-2 ${isToday ? "text-primary" : "text-gray-500"}`}>
+                      <span className={`text-xs font-semibold uppercase tracking-wide ${isToday ? "text-primary" : "text-gray-400"}`}>
                         {new Date(dateStr + "T00:00:00").toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long" })}
                       </span>
                       {isToday && (
-                        <span className="text-[10px] bg-[#8B1A1A] text-white px-1.5 py-0.5 rounded-full font-medium">
+                        <span className="text-xs leading-5 bg-primary text-white px-1.5 py-0.5 rounded-full font-medium">
                           Hari Ini
                         </span>
                       )}
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {daySlots.map(s => <SlotCard key={s.id} slot={s} />)}
                     </div>
                   </div>
@@ -269,14 +269,14 @@ export function MuaClient({ studioInfo }: Props) {
 
 function SlotCard({ slot: s }: { slot: MuaSlot }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
       <div className="h-1.5 w-full bg-pink-200" />
-      <div className="p-4 flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-pink-50 flex-shrink-0">
+      <div className="p-4 flex items-center gap-4">
+        <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-pink-50 flex-shrink-0">
           <Sparkles className="h-5 w-5 text-pink-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5 text-sm text-gray-700 font-medium">
+          <div className="flex items-center gap-2 text-sm text-gray-700 font-medium">
             <Clock className="h-3.5 w-3.5 text-gray-400 flex-shrink-0" />
             <span>{formatTime(s.start_time)} — {formatTime(s.end_time)}</span>
           </div>
@@ -284,7 +284,7 @@ function SlotCard({ slot: s }: { slot: MuaSlot }) {
             <p className="text-xs text-gray-500 mt-0.5 truncate">{s.mua_service}</p>
           )}
         </div>
-        <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-gray-100 text-gray-600 flex-shrink-0">
+        <span className="text-xs px-2 py-1 rounded-full font-medium bg-gray-100 text-gray-600 flex-shrink-0">
           Booked
         </span>
       </div>

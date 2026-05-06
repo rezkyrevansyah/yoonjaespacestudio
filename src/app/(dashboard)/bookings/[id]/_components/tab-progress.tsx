@@ -230,7 +230,7 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
   return (
     <div className="space-y-6 pt-4">
       {/* Booking Status Stepper */}
-      <div className="bg-white rounded-xl border p-5 space-y-4">
+      <div className="bg-white rounded-lg border p-5 space-y-4">
         <h3 className="font-semibold text-gray-800">Status Booking</h3>
 
         {/* Stepper — scrollable on mobile */}
@@ -269,13 +269,13 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
                       )}
                     </div>
                     <span className={cn(
-                      "text-xs text-center leading-tight max-w-[60px]",
+                      "text-xs text-center leading-5 max-w-[60px]",
                       isCurrent ? "text-maroon-700 font-semibold" : isPast ? "text-maroon-500" : "text-gray-400"
                     )}>
                       {BOOKING_STATUS_LABEL[status]}
                     </span>
                     {savedDate && (
-                      <span className="text-[10px] text-gray-400 leading-none text-center max-w-[60px]">
+                      <span className="text-xs leading-5 text-gray-400 leading-5 text-center max-w-[60px]">
                         {formatDate(savedDate)}
                       </span>
                     )}
@@ -287,14 +287,14 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
         </div>
 
         {isCanceled && (
-          <div className="flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 p-3 text-red-700">
+          <div className="flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 p-4 text-red-700">
             <XCircle className="h-4 w-4" />
             <span className="text-sm font-medium">Booking ini telah dibatalkan</span>
           </div>
         )}
 
         {booking.status === "ADDON_UNPAID" && (
-          <div className="flex items-center gap-2 rounded-lg bg-orange-50 border border-orange-200 p-3 text-orange-700 text-sm">
+          <div className="flex items-center gap-2 rounded-lg bg-orange-50 border border-orange-200 p-4 text-orange-700 text-sm">
             <AlertCircle className="h-4 w-4 shrink-0" />
             Ada extra add-on yang belum lunas. Cek tab <strong>Pricing</strong>.
           </div>
@@ -302,7 +302,7 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
 
         {/* Action buttons */}
         {!isCanceled && (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {/* SHOOT_DONE → PHOTOS_DELIVERED: need drive link */}
             {booking.status === "SHOOT_DONE" && (
               <>
@@ -337,7 +337,7 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
                     type="date"
                     value={statusDate}
                     onChange={(e) => setStatusDate(e.target.value)}
-                    className="w-full rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-maroon-400"
+                    className="w-full rounded-md border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-maroon-400"
                   />
                 </div>
                 <Button
@@ -389,7 +389,7 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
             {booking.status !== "CLOSED" && booking.status !== "CANCELED" && (
               <Button
                 variant="ghost"
-                className="w-full text-red-500 hover:bg-red-50 disabled:opacity-50"
+                className="w-full text-red-500 hover:bg-accent disabled:opacity-50"
                 onClick={() => setShowCancelConfirm(true)}
                 disabled={loading || !canCancel}
               >
@@ -407,7 +407,7 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
           <AlertDialogHeader>
             <AlertDialogTitle>Batalkan Booking?</AlertDialogTitle>
             <AlertDialogDescription>
-              Booking <span className="font-mono font-medium">{booking.booking_number}</span> akan
+              Booking <span className="font-sans font-medium">{booking.booking_number}</span> akan
               dibatalkan. Status akan berubah menjadi{" "}
               <span className="font-medium text-red-600">Canceled</span>. Tindakan ini dapat
               dikembalikan dengan mengubah status secara manual.
@@ -438,7 +438,7 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
               Input Link Foto & Deliver
             </DialogTitle>
           </DialogHeader>
-          <div className="space-y-3 py-1">
+          <div className="space-y-4 py-1">
             <div>
               <Label className="mb-2 block">Google Drive Link</Label>
               <Input
@@ -455,7 +455,7 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
                   type="date"
                   value={deliverDate}
                   onChange={(e) => setDeliverDate(e.target.value)}
-                  className="flex-1 min-w-0 rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-maroon-400"
+                  className="flex-1 min-w-0 rounded-md border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-maroon-400"
                 />
                 <Button
                   variant="outline"
@@ -485,14 +485,14 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
       </Dialog>
 
       {/* Print Order */}
-      <div className="bg-white rounded-xl border p-5 space-y-4">
+      <div className="bg-white rounded-lg border p-5 space-y-4">
         <h3 className="font-semibold text-gray-800 flex items-center gap-2">
           <Printer className="h-4 w-4 text-maroon-700" />
           Print Order
         </h3>
 
         {!booking.print_order_status ? (
-          <div className="space-y-3">
+          <div className="space-y-4">
             <p className="text-sm text-gray-500">Belum ada print order untuk booking ini.</p>
             {/* Date input for starting print */}
             <div className="flex items-end gap-2">
@@ -504,7 +504,7 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
                   type="date"
                   value={printDate}
                   onChange={(e) => setPrintDate(e.target.value)}
-                  className="w-full min-w-0 rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  className="w-full min-w-0 rounded-md border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
                 />
               </div>
               <Button
@@ -561,13 +561,13 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
                           )}
                         </div>
                         <span className={cn(
-                          "text-xs text-center leading-tight max-w-[50px]",
+                          "text-xs text-center leading-5 max-w-[50px]",
                           isCurrent ? "text-blue-700 font-semibold" : isPast ? "text-blue-400" : "text-gray-400"
                         )}>
                           {PRINT_ORDER_STATUS_LABEL[status]}
                         </span>
                         {savedDate && (
-                          <span className="text-[10px] text-gray-400 leading-none text-center max-w-[50px]">
+                          <span className="text-xs leading-5 text-gray-400 leading-5 text-center max-w-[50px]">
                             {formatDate(savedDate)}
                           </span>
                         )}
@@ -589,7 +589,7 @@ export function TabProgress({ booking, currentUser, onUpdate }: Props) {
                     type="date"
                     value={printDate}
                     onChange={(e) => setPrintDate(e.target.value)}
-                    className="w-full min-w-0 rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    className="w-full min-w-0 rounded-md border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-400"
                   />
                 </div>
                 <Button

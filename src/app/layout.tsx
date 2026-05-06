@@ -10,6 +10,8 @@ const inter = Inter({
   preload: true,
 });
 
+const THEME_COLOR = "hsl(0 68% 32%)";
+
 export const metadata: Metadata = {
   title: "Yoonjaespace Studio",
   description: "Studio photography management system",
@@ -33,11 +35,11 @@ export default function RootLayout({
   return (
     <html lang="id">
       <head>
-        <meta name="theme-color" content="#8B1A1A" />
+        <meta name="theme-color" content={THEME_COLOR} />
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className={inter.className}>
-        <NextTopLoader color="#8B1A1A" height={3} showSpinner={false} />
+        <NextTopLoader color="hsl(var(--primary))" height={3} showSpinner={false} />
         {children}
         <Toaster />
       </body>

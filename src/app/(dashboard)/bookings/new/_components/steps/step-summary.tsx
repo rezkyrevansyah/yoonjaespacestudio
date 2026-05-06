@@ -99,7 +99,7 @@ export function StepSummary({
           <User className="h-4 w-4 text-maroon-700" />
           Customer
         </div>
-        <div className="rounded-lg bg-gray-50 p-3 space-y-0.5">
+        <div className="rounded-lg bg-gray-50 p-4 space-y-0.5">
           {customerData.isExisting ? (
             <>
               <Row label="Nama" value={customerData.existingCustomerName} />
@@ -123,7 +123,7 @@ export function StepSummary({
           <Calendar className="h-4 w-4 text-maroon-700" />
           Sesi
         </div>
-        <div className="rounded-lg bg-gray-50 p-3 space-y-0.5">
+        <div className="rounded-lg bg-gray-50 p-4 space-y-0.5">
           <Row label="Tanggal" value={formatDate(sessionData.booking_date)} />
           <Row
             label="Waktu"
@@ -142,7 +142,7 @@ export function StepSummary({
             <Calendar className="h-4 w-4 text-maroon-700" />
             Notes
           </div>
-          <div className="rounded-lg bg-gray-50 p-3">
+          <div className="rounded-lg bg-gray-50 p-4">
             <p className="text-sm text-gray-900 whitespace-pre-wrap">{detailData.notes}</p>
           </div>
         </section>
@@ -155,7 +155,7 @@ export function StepSummary({
             <Tag className="h-4 w-4 text-maroon-700" />
             Informasi Tambahan
           </div>
-          <div className="rounded-lg bg-gray-50 p-3 space-y-0.5">
+          <div className="rounded-lg bg-gray-50 p-4 space-y-0.5">
             {customFields.map((cf) => {
               const val = customFieldValues[cf.id];
               if (!val) return null;
@@ -177,7 +177,7 @@ export function StepSummary({
           <PackageIcon className="h-4 w-4 text-maroon-700" />
           Paket & Add-ons
         </div>
-        <div className="rounded-lg bg-gray-50 p-3 space-y-0.5">
+        <div className="rounded-lg bg-gray-50 p-4 space-y-0.5">
           {selectedPackages.map(({ package: pkg, quantity }) => (
             <Row
               key={pkg.id}
@@ -226,7 +226,7 @@ export function StepSummary({
           <UserCheck className="h-4 w-4 text-maroon-700" />
           Staff
         </div>
-        <div className="rounded-lg bg-gray-50 p-3">
+        <div className="rounded-lg bg-gray-50 p-4">
           <Row label="Handled by" value={staffMember?.name ?? "-"} />
         </div>
       </section>
@@ -278,7 +278,7 @@ export function StepSummary({
           <CreditCard className="h-4 w-4 text-maroon-700" />
           Down Payment (opsional)
         </div>
-        <div className="rounded-lg border p-4 space-y-3">
+        <div className="rounded-lg border p-4 space-y-4">
           <p className="text-xs text-gray-500">
             Isi jika customer sudah membayar DP. Kosongkan jika belum ada pembayaran.
           </p>
@@ -298,7 +298,7 @@ export function StepSummary({
             />
           </div>
           {dpAmount > 0 && (
-            <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-3 space-y-1">
+            <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-4 space-y-1">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">DP dibayar</span>
                 <span className="font-medium text-yellow-700">{formatRupiah(dpAmount)}</span>

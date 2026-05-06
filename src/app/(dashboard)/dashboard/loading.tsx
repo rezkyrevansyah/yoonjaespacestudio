@@ -4,7 +4,7 @@ export default function DashboardLoading() {
   return (
     <div className="p-4 md:p-6 space-y-6">
       {/* Greeting */}
-      <div className="space-y-1.5">
+      <div className="space-y-1">
         <Skeleton className="h-3.5 w-24" />
         <Skeleton className="h-7 w-56" />
         <Skeleton className="h-3.5 w-40" />
@@ -13,9 +13,9 @@ export default function DashboardLoading() {
       {/* Quick Menu */}
       <div>
         <Skeleton className="h-3 w-20 mb-3" />
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-24 rounded-2xl" />
+            <Skeleton key={i} className="h-24 rounded-lg" />
           ))}
         </div>
       </div>
@@ -23,9 +23,9 @@ export default function DashboardLoading() {
       {/* Stats */}
       <div>
         <Skeleton className="h-3 w-28 mb-3" />
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-20 rounded-2xl" />
+            <Skeleton key={i} className="h-20 rounded-lg" />
           ))}
         </div>
       </div>
@@ -33,9 +33,9 @@ export default function DashboardLoading() {
       {/* Schedule */}
       <div>
         <Skeleton className="h-3 w-24 mb-3" />
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50">
+        <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4 px-4 py-3.5">
+            <div key={i} className="flex items-center gap-4 px-4 py-2">
               <div className="flex-shrink-0 space-y-1 min-w-[48px]">
                 <Skeleton className="h-4 w-10" />
                 <Skeleton className="h-3 w-10" />

@@ -23,7 +23,7 @@ interface CardProps {
 
 function SummaryCard({ label, value, sub, icon, gradient, textColor, loading }: CardProps) {
   return (
-    <div className={`relative overflow-hidden rounded-2xl p-6 shadow-lg ${gradient} border border-white/20`}>
+    <div className={`relative overflow-hidden rounded-lg p-6 shadow-sm ${gradient} border border-white/20`}>
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -translate-y-16 translate-x-16" />
@@ -32,7 +32,7 @@ function SummaryCard({ label, value, sub, icon, gradient, textColor, loading }: 
 
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-4">
-          <div className={`p-3 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30`}>
+          <div className={`p-4 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30`}>
             {icon}
           </div>
           <div className="text-right">
@@ -44,7 +44,7 @@ function SummaryCard({ label, value, sub, icon, gradient, textColor, loading }: 
           {loading ? (
             <div className="h-8 w-24 bg-white/30 rounded-lg animate-pulse" />
           ) : (
-            <p className={`text-2xl font-bold text-white leading-none ${textColor}`}>
+            <p className={`text-2xl font-bold text-white leading-5 ${textColor}`}>
               {value}
             </p>
           )}

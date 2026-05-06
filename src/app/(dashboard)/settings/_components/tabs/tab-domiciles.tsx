@@ -165,16 +165,16 @@ export function TabDomiciles({ currentUser }: TabDomicilesProps) {
       ) : (
         <div className="space-y-2">
           {items.map((item) => (
-            <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg bg-white">
+            <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg bg-white">
               <p className="text-sm font-medium">{item.name}</p>
               <div className="flex items-center gap-2">
                 <Badge variant={item.is_active ? "default" : "secondary"} className={item.is_active ? "bg-green-100 text-green-800 border-green-200" : ""}>
                   {item.is_active ? "Aktif" : "Nonaktif"}
                 </Badge>
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => openEdit(item)}>
+                <Button size="icon" variant="ghost" className="h-10 w-10" onClick={() => openEdit(item)}>
                   <Pencil className="h-3 w-3" />
                 </Button>
-                <Button size="icon" variant="ghost" className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeleteId(item.id)}>
+                <Button size="icon" variant="ghost" className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent" onClick={() => setDeleteId(item.id)}>
                   <Trash2 className="h-3 w-3" />
                 </Button>
               </div>
@@ -185,11 +185,11 @@ export function TabDomiciles({ currentUser }: TabDomicilesProps) {
 
       {/* Pagination */}
       {total > 0 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-500">Tampilkan</span>
             <Select value={String(pageSize)} onValueChange={(v) => setPageSize(Number(v))}>
-              <SelectTrigger className="w-16 h-8">
+              <SelectTrigger className="w-16 h-10">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -204,10 +204,10 @@ export function TabDomiciles({ currentUser }: TabDomicilesProps) {
             <span className="text-sm text-gray-500">
               {page * pageSize + 1}–{Math.min((page + 1) * pageSize, total)} dari {total}
             </span>
-            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setPage((p) => p - 1)} disabled={page === 0}>
+            <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => setPage((p) => p - 1)} disabled={page === 0}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages - 1}>
+            <Button variant="outline" size="icon" className="h-10 w-10" onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages - 1}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
@@ -225,7 +225,7 @@ export function TabDomiciles({ currentUser }: TabDomicilesProps) {
               <Label>Nama <span className="text-red-500">*</span></Label>
               <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Nama kota atau kabupaten" />
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />
               <Label>Aktif</Label>
             </div>

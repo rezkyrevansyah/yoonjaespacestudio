@@ -181,7 +181,7 @@ export function VendorsClient({ currentUser, initialVendors }: Props) {
         </div>
         <button
           onClick={handleAdd}
-          className="flex items-center gap-2 bg-[#8B1A1A] text-white text-sm font-medium px-4 py-2 rounded-xl hover:bg-[#B22222] transition-colors"
+          className="flex items-center gap-2 bg-primary text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
         >
           <Plus className="w-4 h-4" />
           <span className="hidden sm:inline">Tambah Vendor</span>
@@ -192,11 +192,11 @@ export function VendorsClient({ currentUser, initialVendors }: Props) {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-48 bg-gray-100 rounded-2xl animate-pulse" />
+            <div key={i} className="h-48 bg-gray-100 rounded-lg animate-pulse" />
           ))}
         </div>
       ) : vendors.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 gap-3">
+        <div className="flex flex-col items-center justify-center py-20 gap-4">
           <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
             <Store className="w-7 h-7 text-gray-300" />
           </div>
@@ -275,30 +275,30 @@ interface CardProps {
 
 function VendorCard({ vendor: v, inactive, onDetail, onEdit, onDelete }: CardProps) {
   return (
-    <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all hover:shadow-md ${inactive ? "border-gray-100 opacity-60" : "border-gray-100"}`}>
+    <div className={`bg-white rounded-lg border shadow-sm overflow-hidden transition-all hover:shadow-md ${inactive ? "border-gray-100 opacity-60" : "border-gray-100"}`}>
       {/* Top color bar */}
-      <div className={`h-1 ${inactive ? "bg-gray-200" : "bg-[#8B1A1A]"}`} />
+      <div className={`h-1 ${inactive ? "bg-gray-200" : "bg-primary"}`} />
 
       <div className="p-4">
         {/* Name + category */}
         <div className="flex items-start justify-between gap-2 mb-3">
           <div>
-            <h3 className="text-sm font-bold text-gray-900 leading-tight">{v.name}</h3>
+            <h3 className="text-sm font-bold text-gray-900 leading-5">{v.name}</h3>
             {v.category && (
-              <span className="inline-block mt-1 text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+              <span className="inline-block mt-1 text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                 {v.category}
               </span>
             )}
           </div>
           {inactive && (
-            <span className="flex-shrink-0 text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
+            <span className="flex-shrink-0 text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
               Nonaktif
             </span>
           )}
         </div>
 
         {/* Info rows */}
-        <div className="space-y-1.5 mb-4">
+        <div className="space-y-1 mb-4">
           {v.phone && (
             <div className="flex items-center gap-2 text-xs text-gray-500">
               <Phone className="w-3.5 h-3.5 flex-shrink-0" />
@@ -315,15 +315,15 @@ function VendorCard({ vendor: v, inactive, onDetail, onEdit, onDelete }: CardPro
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-2 mb-4">
-          <div className="bg-gray-50 rounded-xl p-2.5">
-            <div className="flex items-center gap-1.5 mb-0.5">
+          <div className="bg-gray-50 rounded-lg p-2.5">
+            <div className="flex items-center gap-2 mb-0.5">
               <Receipt className="w-3 h-3 text-gray-400" />
               <span className="text-xs text-gray-400">Transaksi</span>
             </div>
             <p className="text-sm font-bold text-gray-900">{v.expense_count}x</p>
           </div>
-          <div className="bg-gray-50 rounded-xl p-2.5">
-            <div className="flex items-center gap-1.5 mb-0.5">
+          <div className="bg-gray-50 rounded-lg p-2.5">
+            <div className="flex items-center gap-2 mb-0.5">
               <DollarSign className="w-3 h-3 text-gray-400" />
               <span className="text-xs text-gray-400">Total</span>
             </div>
@@ -335,14 +335,14 @@ function VendorCard({ vendor: v, inactive, onDetail, onEdit, onDelete }: CardPro
         <div className="flex gap-2">
           <button
             onClick={onDetail}
-            className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-gray-600 border border-gray-200 rounded-lg py-2 hover:bg-gray-50 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 text-xs font-medium text-gray-600 border border-gray-200 rounded-lg py-2 hover:bg-gray-50 transition-colors"
           >
             <Eye className="w-3.5 h-3.5" />
             Detail
           </button>
           <button
             onClick={onEdit}
-            className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-blue-600 border border-blue-100 bg-blue-50 rounded-lg py-2 hover:bg-blue-100 transition-colors"
+            className="flex-1 flex items-center justify-center gap-2 text-xs font-medium text-blue-600 border border-blue-100 bg-blue-50 rounded-lg py-2 hover:bg-blue-100 transition-colors"
           >
             <Pencil className="w-3.5 h-3.5" />
             Edit

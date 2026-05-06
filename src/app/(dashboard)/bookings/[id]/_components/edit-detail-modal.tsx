@@ -96,19 +96,25 @@ function QuantityControl({
   onDecrease: () => void;
 }) {
   return (
-    <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+    <div className="flex items-center gap-2">
       <button
         type="button"
-        onClick={onDecrease}
-        className="h-6 w-6 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDecrease();
+        }}
+        className="h-10 w-10 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
       >
         <Minus className="h-3 w-3" />
       </button>
       <span className="w-6 text-center text-sm font-semibold">{value}</span>
       <button
         type="button"
-        onClick={onIncrease}
-        className="h-6 w-6 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
+        onClick={(e) => {
+          e.stopPropagation();
+          onIncrease();
+        }}
+        className="h-10 w-10 rounded border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
       >
         <Plus className="h-3 w-3" />
       </button>
@@ -357,18 +363,18 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
       <DialogContent className="max-w-lg w-full max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Pencil className="h-5 w-5 text-[#8B1A1A]" />
+            <Pencil className="h-5 w-5 text-primary" />
             Edit Detail Booking
           </DialogTitle>
           <p className="text-sm text-gray-500 mt-0.5">
-            Booking <span className="font-mono font-medium">{booking.booking_number}</span>
+            Booking <span className="font-sans font-medium">{booking.booking_number}</span>
           </p>
         </DialogHeader>
 
         <div className="space-y-4">
           {/* Packages — multi-select cards */}
           <div>
-            <Label className="mb-1.5 block">
+            <Label className="mb-1 block">
               Paket <span className="text-red-500">*</span>
             </Label>
             <div className="space-y-2">
@@ -380,18 +386,18 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
                     key={pkg.id}
                     onClick={() => setPackageQty(pkg.id, isSelected ? 0 : 1)}
                     className={cn(
-                      "rounded-lg border p-3 cursor-pointer transition-colors",
+                      "rounded-lg border p-4 cursor-pointer transition-colors",
                       isSelected
                         ? "bg-maroon-50 border-maroon-300"
                         : "bg-white border-gray-200 hover:border-gray-300"
                     )}
                   >
-                    <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center justify-between gap-4">
                       <div className="flex-1 min-w-0">
                         <p className={cn("font-medium text-sm", isSelected ? "text-maroon-800" : "text-gray-800")}>
                           {pkg.name}
                         </p>
-                        <div className="flex items-center gap-3 mt-0.5">
+                        <div className="flex items-center gap-4 mt-0.5">
                           <p className={cn("text-sm font-semibold", isSelected ? "text-maroon-700" : "text-gray-600")}>
                             {formatRupiah(pkg.price)}
                           </p>
@@ -425,7 +431,7 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
 
           {/* Person Count */}
           <div>
-            <Label className="mb-1.5 block">
+            <Label className="mb-1 block">
               Jumlah Orang <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -445,7 +451,7 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
           {/* Backgrounds */}
           {backgrounds.length > 0 && (
             <div>
-              <Label className="mb-1.5 block">Background</Label>
+              <Label className="mb-1 block">Background</Label>
               <div className="grid grid-cols-2 gap-2">
                 {backgrounds.map((bg) => (
                   <button
@@ -453,7 +459,7 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
                     type="button"
                     onClick={() => toggleBackground(bg.id)}
                     className={cn(
-                      "rounded-lg border px-3 py-2 text-sm text-left transition-colors",
+                      "rounded-lg border px-4 py-2 text-sm text-left transition-colors",
                       form.background_ids.includes(bg.id)
                         ? "bg-maroon-50 border-maroon-400 text-maroon-700 font-medium"
                         : "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
@@ -468,7 +474,7 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
 
           {/* Photo For */}
           <div>
-            <Label className="mb-1.5 block">Photo For</Label>
+            <Label className="mb-1 block">Photo For</Label>
             <Select
               value={form.photo_for_id || "__none__"}
               onValueChange={(v) => setForm((f) => ({ ...f, photo_for_id: v === "__none__" ? "" : v }))}
@@ -486,7 +492,7 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
           </div>
 
           {/* BTS */}
-          <div className="flex items-center gap-3 rounded-lg border p-3">
+          <div className="flex items-center gap-4 rounded-lg border p-4">
             <Checkbox
               id="edit-bts"
               checked={form.behind_the_scenes}
@@ -502,7 +508,7 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
 
           {/* Notes */}
           <div>
-            <Label className="mb-1.5 block">Notes</Label>
+            <Label className="mb-1 block">Notes</Label>
             <Textarea
               value={form.notes}
               onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
@@ -513,7 +519,7 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
 
           {/* Staff */}
           <div>
-            <Label className="mb-1.5 block">Staff</Label>
+            <Label className="mb-1 block">Staff</Label>
             <Select
               value={form.staff_id || "__none__"}
               onValueChange={(v) => setForm((f) => ({ ...f, staff_id: v === "__none__" ? "" : v }))}
@@ -532,11 +538,11 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
 
           {/* Custom Fields */}
           {customFields.length > 0 && (
-            <div className="space-y-3">
+            <div className="space-y-4">
               <p className="text-sm font-medium text-gray-700">Informasi Tambahan</p>
               {customFields.map((cf) => (
                 <div key={cf.id}>
-                  <Label className="mb-1.5 block">{cf.label}</Label>
+                  <Label className="mb-1 block">{cf.label}</Label>
                   {cf.field_type === "text" && (
                     <Input
                       value={form.customFieldValues[cf.id] ?? ""}
@@ -596,7 +602,7 @@ export function EditDetailModal({ open, onClose, booking, currentUser, onUpdated
             <Button
               onClick={handleSubmit}
               disabled={saving || form.packages.length === 0}
-              className="bg-[#8B1A1A] hover:bg-[#B22222] gap-1.5"
+              className="bg-primary hover:bg-primary/90 gap-2"
             >
               {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               Simpan

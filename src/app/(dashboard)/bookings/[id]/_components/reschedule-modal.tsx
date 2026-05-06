@@ -175,14 +175,14 @@ export function RescheduleModal({ open, onClose, booking, currentUser, onResched
       <DialogContent className="max-w-lg w-full max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <CalendarClock className="h-5 w-5 text-[#8B1A1A]" />
+            <CalendarClock className="h-5 w-5 text-primary" />
             Reschedule Booking
           </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
           {/* Past dates toggle */}
-          <div className="flex items-center justify-between rounded-lg border border-dashed border-gray-300 px-3 py-2">
+          <div className="flex items-center justify-between rounded-lg border border-dashed border-gray-300 px-4 py-2">
             <div>
               <p className="text-sm font-medium text-gray-700">Input tanggal masa lalu</p>
               <p className="text-xs text-gray-500">Aktifkan jika reschedule ke tanggal yang sudah lewat</p>
@@ -213,7 +213,7 @@ export function RescheduleModal({ open, onClose, booking, currentUser, onResched
           </div>
 
           {overridePastDates && (
-            <div className="flex items-center gap-2 rounded-lg bg-amber-50 border border-amber-200 px-3 py-2">
+            <div className="flex items-center gap-2 rounded-lg bg-amber-50 border border-amber-200 px-4 py-2">
               <AlertTriangle className="h-4 w-4 text-amber-600 flex-shrink-0" />
               <p className="text-sm text-amber-700">Mode tanggal masa lalu — semua tanggal diizinkan</p>
             </div>
@@ -244,8 +244,8 @@ export function RescheduleModal({ open, onClose, booking, currentUser, onResched
                 }}
                 components={{ Chevron: (props) => <Chevron {...props} /> }}
                 classNames={{
-                  selected: "!bg-[#8B1A1A] !text-white !rounded-full",
-                  today: "font-bold text-[#8B1A1A]",
+                  selected: "!bg-primary !text-white !rounded-full",
+                  today: "font-bold text-primary",
                   day_button: "rounded-full",
                 }}
               />
@@ -269,10 +269,10 @@ export function RescheduleModal({ open, onClose, booking, currentUser, onResched
                       className={cn(
                         "rounded-lg border px-2 py-2 text-sm font-medium transition-colors",
                         isSelected
-                          ? "bg-[#8B1A1A] text-white border-[#8B1A1A]"
+                          ? "bg-primary text-white border-primary"
                           : booked
                             ? "bg-gray-200 text-gray-400 border-gray-200 hover:border-orange-300 hover:bg-orange-50 hover:text-orange-700"
-                            : "bg-white text-gray-700 border-gray-200 hover:border-[#8B1A1A]/40 hover:bg-red-50"
+                            : "bg-white text-gray-700 border-gray-200 hover:border-primary/40 hover:bg-accent"
                       )}
                     >
                       {formatTime(slot)}
@@ -283,13 +283,13 @@ export function RescheduleModal({ open, onClose, booking, currentUser, onResched
 
               {/* Legend */}
               <div className="flex items-center justify-center gap-4 text-xs text-gray-500 mt-3">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-3 h-3 rounded bg-[#8B1A1A] inline-block" /> Dipilih
+                <span className="flex items-center gap-2">
+                  <span className="w-3 h-3 rounded bg-primary inline-block" /> Dipilih
                 </span>
-                <span className="flex items-center gap-1.5">
+                <span className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded bg-gray-200 inline-block" /> Sudah ada booking
                 </span>
-                <span className="flex items-center gap-1.5">
+                <span className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded bg-white border border-gray-200 inline-block" /> Tersedia
                 </span>
               </div>
@@ -297,19 +297,19 @@ export function RescheduleModal({ open, onClose, booking, currentUser, onResched
               {/* Old vs New schedule comparison */}
               {selectedTime ? (
                 <div className="mt-3 grid grid-cols-2 gap-2">
-                  <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <p className="text-xs text-gray-400 font-medium mb-1">Jadwal Lama</p>
                     <p className="text-sm font-semibold text-gray-700">{formatDate(booking.booking_date)}</p>
                     <p className="text-xs text-gray-500">{formatTime(booking.start_time)} – {formatTime(booking.end_time)}</p>
                   </div>
-                  <div className="p-3 bg-maroon-50 rounded-lg border border-maroon-200">
+                  <div className="p-4 bg-maroon-50 rounded-lg border border-maroon-200">
                     <p className="text-xs text-maroon-600 font-medium mb-1">Jadwal Baru</p>
                     <p className="text-sm font-semibold text-maroon-800">{formatDate(dateStr)}</p>
                     <p className="text-xs text-maroon-600">{formatTime(selectedTime)} – {formatTime(newEndTime)} ({durationMins} mnt)</p>
                   </div>
                 </div>
               ) : (
-                <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div className="mt-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
                   <p className="text-xs text-gray-400 font-medium mb-1">Jadwal Saat Ini</p>
                   <p className="text-sm font-semibold text-gray-700">{formatDate(booking.booking_date)}</p>
                   <p className="text-xs text-gray-500">{formatTime(booking.start_time)} – {formatTime(booking.end_time)}</p>
@@ -318,7 +318,7 @@ export function RescheduleModal({ open, onClose, booking, currentUser, onResched
 
               {/* Conflict warning */}
               {conflictBooking && (
-                <div className="flex items-start gap-2.5 rounded-xl bg-amber-50 border border-amber-300 px-4 py-3 mt-2">
+                <div className="flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-300 px-4 py-3 mt-2">
                   <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-sm font-semibold text-amber-800">Perhatian: Jam Bertabrakan</p>
@@ -338,7 +338,7 @@ export function RescheduleModal({ open, onClose, booking, currentUser, onResched
             <Button
               onClick={handleSubmit}
               disabled={!canSubmit || saving}
-              className="bg-[#8B1A1A] hover:bg-[#B22222] gap-1.5"
+              className="bg-primary hover:bg-primary/90 gap-2"
             >
               {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               Simpan Reschedule

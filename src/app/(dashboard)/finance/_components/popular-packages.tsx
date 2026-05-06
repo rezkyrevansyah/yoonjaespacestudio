@@ -27,7 +27,7 @@ export function PopularPackages({ stats, loading }: Props) {
   const maxCount = stats.length > 0 ? Math.max(...stats.map(s => s.booking_count)) : 1;
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
       <div className="px-4 py-3 border-b border-gray-100 flex items-center gap-2">
         <Trophy className="w-4 h-4 text-yellow-500" />
         <h2 className="text-sm font-semibold text-gray-900">Top 5 Paket Populer</h2>
@@ -36,7 +36,7 @@ export function PopularPackages({ stats, loading }: Props) {
       {loading ? (
         <div className="p-6 space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-12 bg-gray-100 rounded-xl animate-pulse" />
+            <div key={i} className="h-12 bg-gray-100 rounded-lg animate-pulse" />
           ))}
         </div>
       ) : stats.length === 0 ? (
@@ -44,17 +44,17 @@ export function PopularPackages({ stats, loading }: Props) {
           <p className="text-sm text-gray-400">Belum ada data booking bulan ini</p>
         </div>
       ) : (
-        <div className="p-3 space-y-2.5">
+        <div className="p-4 space-y-2.5">
           {stats.map((stat, idx) => {
             const color = RANK_COLORS[idx] ?? RANK_COLORS[4];
             const pct = Math.round((stat.booking_count / maxCount) * 100);
             return (
               <div
                 key={stat.package_id}
-                className={`rounded-xl border p-3.5 ${color.bg} ${color.border}`}
+                className={`rounded-lg border p-4 ${color.bg} ${color.border}`}
               >
-                <div className="flex items-center justify-between gap-3 mb-2">
-                  <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex items-center justify-between gap-4 mb-2">
+                  <div className="flex items-center gap-2 min-w-0">
                     <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${color.bg} ${color.text} border ${color.border}`}>
                       {idx + 1}
                     </span>

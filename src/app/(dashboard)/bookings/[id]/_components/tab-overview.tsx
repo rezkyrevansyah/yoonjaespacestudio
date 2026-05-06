@@ -10,7 +10,7 @@ interface Props {
 
 function Row({ label, value }: { label: React.ReactNode; value: React.ReactNode }) {
   return (
-    <div className="flex justify-between text-sm py-1.5 border-b border-gray-50 last:border-0 gap-3">
+    <div className="flex justify-between text-sm py-2 border-b border-gray-50 last:border-0 gap-4">
       <span className="text-gray-500 flex-shrink-0">{label}</span>
       <span className="text-gray-900 text-right min-w-0 break-words">{value ?? "—"}</span>
     </div>
@@ -133,7 +133,7 @@ export function TabOverview({ booking }: Props) {
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {bgs.map((bg, i) => (
                 <Badge key={i} variant="secondary">{bg}</Badge>
               ))}
@@ -151,9 +151,9 @@ export function TabOverview({ booking }: Props) {
               Add-ons
             </CardTitle>
           </CardHeader>
-          <CardContent className="pt-0 space-y-3">
+          <CardContent className="pt-0 space-y-4">
             {addons.map((a) => (
-              <div key={a.addon_id} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0">
+              <div key={a.addon_id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                 <div className="flex-1 min-w-0">
                   <span className="text-gray-900 font-medium">
                     {a.addons?.name ?? a.addon_id}
@@ -170,7 +170,7 @@ export function TabOverview({ booking }: Props) {
               </div>
             ))}
             {extraAddons.map((a) => (
-              <div key={a.addon_id} className="flex items-start justify-between py-1.5 border-b border-gray-50 last:border-0">
+              <div key={a.addon_id} className="flex items-start justify-between py-2 border-b border-gray-50 last:border-0">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-amber-600 font-medium">

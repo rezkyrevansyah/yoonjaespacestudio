@@ -272,7 +272,7 @@ export function UserManagementClient({ currentUser, initialUsers, roles }: UserM
                         <Button
                           size="icon"
                           variant="ghost"
-                          className="h-8 w-8"
+                          className="h-10 w-10"
                           onClick={() => openEdit(u)}
                         >
                           <Pencil className="h-3.5 w-3.5" />
@@ -281,7 +281,7 @@ export function UserManagementClient({ currentUser, initialUsers, roles }: UserM
                           <Button
                             size="icon"
                             variant="ghost"
-                            className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                            className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent"
                             onClick={() => setDeleteId(u.id)}
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -305,7 +305,7 @@ export function UserManagementClient({ currentUser, initialUsers, roles }: UserM
               <div key={u.id} className="p-4 space-y-2">
                 <div className="flex items-start justify-between">
                   <div>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-2">
                       <p className="font-medium text-sm">{u.name}</p>
                       {u.is_primary && <Crown className="h-3.5 w-3.5 text-amber-500" />}
                     </div>
@@ -313,14 +313,14 @@ export function UserManagementClient({ currentUser, initialUsers, roles }: UserM
                     {u.phone && <p className="text-xs text-muted-foreground">{u.phone}</p>}
                   </div>
                   <div className="flex gap-1">
-                    <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => openEdit(u)}>
+                    <Button size="icon" variant="ghost" className="h-10 w-10" onClick={() => openEdit(u)}>
                       <Pencil className="h-3.5 w-3.5" />
                     </Button>
                     {!u.is_primary && (
                       <Button
                         size="icon"
                         variant="ghost"
-                        className="h-8 w-8 text-red-500"
+                        className="h-10 w-10 text-red-500"
                         onClick={() => setDeleteId(u.id)}
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -407,7 +407,7 @@ export function UserManagementClient({ currentUser, initialUsers, roles }: UserM
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Switch
                 checked={addForm.is_active}
                 onCheckedChange={(v) => setAddForm({ ...addForm, is_active: v })}
@@ -465,7 +465,7 @@ export function UserManagementClient({ currentUser, initialUsers, roles }: UserM
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Switch
                 checked={editForm.is_active}
                 onCheckedChange={(v) => setEditForm({ ...editForm, is_active: v })}

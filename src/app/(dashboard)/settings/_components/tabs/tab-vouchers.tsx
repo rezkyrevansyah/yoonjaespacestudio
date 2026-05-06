@@ -133,10 +133,10 @@ export function TabVouchers({ currentUser }: TabVouchersProps) {
       ) : (
         <div className="space-y-2">
           {items.map((item) => (
-            <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg bg-white">
+            <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg bg-white">
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-mono font-semibold">{item.code}</p>
+                  <p className="text-sm font-sans font-semibold">{item.code}</p>
                   <Badge variant={item.is_active ? "default" : "secondary"} className={item.is_active ? "bg-green-100 text-green-800 border-green-200" : ""}>
                     {item.is_active ? "Aktif" : "Nonaktif"}
                   </Badge>
@@ -148,8 +148,8 @@ export function TabVouchers({ currentUser }: TabVouchersProps) {
                 </p>
               </div>
               <div className="flex items-center gap-1 shrink-0">
-                <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => openEdit(item)}><Pencil className="h-3 w-3" /></Button>
-                <Button size="icon" variant="ghost" className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeleteId(item.id)}><Trash2 className="h-3 w-3" /></Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10" onClick={() => openEdit(item)}><Pencil className="h-3 w-3" /></Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent" onClick={() => setDeleteId(item.id)}><Trash2 className="h-3 w-3" /></Button>
               </div>
             </div>
           ))}
@@ -162,9 +162,9 @@ export function TabVouchers({ currentUser }: TabVouchersProps) {
           <div className="space-y-4 py-2">
             <div className="space-y-2">
               <Label>Kode Voucher <span className="text-red-500">*</span></Label>
-              <Input value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })} placeholder="LEBARAN2025" className="font-mono" />
+              <Input value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })} placeholder="LEBARAN2025" className="font-sans" />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Tipe Diskon</Label>
                 <Select value={form.discount_type} onValueChange={(v: "percentage" | "fixed") => setForm({ ...form, discount_type: v })}>
@@ -184,7 +184,7 @@ export function TabVouchers({ currentUser }: TabVouchersProps) {
               <Label>Minimum Pembelian (Rp)</Label>
               <Input value={form.minimum_purchase} onChange={(e) => setForm({ ...form, minimum_purchase: e.target.value.replace(/\D/g, "") })} placeholder="0" />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Berlaku Dari</Label>
                 <Input type="date" value={form.valid_from} onChange={(e) => setForm({ ...form, valid_from: e.target.value })} />
@@ -194,7 +194,7 @@ export function TabVouchers({ currentUser }: TabVouchersProps) {
                 <Input type="date" value={form.valid_until} min={form.valid_from} onChange={(e) => setForm({ ...form, valid_until: e.target.value })} />
               </div>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} /><Label>Aktif</Label>
             </div>
           </div>

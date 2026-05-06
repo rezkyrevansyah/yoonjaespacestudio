@@ -476,13 +476,13 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
   return (
     <div className="space-y-5 pt-4">
       {/* Paket & Add-on Awal */}
-      <div className="bg-white rounded-xl border p-5 space-y-3">
+      <div className="bg-white rounded-lg border p-5 space-y-4">
         <h3 className="font-semibold text-gray-800">Paket & Add-on Awal</h3>
 
         <div className="space-y-2">
           {booking.booking_packages.length > 0 ? (
             booking.booking_packages.map((bp) => (
-              <div key={bp.id} className="flex justify-between text-sm py-1.5 border-b border-gray-50">
+              <div key={bp.id} className="flex justify-between text-sm py-2 border-b border-gray-50">
                 <span className="text-gray-600">
                   Paket: {bp.packages?.name}
                   {bp.quantity > 1 && <span className="text-gray-400 ml-1">(x{bp.quantity})</span>}
@@ -491,13 +491,13 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
               </div>
             ))
           ) : (
-            <div className="flex justify-between text-sm py-1.5 border-b border-gray-50">
+            <div className="flex justify-between text-sm py-2 border-b border-gray-50">
               <span className="text-gray-600">Paket: {booking.packages?.name}</span>
               <span className="font-medium">{formatRupiah(booking.packages?.price ?? 0)}</span>
             </div>
           )}
           {originalAddons.map((a) => (
-            <div key={a.addon_id} className="flex justify-between text-sm py-1.5 border-b border-gray-50 last:border-0">
+            <div key={a.addon_id} className="flex justify-between text-sm py-2 border-b border-gray-50 last:border-0">
               <span className="text-gray-600">
                 {a.addons?.name ?? a.addon_id}
                 {(a.quantity ?? 1) > 1 && <span className="text-gray-400 ml-1">({a.quantity}x @ {formatRupiah(a.price)})</span>}
@@ -506,7 +506,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
             </div>
           ))}
           {discount > 0 && (
-            <div className="flex justify-between text-sm py-1.5 text-green-700">
+            <div className="flex justify-between text-sm py-2 text-green-700">
               <span>
                 Diskon{" "}
                 {booking.vouchers ? `(${booking.vouchers.code})` : "(manual)"}
@@ -518,7 +518,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
       </div>
 
       {/* Down Payment */}
-      <div className="bg-white rounded-xl border p-5 space-y-4">
+      <div className="bg-white rounded-lg border p-5 space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-gray-800 flex items-center gap-2">
             <CreditCard className="h-4 w-4 text-maroon-700" />
@@ -528,7 +528,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
             <Button
               size="sm"
               variant="outline"
-              className="gap-1.5 h-8 text-xs"
+              className="gap-2 h-10 text-sm"
               onClick={() => { setDpInput(""); setDpDateInput(""); setEditingDp(true); }}
             >
               <Plus className="h-3.5 w-3.5" />Tambah DP
@@ -537,7 +537,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
         </div>
 
         {editingDp ? (
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div>
               <Input
                 type="number"
@@ -559,7 +559,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
                   type="date"
                   value={dpDateInput}
                   onChange={(e) => setDpDateInput(e.target.value)}
-                  className="flex-1 min-w-0 rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-maroon-400"
+                  className="flex-1 min-w-0 rounded-md border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-maroon-400"
                 />
                 <Button
                   type="button"
@@ -582,18 +582,18 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
                 size="sm"
                 onClick={handleSaveDp}
                 disabled={savingDp || !dpInput || parseInt(dpInput) <= 0}
-                className="bg-maroon-700 hover:bg-maroon-600 h-8"
+                className="bg-maroon-700 hover:bg-maroon-600 h-10"
               >
                 {savingDp && <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />}
                 Simpan
               </Button>
-              <Button size="sm" variant="outline" onClick={() => { setEditingDp(false); setDpDateInput(""); }} className="h-8">
+              <Button size="sm" variant="outline" onClick={() => { setEditingDp(false); setDpDateInput(""); }} className="h-10">
                 Batal
               </Button>
             </div>
           </div>
         ) : hasDp ? (
-          <div className="flex items-center justify-between rounded-lg border p-3 gap-2">
+          <div className="flex items-center justify-between rounded-lg border p-4 gap-2">
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <p className="font-semibold text-sm text-gray-900">{formatRupiah(dpAmount!)}</p>
@@ -618,7 +618,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
                 size="sm"
                 onClick={handleToggleDpPaid}
                 disabled={togglingDp}
-                className="h-8 px-2"
+                className="h-10 px-4"
                 title={dpIsLunas ? "Tandai Belum Lunas" : "Tandai Lunas"}
               >
                 {togglingDp ? (
@@ -633,7 +633,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
                 variant="ghost"
                 size="sm"
                 onClick={() => { setDpInput(String(dpAmount)); setDpDateInput(dpPaidAt ? new Date(dpPaidAt).toLocaleDateString("en-CA") : ""); setEditingDp(true); }}
-                className="h-8 px-2"
+                className="h-10 px-4"
                 title="Edit nominal DP"
               >
                 <Pencil className="h-3.5 w-3.5" />
@@ -643,7 +643,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
                 size="sm"
                 onClick={handleDeleteDp}
                 disabled={deletingDp}
-                className="h-8 px-2 text-red-400 hover:text-red-600 hover:bg-red-50"
+                className="h-10 px-4 text-red-400 hover:text-red-600 hover:bg-accent"
                 title="Hapus DP"
               >
                 {deletingDp ? (
@@ -660,7 +660,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
       </div>
 
       {/* Extra Add-on */}
-      <div className="bg-white rounded-xl border p-5 space-y-4">
+      <div className="bg-white rounded-lg border p-5 space-y-4">
         <h3 className="font-semibold text-gray-800">Extra Add-on</h3>
 
         {extraAddons.length === 0 ? (
@@ -670,7 +670,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
             {extraAddons.map((a) => (
               <div
                 key={a.addon_id}
-                className="flex items-center justify-between rounded-lg border p-3"
+                className="flex items-center justify-between rounded-lg border p-4"
               >
                 <div>
                   <p className="font-medium text-sm">
@@ -693,7 +693,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
                     size="sm"
                     onClick={() => togglePaid(a.addon_id, a.is_paid)}
                     disabled={togglingId === a.addon_id}
-                    className="h-8 px-2"
+                    className="h-10 px-4"
                   >
                     {togglingId === a.addon_id ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -708,7 +708,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
                     size="sm"
                     onClick={() => removeExtraAddon(a.addon_id)}
                     disabled={removingId === a.addon_id}
-                    className="h-8 px-2 text-red-400 hover:text-red-600 hover:bg-red-50"
+                    className="h-10 px-4 text-red-400 hover:text-red-600 hover:bg-accent"
                   >
                     {removingId === a.addon_id
                       ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -797,7 +797,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
       </div>
 
       {/* Total Summary */}
-      <div className="rounded-xl border-2 border-maroon-200 bg-maroon-50 p-5 space-y-2">
+      <div className="rounded-lg border-2 border-maroon-200 bg-maroon-50 p-5 space-y-2">
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">Subtotal awal</span>
           <span>{formatRupiah(Math.max(0, packagesTotal + originalAddonsTotal - discount))}</span>
@@ -836,7 +836,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
               <Button
                 variant="outline"
                 size="sm"
-                className="h-7 text-xs text-red-600 border-red-200 hover:bg-red-50"
+                className="h-7 text-xs text-red-600 border-red-200 hover:bg-accent"
                 onClick={() => setShowCancelLunasDialog(true)}
                 disabled={cancelingPaid}
               >

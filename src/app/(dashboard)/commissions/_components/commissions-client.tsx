@@ -479,7 +479,7 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
   return (
     <div className="p-4 md:p-6 space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-gray-900">Commissions</h1>
           <p className="text-sm text-gray-500">Periode: {period.label}</p>
@@ -487,7 +487,7 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setResetConfirmOpen(true)}
-            className="flex items-center gap-1.5 text-sm font-medium text-red-500 border border-red-200 bg-red-50 hover:bg-red-100 rounded-xl px-3 py-2 transition-colors"
+            className="flex items-center gap-2 text-sm font-medium text-red-500 border border-red-200 bg-red-50 hover:bg-red-100 rounded-lg px-4 py-2 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset
@@ -496,7 +496,7 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
             <select
               value={selectedMonth}
               onChange={e => setSelectedMonth(Number(e.target.value))}
-              className="appearance-none text-sm font-medium border border-gray-200 rounded-xl pl-3 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A] cursor-pointer"
+              className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer"
             >
               {MONTHS.map((m, i) => <option key={i} value={i}>{m}</option>)}
             </select>
@@ -506,7 +506,7 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
             <select
               value={selectedYear}
               onChange={e => setSelectedYear(Number(e.target.value))}
-              className="appearance-none text-sm font-medium border border-gray-200 rounded-xl pl-3 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A] cursor-pointer"
+              className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer"
             >
               {yearOptions.map(y => <option key={y} value={y}>{y}</option>)}
             </select>
@@ -516,36 +516,36 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-green-50 border border-green-100 rounded-2xl p-4">
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-green-50 border border-green-100 rounded-lg p-4">
           <p className="text-xs font-medium text-green-600 uppercase tracking-wide">Sudah Dibayar</p>
           <p className="text-xl font-bold text-green-700 mt-1">{formatRupiah(totalPaid)}</p>
         </div>
-        <div className="bg-orange-50 border border-orange-100 rounded-2xl p-4">
+        <div className="bg-orange-50 border border-orange-100 rounded-lg p-4">
           <p className="text-xs font-medium text-orange-600 uppercase tracking-wide">Belum Dibayar</p>
           <p className="text-xl font-bold text-orange-700 mt-1">{formatRupiah(totalUnpaid)}</p>
         </div>
       </div>
 
       {/* Bonus Config Panel */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-lg border border-gray-100 shadow-sm overflow-hidden">
         <button
           onClick={() => setBonusOpen(!bonusOpen)}
           className="w-full flex items-center justify-between p-4 hover:bg-gray-50 transition-colors"
         >
           <div className="flex items-center gap-2">
-            <Settings className="w-4 h-4 text-[#8B1A1A]" />
+            <Settings className="w-4 h-4 text-primary" />
             <span className="text-sm font-semibold text-gray-800">Pengaturan Bonus Komisi</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               {currentDefaultBonus > 0 && (
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
                   Default: {formatRupiah(currentDefaultBonus)}
                 </span>
               )}
               {pkgsWithBonus > 0 && (
-                <span className="text-xs text-amber-600 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">
+                <span className="text-xs text-amber-600 bg-amber-50 border border-amber-100 px-2 py-1 rounded-full">
                   {pkgsWithBonus} paket punya bonus
                 </span>
               )}
@@ -568,7 +568,7 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
                   value={defaultBonusInput}
                   onChange={e => setDefaultBonusInput(e.target.value.replace(/\D/g, ""))}
                   placeholder="0"
-                  className="max-w-[160px] h-9 rounded-xl border border-gray-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]"
+                  className="max-w-[160px] h-10 rounded-lg border border-gray-200 px-4 text-sm focus:outline-none focus:ring-1 focus:ring-ring/30 focus:border-ring"
                 />
               </div>
             </div>
@@ -580,7 +580,7 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
                 <p className="text-xs text-gray-400">Jika diisi, override bonus default untuk paket tersebut. Kosongkan atau isi 0 untuk pakai default.</p>
                 <div className="space-y-2 mt-2">
                   {pkgBonuses.map((p, i) => (
-                    <div key={p.id} className="flex items-center gap-3">
+                    <div key={p.id} className="flex items-center gap-4">
                       <span className="text-sm text-gray-700 w-36 truncate flex-shrink-0">{p.name}</span>
                       <span className="text-xs text-gray-400">Rp</span>
                       <input
@@ -589,10 +589,10 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
                         value={p.bonus}
                         onChange={e => setPkgBonuses(prev => prev.map((x, j) => j === i ? { ...x, bonus: e.target.value.replace(/\D/g, "") } : x))}
                         placeholder="0"
-                        className="w-28 h-8 rounded-lg border border-gray-200 px-2 text-sm text-right focus:outline-none focus:ring-1 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A]"
+                        className="w-28 h-10 rounded-lg border border-gray-200 px-2 text-sm text-right focus:outline-none focus:ring-1 focus:ring-ring/30 focus:border-ring"
                       />
                       {Number(p.bonus) > 0 && (
-                        <span className="text-[10px] text-amber-600 font-medium">override</span>
+                        <span className="text-xs leading-5 text-amber-600 font-medium">override</span>
                       )}
                     </div>
                   ))}
@@ -603,7 +603,7 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
             <button
               onClick={handleSaveBonus}
               disabled={savingBonus}
-              className="flex items-center gap-2 bg-[#8B1A1A] text-white text-sm font-medium rounded-xl px-4 py-2.5 hover:bg-[#B22222] transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 bg-primary text-white text-sm font-medium rounded-lg px-4 py-2 hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
               {savingBonus ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               {savingBonus ? "Menyimpan..." : "Simpan Pengaturan Bonus"}
@@ -616,7 +616,7 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
       {loading ? (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-40 bg-gray-100 rounded-2xl animate-pulse" />
+            <div key={i} className="h-40 bg-gray-100 rounded-lg animate-pulse" />
           ))}
         </div>
       ) : staffCards.length === 0 ? (
@@ -706,16 +706,16 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
   const totalCommission = card.bookings.reduce((sum, b) => sum + b.commissionAmount, 0);
 
   return (
-    <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${isPaid ? "border-green-100" : "border-gray-100"}`}>
+    <div className={`bg-white rounded-lg border shadow-sm overflow-hidden ${isPaid ? "border-green-100" : "border-gray-100"}`}>
       {/* Status bar */}
       <div className={`h-1 ${isPaid ? "bg-green-400" : "bg-orange-300"}`} />
 
       <div className="p-4 space-y-4">
         {/* Staff info row */}
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#FEF2F2] flex items-center justify-center flex-shrink-0">
-              <User className="w-4 h-4 text-[#8B1A1A]" />
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
+              <User className="w-4 h-4 text-primary" />
             </div>
             <div>
               <p className="text-sm font-semibold text-gray-900">{card.staffName}</p>
@@ -735,9 +735,9 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
         </div>
 
         {/* Total komisi (auto-sum) + status */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-xs font-medium text-gray-500 mb-1.5">Total Komisi</p>
+            <p className="text-xs font-medium text-gray-500 mb-1">Total Komisi</p>
             <p className={`text-lg font-bold ${totalCommission > 0 ? "text-gray-900" : "text-gray-300"}`}>
               {totalCommission > 0 ? formatRupiah(totalCommission) : "Rp 0"}
             </p>
@@ -745,12 +745,12 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
           </div>
 
           <div className="flex flex-col justify-between">
-            <p className="text-xs font-medium text-gray-500 mb-1.5">Status</p>
+            <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
             <button
               onClick={onTogglePaid}
-              className={`flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-xl border transition-colors ${
+              className={`flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border transition-colors ${
                 card.isPaid
-                  ? "bg-green-50 border-green-200 text-green-700 hover:bg-red-50 hover:border-red-200 hover:text-red-600"
+                  ? "bg-green-50 border-green-200 text-green-700 hover:bg-accent hover:border-red-200 hover:text-red-600"
                   : "bg-gray-50 border-gray-200 text-gray-500 hover:bg-gray-100"
               }`}
             >
@@ -767,7 +767,7 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
           <button
             onClick={onSave}
             disabled={card.saving}
-            className="w-full flex items-center justify-center gap-2 bg-[#8B1A1A] text-white text-sm font-medium rounded-xl py-2.5 hover:bg-[#B22222] transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 bg-primary text-white text-sm font-medium rounded-lg py-2 hover:bg-primary/90 transition-colors disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             {card.saving ? "Menyimpan..." : "Simpan"}
@@ -779,9 +779,9 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
           <div>
             <button
               onClick={onToggleExpand}
-              className="w-full flex items-center justify-between text-xs font-medium text-gray-500 bg-gray-50 rounded-xl px-3 py-2.5 hover:bg-gray-100 transition-colors"
+              className="w-full flex items-center justify-between text-xs font-medium text-gray-500 bg-gray-50 rounded-lg px-4 py-2 hover:bg-gray-100 transition-colors"
             >
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-2">
                 <CalendarDays className="w-3.5 h-3.5" />
                 Riwayat Booking & Input Komisi ({card.bookings.length})
               </span>
@@ -789,32 +789,32 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
             </button>
 
             {card.expanded && (
-              <div className="mt-2 rounded-xl border border-gray-100 overflow-hidden">
+              <div className="mt-2 rounded-lg border border-gray-100 overflow-hidden">
                 <table className="w-full text-xs">
                   <thead>
                     <tr className="bg-gray-50 text-gray-400">
-                      <th className="px-3 py-2 text-left font-medium">Booking</th>
-                      <th className="px-3 py-2 text-left font-medium hidden sm:table-cell">Customer</th>
-                      <th className="px-3 py-2 text-left font-medium hidden sm:table-cell">Tanggal</th>
-                      <th className="px-3 py-2 text-right font-medium">Total Booking</th>
-                      <th className="px-3 py-2 text-right font-medium">Komisi</th>
-                      <th className="px-3 py-2 w-6" />
+                      <th className="px-4 py-2 text-left font-medium">Booking</th>
+                      <th className="px-4 py-2 text-left font-medium hidden sm:table-cell">Customer</th>
+                      <th className="px-4 py-2 text-left font-medium hidden sm:table-cell">Tanggal</th>
+                      <th className="px-4 py-2 text-right font-medium">Total Booking</th>
+                      <th className="px-4 py-2 text-right font-medium">Komisi</th>
+                      <th className="px-4 py-2 w-6" />
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-50">
                     {card.bookings.map(b => (
                       <tr key={b.id} className="hover:bg-gray-50">
-                        <td className="px-3 py-2 font-mono text-gray-500">{b.booking_number}</td>
-                        <td className="px-3 py-2 text-gray-800 font-medium hidden sm:table-cell">{b.customers?.name ?? "-"}</td>
-                        <td className="px-3 py-2 text-gray-500 hidden sm:table-cell">{formatDate(b.booking_date)}</td>
-                        <td className="px-3 py-2 text-right font-semibold text-gray-800">{formatRupiah(b.total)}</td>
-                        <td className="px-3 py-2 text-right">
+                        <td className="px-4 py-2 font-sans text-gray-500">{b.booking_number}</td>
+                        <td className="px-4 py-2 text-gray-800 font-medium hidden sm:table-cell">{b.customers?.name ?? "-"}</td>
+                        <td className="px-4 py-2 text-gray-500 hidden sm:table-cell">{formatDate(b.booking_date)}</td>
+                        <td className="px-4 py-2 text-right font-semibold text-gray-800">{formatRupiah(b.total)}</td>
+                        <td className="px-4 py-2 text-right">
                           {isPaid ? (
                             <span className="font-semibold text-gray-700">{formatRupiah(b.commissionAmount)}</span>
                           ) : (
                             <div className="flex flex-col items-end gap-0.5">
                               {b.isAutoFilled && (
-                                <span className="text-[10px] text-amber-500 font-medium">auto</span>
+                                <span className="text-xs leading-5 text-amber-500 font-medium">auto</span>
                               )}
                               <div className="flex items-center justify-end">
                                 <span className="text-gray-400 mr-1">Rp</span>
@@ -824,17 +824,17 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
                                   value={b.commissionAmount > 0 ? String(b.commissionAmount) : ""}
                                   onChange={e => onBookingCommissionChange(b.id, e.target.value)}
                                   placeholder="0"
-                                  className={`w-24 border rounded-lg px-2 py-1 text-right text-xs focus:outline-none focus:ring-1 focus:ring-[#8B1A1A]/30 focus:border-[#8B1A1A] ${b.isAutoFilled ? "border-amber-200 bg-amber-50" : "border-gray-200"}`}
+                                  className={`w-24 border rounded-lg px-2 py-1 text-right text-xs focus:outline-none focus:ring-1 focus:ring-ring/30 focus:border-ring ${b.isAutoFilled ? "border-amber-200 bg-amber-50" : "border-gray-200"}`}
                                 />
                               </div>
                             </div>
                           )}
                         </td>
-                        <td className="px-3 py-2">
+                        <td className="px-4 py-2">
                           <Link
                             href={`/bookings/${b.id}`}
                             target="_blank"
-                            className="text-gray-300 hover:text-[#8B1A1A] transition-colors"
+                            className="text-gray-300 hover:text-primary transition-colors"
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </Link>
@@ -844,12 +844,12 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
                   </tbody>
                   <tfoot>
                     <tr className="border-t border-gray-200 bg-gray-50">
-                      <td colSpan={3} className="px-3 py-2 font-semibold text-gray-600 hidden sm:table-cell">Total</td>
-                      <td colSpan={1} className="px-3 py-2 font-semibold text-gray-600 sm:hidden">Total</td>
-                      <td className="px-3 py-2 text-right font-bold text-gray-800">
+                      <td colSpan={3} className="px-4 py-2 font-semibold text-gray-600 hidden sm:table-cell">Total</td>
+                      <td colSpan={1} className="px-4 py-2 font-semibold text-gray-600 sm:hidden">Total</td>
+                      <td className="px-4 py-2 text-right font-bold text-gray-800">
                         {formatRupiah(card.bookings.reduce((s, b) => s + b.total, 0))}
                       </td>
-                      <td className="px-3 py-2 text-right font-bold text-[#8B1A1A]">
+                      <td className="px-4 py-2 text-right font-bold text-primary">
                         {formatRupiah(totalCommission)}
                       </td>
                       <td />

@@ -49,9 +49,9 @@ function SortableCategoryItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center justify-between p-3 border rounded-lg bg-white ${isDragging ? "shadow-lg opacity-80 z-10 relative" : ""}`}
+      className={`flex items-center justify-between p-4 border rounded-lg bg-white ${isDragging ? "shadow-sm opacity-80 z-10 relative" : ""}`}
     >
-      <div className="flex items-center gap-3 min-w-0">
+      <div className="flex items-center gap-4 min-w-0">
         <button
           type="button"
           {...attributes}
@@ -66,10 +66,10 @@ function SortableCategoryItem({
         <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">
           Aktif
         </Badge>
-        <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => onEdit(item)}>
+        <Button size="icon" variant="ghost" className="h-10 w-10" onClick={() => onEdit(item)}>
           <Pencil className="h-3 w-3" />
         </Button>
-        <Button size="icon" variant="ghost" className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => onDelete(item.id)}>
+        <Button size="icon" variant="ghost" className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent" onClick={() => onDelete(item.id)}>
           <Trash2 className="h-3 w-3" />
         </Button>
       </div>
@@ -307,7 +307,7 @@ function CategorySection({
 
           {/* Save bar */}
           {hasReordered && (
-            <div className="flex items-center justify-end gap-2 mt-3 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+            <div className="flex items-center justify-end gap-2 mt-3 p-4 bg-amber-50 border border-amber-200 rounded-lg">
               <span className="text-sm text-amber-800 mr-auto">Urutan berubah</span>
               <Button variant="outline" size="sm" onClick={handleCancelReorder} disabled={savingOrder}>
                 Batal
@@ -325,7 +325,7 @@ function CategorySection({
               <button
                 type="button"
                 onClick={() => setInactiveExpanded(!inactiveExpanded)}
-                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
               >
                 {inactiveExpanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
                 Non-aktif ({inactiveItems.length})
@@ -333,16 +333,16 @@ function CategorySection({
               {inactiveExpanded && (
                 <div className="space-y-2 mt-2">
                   {inactiveItems.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg bg-gray-50 opacity-60">
-                      <div className="flex items-center gap-3 min-w-0">
+                    <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg bg-gray-50 opacity-60">
+                      <div className="flex items-center gap-4 min-w-0">
                         <p className="text-sm font-medium truncate">{item.name}</p>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         <Badge variant="secondary">Nonaktif</Badge>
-                        <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => openEdit(item)}>
+                        <Button size="icon" variant="ghost" className="h-10 w-10" onClick={() => openEdit(item)}>
                           <Pencil className="h-3 w-3" />
                         </Button>
-                        <Button size="icon" variant="ghost" className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50" onClick={() => setDeleteId(item.id)}>
+                        <Button size="icon" variant="ghost" className="h-10 w-10 text-red-500 hover:text-red-700 hover:bg-accent" onClick={() => setDeleteId(item.id)}>
                           <Trash2 className="h-3 w-3" />
                         </Button>
                       </div>
@@ -366,7 +366,7 @@ function CategorySection({
               <Label>Nama <span className="text-red-500">*</span></Label>
               <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Paket Utama" />
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Switch checked={form.is_active} onCheckedChange={(v) => setForm({ ...form, is_active: v })} />
               <Label>Aktif</Label>
             </div>

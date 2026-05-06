@@ -64,7 +64,7 @@ export function AvailabilityModal({ open, onClose, date, openTime, closeTime, ti
       <DialogContent className="max-w-lg w-full max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-[#8B1A1A]" />
+            <Clock className="h-5 w-5 text-primary" />
             Ketersediaan Jam
           </DialogTitle>
           <p className="text-sm text-gray-500 mt-0.5">{dateLabel}</p>
@@ -90,7 +90,7 @@ export function AvailabilityModal({ open, onClose, date, openTime, closeTime, ti
                   <div
                     key={slot}
                     className={cn(
-                      "rounded-lg border px-2 py-2.5 text-sm font-medium text-center select-none",
+                      "rounded-lg border px-2 py-2 text-sm font-medium text-center select-none",
                       isBooked
                         ? "bg-gray-200 text-gray-400 border-gray-200"
                         : "bg-green-50 text-green-700 border-green-200"
@@ -104,11 +104,11 @@ export function AvailabilityModal({ open, onClose, date, openTime, closeTime, ti
 
             {/* Legend */}
             <div className="flex items-center justify-center gap-4 text-xs text-gray-500 pt-1">
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded bg-green-50 border border-green-200 inline-block" />
                 Tersedia
               </span>
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded bg-gray-200 inline-block" />
                 Sudah ada booking
               </span>

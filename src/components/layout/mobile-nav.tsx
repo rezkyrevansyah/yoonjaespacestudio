@@ -82,17 +82,17 @@ export function MobileNav({ user, logoUrl, studioName }: MobileNavProps) {
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" className="w-72 p-0">
-          <SheetHeader className="flex-row items-center gap-3 px-6 py-5 border-b border-border space-y-0">
+          <SheetHeader className="flex-row items-center gap-4 px-6 py-5 border-b border-border space-y-0">
             <StudioLogo logoUrl={logoUrl} studioName={studioName} />
             <div>
-              <SheetTitle className="text-sm text-maroon-700 leading-tight">
+              <SheetTitle className="text-sm text-maroon-700 leading-5">
                 {studioName ?? "Yoonjaespace"}
               </SheetTitle>
               <p className="text-xs text-muted-foreground">Studio Management</p>
             </div>
           </SheetHeader>
 
-          <nav className="flex-1 px-3 py-4 space-y-1">
+          <nav className="flex-1 px-4 py-4 space-y-1">
             {visibleMenus.map((item) => {
               const Icon = ICON_MAP[item.icon] ?? LayoutDashboard;
               const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -102,7 +102,7 @@ export function MobileNav({ user, logoUrl, studioName }: MobileNavProps) {
                   href={item.href}
                   onClick={() => setOpen(false)}
                   className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+                    "flex items-center gap-4 px-4 py-2 rounded-md text-sm font-medium transition-colors",
                     isActive
                       ? "bg-maroon-50 text-maroon-700"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
@@ -115,9 +115,9 @@ export function MobileNav({ user, logoUrl, studioName }: MobileNavProps) {
             })}
           </nav>
 
-          <div className="px-3 py-4 border-t border-border">
+          <div className="px-4 py-4 border-t border-border">
             {user && (
-              <div className="flex items-center gap-3 px-3 py-2 mb-2">
+              <div className="flex items-center gap-4 px-4 py-2 mb-2">
                 <div className="flex items-center justify-center w-8 h-8 rounded-full bg-maroon-100 text-maroon-700 text-sm font-semibold shrink-0">
                   {user.name.charAt(0).toUpperCase()}
                 </div>
@@ -130,7 +130,7 @@ export function MobileNav({ user, logoUrl, studioName }: MobileNavProps) {
             <Button
               variant="ghost"
               size="sm"
-              className="w-full justify-start gap-3 text-gray-600 hover:text-red-600 hover:bg-red-50"
+              className="w-full justify-start gap-4 text-gray-600 hover:text-red-600 hover:bg-accent"
               onClick={handleLogout}
             >
               <LogOut className="h-4 w-4" />
