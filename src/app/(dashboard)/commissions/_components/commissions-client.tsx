@@ -508,6 +508,9 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
         <div>
           <h1 className="text-xl font-bold text-gray-900">Commissions</h1>
           <p className="text-sm text-gray-500">Periode: {period.label}</p>
+          <p className="text-xs text-gray-400 mt-0.5">
+            Cutoff tanggal {cutoffDay} — beda dari kalender bulan di halaman Bookings/Finance/Dashboard
+          </p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <button
@@ -523,7 +526,14 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
               onChange={e => setSelectedMonth(Number(e.target.value))}
               className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer"
             >
-              {MONTHS.map((m, i) => <option key={i} value={i}>{m}</option>)}
+              {MONTHS.map((m, i) => {
+                const r = getPeriodRange(i, selectedYear, cutoffDay);
+                return (
+                  <option key={i} value={i}>
+                    {m} ({r.start.slice(8, 10)}/{r.start.slice(5, 7)} – {r.end.slice(8, 10)}/{r.end.slice(5, 7)})
+                  </option>
+                );
+              })}
             </select>
             <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
           </div>
