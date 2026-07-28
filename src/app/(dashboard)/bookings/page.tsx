@@ -1,4 +1,5 @@
 import { requireMenu } from "@/lib/require-menu";
+import { getCachedActiveUsers } from "@/lib/cached-queries";
 import { createClient } from "@/utils/supabase/server";
 import type { BookingStatus } from "@/lib/types/database";
 import { BookingsClient } from "./_components/bookings-client";
@@ -48,9 +49,10 @@ export default async function BookingsPage({
     initialQuery = initialQuery.eq("print_order_status", print);
   }
 
-  const [currentUser, initialResult] = await Promise.all([
+  const [currentUser, initialResult, staffUsers] = await Promise.all([
     requireMenu("bookings"),
     initialQuery.range(0, 9),
+    getCachedActiveUsers(),
   ]);
 
   return (
@@ -61,6 +63,7 @@ export default async function BookingsPage({
         bookings: (initialResult.data as unknown as BookingRow[]) ?? [],
         total: initialResult.count ?? 0,
       }}
+      staffOptions={(staffUsers ?? []).map((u) => ({ id: u.id, name: u.name }))}
     />
   );
 }

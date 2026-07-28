@@ -7,7 +7,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { DateRangeFilter } from "@/components/ui/date-range-filter";
+import { BookingFilterSheet, ALL_STATUSES, RESCHEDULED_FILTER } from "./booking-filter-sheet";
 import {
   Select,
   SelectContent,
@@ -40,6 +40,7 @@ import {
   PRINT_ORDER_STATUS_LABEL,
 } from "@/lib/constants";
 import { formatRupiah, formatDate, formatTime, toDateStr } from "@/lib/utils";
+import { getWeekRange, getMonthRange, getPreviousMonthRange } from "@/lib/booking-stats";
 import type { CurrentUser, BookingStatus } from "@/lib/types/database";
 import {
   Plus,
@@ -83,16 +84,22 @@ function getPackageNames(b: BookingRow): string {
 }
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50];
-const ALL_STATUSES = "ALL";
-const RESCHEDULED_FILTER = "RESCHEDULED";
+
+interface StaffOption {
+  id: string;
+  name: string;
+}
 
 interface Props {
   currentUser: CurrentUser;
   initialPrint: string;
   initialData: { bookings: BookingRow[]; total: number };
+  staffOptions: StaffOption[];
 }
 
-export function BookingsClient({ currentUser, initialPrint, initialData }: Props) {
+type DatePreset = "today" | "week" | "month" | "lastMonth" | null;
+
+export function BookingsClient({ currentUser, initialPrint, initialData, staffOptions }: Props) {
   const router = useRouter();
   const { toast } = useToast();
   // Stable ref for currentUser to avoid adding it to useCallback deps
@@ -108,8 +115,10 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>(ALL_STATUSES);
   const [printFilter, setPrintFilter] = useState<string>(initialPrint);
+  const [staffFilter, setStaffFilter] = useState<string>("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [activePreset, setActivePreset] = useState<DatePreset>(null);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [sortAsc, setSortAsc] = useState(false);
@@ -119,25 +128,44 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
   const [deleteNumber, setDeleteNumber] = useState<string>("");
   const [deleting, setDeleting] = useState(false);
 
-  // Computed after mount so SSR/CSR agree (avoids hydration mismatch when
-  // server and client roll over midnight at slightly different moments).
-  const [todayStr, setTodayStr] = useState<string>("");
-  useEffect(() => {
-    setTodayStr(toDateStr(new Date()));
-  }, []);
-
   function resetFilters() {
     setSearchInput("");
     setSearch("");
     setStatusFilter(ALL_STATUSES);
     setPrintFilter("");
+    setStaffFilter("");
     setDateFrom("");
     setDateTo("");
+    setActivePreset(null);
     setPage(0);
   }
 
-  const hasActiveFilters = !!(searchInput || statusFilter !== ALL_STATUSES || printFilter || dateFrom || dateTo);
-  const isTodayFilter = dateFrom === todayStr && dateTo === todayStr;
+  function applyPreset(preset: Exclude<DatePreset, null>) {
+    if (activePreset === preset) {
+      setDateFrom("");
+      setDateTo("");
+      setActivePreset(null);
+      setPage(0);
+      return;
+    }
+    const now = new Date();
+    let range: { startDate: string; endDate: string };
+    if (preset === "today") {
+      range = { startDate: toDateStr(now), endDate: toDateStr(now) };
+    } else if (preset === "week") {
+      range = getWeekRange(now);
+    } else if (preset === "month") {
+      range = getMonthRange(now.getFullYear(), now.getMonth());
+    } else {
+      range = getPreviousMonthRange(now);
+    }
+    setDateFrom(range.startDate);
+    setDateTo(range.endDate);
+    setActivePreset(preset);
+    setPage(0);
+  }
+
+  const hasActiveFilters = !!(searchInput || statusFilter !== ALL_STATUSES || printFilter || staffFilter || dateFrom || dateTo);
 
   const fetchBookings = useCallback(async () => {
     setLoading(true);
@@ -162,6 +190,9 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
       }
       if (printFilter) {
         query = query.eq("print_order_status", printFilter);
+      }
+      if (staffFilter) {
+        query = query.eq("staff_id", staffFilter);
       }
       if (dateFrom) query = query.gte("booking_date", dateFrom);
       if (dateTo) query = query.lte("booking_date", dateTo);
@@ -196,7 +227,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
     } finally {
       setLoading(false);
     }
-  }, [statusFilter, printFilter, dateFrom, dateTo, search, page, pageSize, sortAsc, toast]);
+  }, [statusFilter, printFilter, staffFilter, dateFrom, dateTo, search, page, pageSize, sortAsc, toast]);
 
   // Track whether we've moved past the initial default state
   // Initial data is already server-filtered (server reads ?print= param), so always skip first fetch
@@ -220,7 +251,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
   // Reset page when filters or sort change
   useEffect(() => {
     setPage(0);
-  }, [search, statusFilter, printFilter, dateFrom, dateTo, pageSize, sortAsc]);
+  }, [search, statusFilter, printFilter, staffFilter, dateFrom, dateTo, pageSize, sortAsc]);
 
   async function handleDelete() {
     if (!deleteId) return;
@@ -275,7 +306,7 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-2 flex-wrap">
+      <div className="flex flex-col sm:flex-row gap-2">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
@@ -285,51 +316,48 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
             onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-full sm:w-40">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL_STATUSES}>Semua Status</SelectItem>
-            <SelectItem value={RESCHEDULED_FILTER}>Rescheduled</SelectItem>
-            {Object.entries(BOOKING_STATUS_LABEL).map(([k, v]) => (
-              <SelectItem key={k} value={k}>{v}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={printFilter || ALL_STATUSES} onValueChange={(v) => setPrintFilter(v === ALL_STATUSES ? "" : v)}>
-          <SelectTrigger className="w-full sm:w-44">
-            <SelectValue placeholder="Print Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL_STATUSES}>Semua Print</SelectItem>
-            {Object.entries(PRINT_ORDER_STATUS_LABEL).map(([k, v]) => (
-              <SelectItem key={k} value={k}>{v}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <DateRangeFilter
-          from={dateFrom}
-          to={dateTo}
-          onChange={(newFrom, newTo) => {
-            setDateFrom(newFrom);
-            setDateTo(newTo);
-            setPage(0);
-          }}
-        />
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => { setDateFrom(todayStr); setDateTo(todayStr); setPage(0); }}
-          className={`shrink-0 ${isTodayFilter ? "bg-maroon-50 border-maroon-300 text-maroon-700" : ""}`}
-        >
-          Hari Ini
-        </Button>
-        {hasActiveFilters && (
-          <Button variant="ghost" size="sm" onClick={resetFilters} className="shrink-0 text-gray-500">
-            Reset Filter
-          </Button>
-        )}
+
+        <div className="grid grid-cols-2 sm:flex gap-2">
+          {(
+            [
+              { key: "today", label: "Hari Ini" },
+              { key: "week", label: "Minggu Ini" },
+              { key: "month", label: "Bulan Ini" },
+              { key: "lastMonth", label: "Bulan Lalu" },
+            ] as const
+          ).map((preset) => (
+            <Button
+              key={preset.key}
+              variant="outline"
+              size="sm"
+              onClick={() => applyPreset(preset.key)}
+              className={activePreset === preset.key ? "bg-maroon-50 border-maroon-300 text-maroon-700" : ""}
+            >
+              {preset.label}
+            </Button>
+          ))}
+        </div>
+
+        <div className="flex gap-2">
+          <BookingFilterSheet
+            values={{ statusFilter, printFilter, staffFilter, dateFrom, dateTo }}
+            staffOptions={staffOptions}
+            onApply={(v) => {
+              setStatusFilter(v.statusFilter);
+              setPrintFilter(v.printFilter);
+              setStaffFilter(v.staffFilter);
+              setDateFrom(v.dateFrom);
+              setDateTo(v.dateTo);
+              setActivePreset(null);
+              setPage(0);
+            }}
+          />
+          {hasActiveFilters && (
+            <Button variant="ghost" size="sm" onClick={resetFilters} className="shrink-0 text-gray-500">
+              Reset Filter
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Table — desktop */}
