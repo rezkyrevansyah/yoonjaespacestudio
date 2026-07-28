@@ -1,7 +1,8 @@
 "use client";
 
-import { TrendingUp, TrendingDown, DollarSign, CalendarCheck } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, CalendarCheck, Info } from "lucide-react";
 import { formatRupiah } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Props {
   totalIncome: number;
@@ -15,13 +16,14 @@ interface CardProps {
   label: string;
   value: string;
   sub?: string;
+  infoText?: string;
   icon: React.ReactNode;
   gradient: string;
   textColor: string;
   loading: boolean;
 }
 
-function SummaryCard({ label, value, sub, icon, gradient, textColor, loading }: CardProps) {
+function SummaryCard({ label, value, sub, infoText, icon, gradient, textColor, loading }: CardProps) {
   return (
     <div className={`relative overflow-hidden rounded-lg p-6 shadow-sm ${gradient} border border-white/20`}>
       {/* Background pattern */}
@@ -49,7 +51,27 @@ function SummaryCard({ label, value, sub, icon, gradient, textColor, loading }: 
             </p>
           )}
           {sub && !loading && (
-            <p className="text-xs text-white/70 font-medium">{sub}</p>
+            <p className="flex items-center gap-1 text-xs text-white/70 font-medium">
+              {sub}
+              {infoText && (
+                <TooltipProvider delayDuration={150}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        aria-label="Info perhitungan"
+                        className="inline-flex text-white/70 hover:text-white"
+                      >
+                        <Info className="w-3.5 h-3.5" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-64 text-xs" side="bottom">
+                      {infoText}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </p>
           )}
         </div>
       </div>
@@ -64,6 +86,7 @@ export function SummaryCards({ totalIncome, totalExpense, grossProfit, bookingCo
         label="Total Income"
         value={formatRupiah(totalIncome)}
         sub={`${bookingCount} booking`}
+        infoText="Hanya booking berstatus Paid, Shoot Done, Photos Delivered, Addon Unpaid, atau Closed yang dihitung sebagai income. Booking dengan status Booked/DP Paid (belum lunas) atau Canceled tidak termasuk — karena itu jumlahnya bisa lebih sedikit dari total booking di halaman Bookings."
         icon={<TrendingUp className="w-6 h-6 text-green-600" />}
         gradient="bg-gradient-to-br from-green-500 to-green-600"
         textColor="text-white"
