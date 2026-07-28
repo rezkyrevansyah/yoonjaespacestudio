@@ -1,21 +1,12 @@
 import { requireMenu } from "@/lib/require-menu";
 import { getCachedActiveUsers } from "@/lib/cached-queries";
+import { REVENUE_STATUSES } from "@/lib/booking-stats";
+import { getPeriodRange } from "@/lib/commission-period";
 import { createClient } from "@/utils/supabase/server";
 import { CommissionsClient, type InitialCommissionData } from "./_components/commissions-client";
 
 export const metadata = { title: "Commissions — Yoonjaespace" };
 export const dynamic = "force-dynamic";
-
-function getPeriodRange(month: number, year: number, cutoffDay: number) {
-  const prevMonth = month === 0 ? 11 : month - 1;
-  const prevYear = month === 0 ? year - 1 : year;
-  const endDay = cutoffDay - 1;
-  const start = `${prevYear}-${String(prevMonth + 1).padStart(2, "0")}-${String(cutoffDay).padStart(2, "0")}`;
-  const end = `${year}-${String(month + 1).padStart(2, "0")}-${String(endDay).padStart(2, "0")}`;
-  return { start, end };
-}
-
-const PAID_STATUSES = ["PAID", "SHOOT_DONE", "PHOTOS_DELIVERED", "ADDON_UNPAID", "CLOSED"];
 
 export default async function CommissionsPage() {
   const supabase = await createClient();
@@ -42,7 +33,7 @@ export default async function CommissionsPage() {
       .select("id, booking_number, booking_date, total, staff_id, commission_amount, customers(name), packages(id, name, commission_bonus)")
       .gte("booking_date", period.start)
       .lte("booking_date", period.end)
-      .in("status", PAID_STATUSES)
+      .in("status", REVENUE_STATUSES)
       .order("booking_date"),
     supabase
       .from("commissions")

@@ -11,7 +11,11 @@ import { formatRupiah, formatDate } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { invalidatePackages, invalidateSettingsGeneral } from "@/lib/cache-invalidation";
+import { REVENUE_STATUSES } from "@/lib/booking-stats";
+import { getPeriodRange } from "@/lib/commission-period";
 import type { CurrentUser } from "@/lib/types/database";
+
+const UNASSIGNED_STAFF_ID = "__unassigned__";
 
 interface StaffUser {
   id: string;
@@ -71,16 +75,6 @@ const MONTHS = [
   "Juli", "Agustus", "September", "Oktober", "November", "Desember",
 ];
 
-function getPeriodRange(month: number, year: number, cutoffDay: number): { start: string; end: string; label: string } {
-  const prevMonth = month === 0 ? 11 : month - 1;
-  const prevYear = month === 0 ? year - 1 : year;
-  const endDay = cutoffDay - 1;
-  const start = `${prevYear}-${String(prevMonth + 1).padStart(2, "0")}-${String(cutoffDay).padStart(2, "0")}`;
-  const end = `${year}-${String(month + 1).padStart(2, "0")}-${String(endDay).padStart(2, "0")}`;
-  const label = `${cutoffDay} ${MONTHS[prevMonth]} ${prevYear} – ${endDay} ${MONTHS[month]} ${year}`;
-  return { start, end, label };
-}
-
 function resolveBonus(
   commissionAmount: number,
   pkgBonus: number | null | undefined,
@@ -106,7 +100,7 @@ function buildStaffCards(
   }
   const bookingsByStaff = new Map<string, BookingItem[]>();
   for (const b of bookings) {
-    const staffId = b.staff_id ?? "__unassigned__";
+    const staffId = b.staff_id ?? UNASSIGNED_STAFF_ID;
     const existing = bookingsByStaff.get(staffId) ?? [];
     const resolved = resolveBonus(b.commission_amount ?? 0, b.packages?.commission_bonus, defaultBonus);
     existing.push({
@@ -121,7 +115,7 @@ function buildStaffCards(
     });
     bookingsByStaff.set(staffId, existing);
   }
-  return staffUsers.map(s => {
+  const cards = staffUsers.map(s => {
     const staffBookings = bookingsByStaff.get(s.id) ?? [];
     const existing = commissionMap.get(s.id);
     return {
@@ -135,6 +129,20 @@ function buildStaffCards(
       saving: false,
     };
   });
+  const unassignedBookings = bookingsByStaff.get(UNASSIGNED_STAFF_ID) ?? [];
+  if (unassignedBookings.length > 0) {
+    cards.push({
+      staffId: UNASSIGNED_STAFF_ID, staffName: "Tanpa Staff", staffEmail: "",
+      bookings: unassignedBookings,
+      commissionId: null,
+      savedAmount: 0,
+      savedStatus: "unpaid",
+      isPaid: false,
+      expanded: true,
+      saving: false,
+    });
+  }
+  return cards;
 }
 
 export function CommissionsClient({ currentUser, staffUsers, initialData }: Props) {
@@ -175,14 +183,13 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const paidStatuses = ["PAID", "SHOOT_DONE", "PHOTOS_DELIVERED", "ADDON_UNPAID", "CLOSED"]; // ADDON_UNPAID intentional: addon debt does not block commission
       const [bookingsResult, commissionsResult] = await Promise.all([
         supabase
           .from("bookings")
           .select("id, booking_number, booking_date, total, staff_id, commission_amount, customers(name), packages(id, name, commission_bonus)")
           .gte("booking_date", period.start)
           .lte("booking_date", period.end)
-          .in("status", paidStatuses)
+          .in("status", REVENUE_STATUSES)
           .order("booking_date"),
         supabase
           .from("commissions")
@@ -207,7 +214,7 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
           commission_amount: number; customers: { name: string } | null;
           packages: { id: string; name: string; commission_bonus: number } | null;
         };
-        const staffId = raw.staff_id ?? "__unassigned__";
+        const staffId = raw.staff_id ?? UNASSIGNED_STAFF_ID;
         const existing = bookingsByStaff.get(staffId) ?? [];
         const resolved = resolveBonus(raw.commission_amount ?? 0, raw.packages?.commission_bonus, defaultBonusRef.current);
         existing.push({
@@ -237,6 +244,20 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
           saving: false,
         };
       });
+
+      const unassignedBookings = bookingsByStaff.get(UNASSIGNED_STAFF_ID) ?? [];
+      if (unassignedBookings.length > 0) {
+        cards.push({
+          staffId: UNASSIGNED_STAFF_ID, staffName: "Tanpa Staff", staffEmail: "",
+          bookings: unassignedBookings,
+          commissionId: null,
+          savedAmount: 0,
+          savedStatus: "unpaid",
+          isPaid: false,
+          expanded: false,
+          saving: false,
+        });
+      }
 
       setStaffCards(cards);
     } catch {
@@ -466,12 +487,16 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
     }
   }
 
+  function liveTotal(card: StaffCommission): number {
+    return card.bookings.reduce((sum, b) => sum + b.commissionAmount, 0);
+  }
+
   const totalPaid = staffCards
     .filter(c => c.savedStatus === "paid")
-    .reduce((sum, c) => sum + c.savedAmount, 0);
+    .reduce((sum, c) => sum + liveTotal(c), 0);
   const totalUnpaid = staffCards
-    .filter(c => c.savedStatus === "unpaid" && c.savedAmount > 0)
-    .reduce((sum, c) => sum + c.savedAmount, 0);
+    .filter(c => c.savedStatus === "unpaid" && c.staffId !== UNASSIGNED_STAFF_ID)
+    .reduce((sum, c) => sum + liveTotal(c), 0);
 
   const pkgsWithBonus = pkgBonuses.filter(p => Number(p.bonus) > 0).length;
   const currentDefaultBonus = parseInt(defaultBonusInput.replace(/\D/g, ""), 10) || 0;
@@ -629,6 +654,8 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
             <StaffCard
               key={card.staffId}
               card={card}
+              isUnassigned={card.staffId === UNASSIGNED_STAFF_ID}
+              isDirty={card.commissionId !== null && liveTotal(card) !== card.savedAmount}
               onToggleExpand={() => updateCard(card.staffId, { expanded: !card.expanded })}
               onTogglePaid={() => {
                 if (card.savedStatus === "paid") {
@@ -695,31 +722,36 @@ export function CommissionsClient({ currentUser, staffUsers, initialData }: Prop
 
 interface StaffCardProps {
   card: StaffCommission;
+  isUnassigned: boolean;
+  isDirty: boolean;
   onToggleExpand: () => void;
   onTogglePaid: () => void;
   onBookingCommissionChange: (bookingId: string, val: string) => void;
   onSave: () => void;
 }
 
-function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChange, onSave }: StaffCardProps) {
+function StaffCard({ card, isUnassigned, isDirty, onToggleExpand, onTogglePaid, onBookingCommissionChange, onSave }: StaffCardProps) {
   const isPaid = card.savedStatus === "paid";
   const totalCommission = card.bookings.reduce((sum, b) => sum + b.commissionAmount, 0);
 
   return (
-    <div className={`bg-white rounded-lg border shadow-sm overflow-hidden ${isPaid ? "border-green-100" : "border-gray-100"}`}>
+    <div className={`bg-white rounded-lg border shadow-sm overflow-hidden ${isUnassigned ? "border-dashed border-gray-300" : isPaid ? "border-green-100" : "border-gray-100"}`}>
       {/* Status bar */}
-      <div className={`h-1 ${isPaid ? "bg-green-400" : "bg-orange-300"}`} />
+      {!isUnassigned && <div className={`h-1 ${isPaid ? "bg-green-400" : "bg-orange-300"}`} />}
 
       <div className="p-4 space-y-4">
         {/* Staff info row */}
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-9 h-9 rounded-full bg-accent flex items-center justify-center flex-shrink-0">
-              <User className="w-4 h-4 text-primary" />
+            <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ${isUnassigned ? "bg-gray-100" : "bg-accent"}`}>
+              <User className={`w-4 h-4 ${isUnassigned ? "text-gray-400" : "text-primary"}`} />
             </div>
             <div>
               <p className="text-sm font-semibold text-gray-900">{card.staffName}</p>
-              <p className="text-xs text-gray-400">{card.staffEmail}</p>
+              {card.staffEmail && <p className="text-xs text-gray-400">{card.staffEmail}</p>}
+              {isUnassigned && (
+                <p className="text-xs text-gray-400">Booking belum ditetapkan ke staff mana pun</p>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -728,50 +760,59 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
                 Dibayar
               </span>
             )}
+            {isDirty && (
+              <span className="text-xs font-medium text-amber-700 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-full">
+                Perlu disimpan ulang
+              </span>
+            )}
             <span className="text-xs text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
               {card.bookings.length} booking
             </span>
           </div>
         </div>
 
-        {/* Total komisi (auto-sum) + status */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <p className="text-xs font-medium text-gray-500 mb-1">Total Komisi</p>
-            <p className={`text-lg font-bold ${totalCommission > 0 ? "text-gray-900" : "text-gray-300"}`}>
-              {totalCommission > 0 ? formatRupiah(totalCommission) : "Rp 0"}
-            </p>
-            <p className="text-xs text-gray-400 mt-0.5">dari {card.bookings.length} booking</p>
-          </div>
+        {!isUnassigned && (
+          <>
+            {/* Total komisi (auto-sum) + status */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs font-medium text-gray-500 mb-1">Total Komisi</p>
+                <p className={`text-lg font-bold ${totalCommission > 0 ? "text-gray-900" : "text-gray-300"}`}>
+                  {totalCommission > 0 ? formatRupiah(totalCommission) : "Rp 0"}
+                </p>
+                <p className="text-xs text-gray-400 mt-0.5">dari {card.bookings.length} booking</p>
+              </div>
 
-          <div className="flex flex-col justify-between">
-            <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
-            <button
-              onClick={onTogglePaid}
-              className={`flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border transition-colors ${
-                card.isPaid
-                  ? "bg-green-50 border-green-200 text-green-700 hover:bg-accent hover:border-red-200 hover:text-red-600"
-                  : "bg-gray-50 border-gray-200 text-gray-500 hover:bg-gray-100"
-              }`}
-            >
-              {card.isPaid
-                ? <CheckSquare className="w-4 h-4 flex-shrink-0" />
-                : <Square className="w-4 h-4 flex-shrink-0" />}
-              <span className="truncate">{card.isPaid ? "Sudah Dibayar" : "Belum Dibayar"}</span>
-            </button>
-          </div>
-        </div>
+              <div className="flex flex-col justify-between">
+                <p className="text-xs font-medium text-gray-500 mb-1">Status</p>
+                <button
+                  onClick={onTogglePaid}
+                  className={`flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-lg border transition-colors ${
+                    card.isPaid
+                      ? "bg-green-50 border-green-200 text-green-700 hover:bg-accent hover:border-red-200 hover:text-red-600"
+                      : "bg-gray-50 border-gray-200 text-gray-500 hover:bg-gray-100"
+                  }`}
+                >
+                  {card.isPaid
+                    ? <CheckSquare className="w-4 h-4 flex-shrink-0" />
+                    : <Square className="w-4 h-4 flex-shrink-0" />}
+                  <span className="truncate">{card.isPaid ? "Sudah Dibayar" : "Belum Dibayar"}</span>
+                </button>
+              </div>
+            </div>
 
-        {/* Save button */}
-        {!isPaid && (
-          <button
-            onClick={onSave}
-            disabled={card.saving}
-            className="w-full flex items-center justify-center gap-2 bg-primary text-white text-sm font-medium rounded-lg py-2 hover:bg-primary/90 transition-colors disabled:opacity-50"
-          >
-            <Save className="w-4 h-4" />
-            {card.saving ? "Menyimpan..." : "Simpan"}
-          </button>
+            {/* Save button */}
+            {!isPaid && (
+              <button
+                onClick={onSave}
+                disabled={card.saving}
+                className="w-full flex items-center justify-center gap-2 bg-primary text-white text-sm font-medium rounded-lg py-2 hover:bg-primary/90 transition-colors disabled:opacity-50"
+              >
+                <Save className="w-4 h-4" />
+                {card.saving ? "Menyimpan..." : "Simpan"}
+              </button>
+            )}
+          </>
         )}
 
         {/* Booking history toggle */}
@@ -797,7 +838,7 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
                       <th className="px-4 py-2 text-left font-medium hidden sm:table-cell">Customer</th>
                       <th className="px-4 py-2 text-left font-medium hidden sm:table-cell">Tanggal</th>
                       <th className="px-4 py-2 text-right font-medium">Total Booking</th>
-                      <th className="px-4 py-2 text-right font-medium">Komisi</th>
+                      {!isUnassigned && <th className="px-4 py-2 text-right font-medium">Komisi</th>}
                       <th className="px-4 py-2 w-6" />
                     </tr>
                   </thead>
@@ -808,35 +849,43 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
                         <td className="px-4 py-2 text-gray-800 font-medium hidden sm:table-cell">{b.customers?.name ?? "-"}</td>
                         <td className="px-4 py-2 text-gray-500 hidden sm:table-cell">{formatDate(b.booking_date)}</td>
                         <td className="px-4 py-2 text-right font-semibold text-gray-800">{formatRupiah(b.total)}</td>
-                        <td className="px-4 py-2 text-right">
-                          {isPaid ? (
-                            <span className="font-semibold text-gray-700">{formatRupiah(b.commissionAmount)}</span>
-                          ) : (
-                            <div className="flex flex-col items-end gap-0.5">
-                              {b.isAutoFilled && (
-                                <span className="text-xs leading-5 text-amber-500 font-medium">auto</span>
-                              )}
-                              <div className="flex items-center justify-end">
-                                <span className="text-gray-400 mr-1">Rp</span>
-                                <input
-                                  type="text"
-                                  inputMode="numeric"
-                                  value={b.commissionAmount > 0 ? String(b.commissionAmount) : ""}
-                                  onChange={e => onBookingCommissionChange(b.id, e.target.value)}
-                                  placeholder="0"
-                                  className={`w-24 border rounded-lg px-2 py-1 text-right text-xs focus:outline-none focus:ring-1 focus:ring-ring/30 focus:border-ring ${b.isAutoFilled ? "border-amber-200 bg-amber-50" : "border-gray-200"}`}
-                                />
+                        {!isUnassigned && (
+                          <td className="px-4 py-2 text-right">
+                            {isPaid ? (
+                              <span className="font-semibold text-gray-700">{formatRupiah(b.commissionAmount)}</span>
+                            ) : (
+                              <div className="flex flex-col items-end gap-0.5">
+                                {b.isAutoFilled && (
+                                  <span className="text-xs leading-5 text-amber-500 font-medium">auto</span>
+                                )}
+                                <div className="flex items-center justify-end">
+                                  <span className="text-gray-400 mr-1">Rp</span>
+                                  <input
+                                    type="text"
+                                    inputMode="numeric"
+                                    value={b.commissionAmount > 0 ? String(b.commissionAmount) : ""}
+                                    onChange={e => onBookingCommissionChange(b.id, e.target.value)}
+                                    placeholder="0"
+                                    className={`w-24 border rounded-lg px-2 py-1 text-right text-xs focus:outline-none focus:ring-1 focus:ring-ring/30 focus:border-ring ${b.isAutoFilled ? "border-amber-200 bg-amber-50" : "border-gray-200"}`}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </td>
+                            )}
+                          </td>
+                        )}
                         <td className="px-4 py-2">
                           <Link
                             href={`/bookings/${b.id}`}
                             target="_blank"
-                            className="text-gray-300 hover:text-primary transition-colors"
+                            className={isUnassigned
+                              ? "flex items-center gap-1 text-xs font-medium text-primary hover:underline whitespace-nowrap"
+                              : "text-gray-300 hover:text-primary transition-colors"}
                           >
-                            <ExternalLink className="w-3.5 h-3.5" />
+                            {isUnassigned ? (
+                              <>Assign staff <ExternalLink className="w-3 h-3" /></>
+                            ) : (
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            )}
                           </Link>
                         </td>
                       </tr>
@@ -849,9 +898,11 @@ function StaffCard({ card, onToggleExpand, onTogglePaid, onBookingCommissionChan
                       <td className="px-4 py-2 text-right font-bold text-gray-800">
                         {formatRupiah(card.bookings.reduce((s, b) => s + b.total, 0))}
                       </td>
-                      <td className="px-4 py-2 text-right font-bold text-primary">
-                        {formatRupiah(totalCommission)}
-                      </td>
+                      {!isUnassigned && (
+                        <td className="px-4 py-2 text-right font-bold text-primary">
+                          {formatRupiah(totalCommission)}
+                        </td>
+                      )}
                       <td />
                     </tr>
                   </tfoot>

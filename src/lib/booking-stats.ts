@@ -1,5 +1,6 @@
 import type { BookingStatus } from "@/lib/types/database";
 
+// ADDON_UNPAID is intentional: outstanding addon debt does not block revenue/commission recognition.
 export const REVENUE_STATUSES: BookingStatus[] = [
   "PAID",
   "SHOOT_DONE",
