@@ -7,6 +7,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { DateRangeFilter } from "@/components/ui/date-range-filter";
 import {
   Select,
   SelectContent,
@@ -305,27 +306,15 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
             ))}
           </SelectContent>
         </Select>
-        {/* Date range — side by side on mobile, individual on desktop */}
-        <div className="flex flex-col sm:contents min-w-0">
-          <div className="flex-1 min-w-0 sm:flex-none flex flex-col gap-0.5">
-            <label className="text-xs text-gray-500 sm:hidden px-0.5">Dari</label>
-            <Input
-              type="date"
-              className="w-full sm:w-40"
-              value={dateFrom}
-              onChange={(e) => setDateFrom(e.target.value)}
-            />
-          </div>
-          <div className="flex-1 min-w-0 sm:flex-none flex flex-col gap-0.5">
-            <label className="text-xs text-gray-500 sm:hidden px-0.5">Sampai</label>
-            <Input
-              type="date"
-              className="w-full sm:w-40"
-              value={dateTo}
-              onChange={(e) => setDateTo(e.target.value)}
-            />
-          </div>
-        </div>
+        <DateRangeFilter
+          from={dateFrom}
+          to={dateTo}
+          onChange={(newFrom, newTo) => {
+            setDateFrom(newFrom);
+            setDateTo(newTo);
+            setPage(0);
+          }}
+        />
         <Button
           variant="outline"
           size="sm"

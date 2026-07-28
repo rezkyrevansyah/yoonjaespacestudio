@@ -7,16 +7,34 @@ import { buttonVariants } from "@/components/ui/button"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
-function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
+function Calendar({
+  className,
+  classNames,
+  showOutsideDays = true,
+  captionLayout,
+  startMonth,
+  endMonth,
+  ...props
+}: CalendarProps) {
+  const now = new Date()
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      captionLayout={captionLayout}
+      startMonth={startMonth ?? new Date(now.getFullYear() - 5, 0)}
+      endMonth={endMonth ?? new Date(now.getFullYear() + 1, 11)}
       className={cn("p-4", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
         month_caption: "flex justify-center pt-1 relative items-center",
         caption_label: "text-sm font-medium",
+        dropdowns: "flex items-center justify-center gap-1.5",
+        dropdown_root: "relative",
+        dropdown:
+          "h-8 rounded-md border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        months_dropdown: "h-8 rounded-md border border-input bg-background px-2 text-sm",
+        years_dropdown: "h-8 rounded-md border border-input bg-background px-2 text-sm",
         nav: "space-x-1 flex items-center absolute right-1 top-0 bottom-0",
         button_previous: cn(buttonVariants({ variant: "outline" }), "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100 absolute left-1"),
         button_next: cn(buttonVariants({ variant: "outline" }), "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"),
@@ -27,8 +45,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         day: "h-10 w-10 text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
         day_button: cn(buttonVariants({ variant: "ghost" }), "h-10 w-10 p-0 font-normal aria-selected:opacity-100"),
         range_end: "day-range-end",
-        selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground rounded-md",
-        today: "bg-accent text-accent-foreground rounded-md",
+        selected: "bg-maroon-700 text-white hover:bg-maroon-600 hover:text-white focus:bg-maroon-700 focus:text-white rounded-md",
+        today: "text-maroon-700 font-semibold rounded-md",
         outside: "day-outside text-muted-foreground opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
         disabled: "text-muted-foreground opacity-50",
         range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground",
