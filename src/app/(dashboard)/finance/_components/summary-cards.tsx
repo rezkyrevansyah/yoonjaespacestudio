@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { TrendingUp, TrendingDown, DollarSign, CalendarCheck, Info } from "lucide-react";
 import { formatRupiah } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -24,6 +25,8 @@ interface CardProps {
 }
 
 function SummaryCard({ label, value, sub, infoText, icon, gradient, textColor, loading }: CardProps) {
+  const [infoOpen, setInfoOpen] = useState(false);
+
   return (
     <div className={`relative overflow-hidden rounded-lg p-6 shadow-sm ${gradient} border border-white/20`}>
       {/* Background pattern */}
@@ -55,11 +58,12 @@ function SummaryCard({ label, value, sub, infoText, icon, gradient, textColor, l
               {sub}
               {infoText && (
                 <TooltipProvider delayDuration={150}>
-                  <Tooltip>
+                  <Tooltip open={infoOpen} onOpenChange={setInfoOpen}>
                     <TooltipTrigger asChild>
                       <button
                         type="button"
                         aria-label="Info perhitungan"
+                        onClick={() => setInfoOpen((v) => !v)}
                         className="inline-flex text-white/70 hover:text-white"
                       >
                         <Info className="w-3.5 h-3.5" />
