@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Download, ChevronDown, Package } from "lucide-react";
+import { Download, ChevronDown, Package, CalendarRange } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { formatRupiah, formatDate } from "@/lib/utils";
 import { REVENUE_STATUSES, getMonthRange } from "@/lib/booking-stats";
@@ -62,6 +62,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
   const now = new Date();
   const [selectedMonth, setSelectedMonth] = useState(initialData.month);
   const [selectedYear, setSelectedYear] = useState(initialData.year);
+  const [viewMode, setViewMode] = useState<"month" | "all-time">("month");
 
   const [incomeBookings, setIncomeBookings] = useState<IncomeBooking[]>(initialData.incomeBookings);
   const [expenses, setExpenses] = useState<Expense[]>(initialData.expenses);
@@ -81,22 +82,23 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
   const fetchData = useCallback(async () => {
     setLoading(true);
 
-    const { startDate, endDate } = getMonthRange(selectedYear, selectedMonth);
+    let bookingsQuery = supabase
+      .from("bookings")
+      .select("id, booking_number, booking_date, transaction_date, created_at, status, total, payment_method, payment_account_name, customers(name), packages(name)")
+      .in("status", REVENUE_STATUSES);
+    let expensesQuery = supabase
+      .from("expenses")
+      .select("id, date, description, amount, category, notes, source, source_id, vendor_id, vendors(id, name)");
+
+    if (viewMode === "month") {
+      const { startDate, endDate } = getMonthRange(selectedYear, selectedMonth);
+      bookingsQuery = bookingsQuery.gte("booking_date", startDate).lte("booking_date", endDate);
+      expensesQuery = expensesQuery.gte("date", startDate).lte("date", endDate);
+    }
 
     const [{ data: bookings }, { data: expenseData }] = await Promise.all([
-      supabase
-        .from("bookings")
-        .select("id, booking_number, booking_date, transaction_date, created_at, status, total, payment_method, payment_account_name, customers(name), packages(name)")
-        .gte("booking_date", startDate)
-        .lte("booking_date", endDate)
-        .in("status", REVENUE_STATUSES)
-        .order("booking_date"),
-      supabase
-        .from("expenses")
-        .select("id, date, description, amount, category, notes, source, source_id, vendor_id, vendors(id, name)")
-        .gte("date", startDate)
-        .lte("date", endDate)
-        .order("date"),
+      bookingsQuery.order("booking_date"),
+      expensesQuery.order("date"),
     ]);
 
     setIncomeBookings((bookings ?? []) as unknown as IncomeBooking[]);
@@ -128,7 +130,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
     setPackageStats(sorted);
 
     setLoading(false);
-  }, [selectedMonth, selectedYear]);
+  }, [selectedMonth, selectedYear, viewMode]);
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -266,10 +268,14 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
     fetchData();
   }
 
+  function toggleViewMode() {
+    setViewMode((m) => (m === "all-time" ? "month" : "all-time"));
+  }
+
   async function handleExportExcel() {
     const XLSX = await import("xlsx");
 
-    const periodLabel = `${MONTHS[selectedMonth]} ${selectedYear}`;
+    const periodLabel = viewMode === "all-time" ? "Semua Waktu" : `${MONTHS[selectedMonth]} ${selectedYear}`;
 
     // Summary sheet
     const summaryData = [
@@ -313,7 +319,8 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
     const wsExpense = XLSX.utils.json_to_sheet(expenseRows);
     XLSX.utils.book_append_sheet(wb, wsExpense, "Expenses");
 
-    XLSX.writeFile(wb, `finance_${selectedYear}_${String(selectedMonth + 1).padStart(2, "0")}.xlsx`);
+    const fileSuffix = viewMode === "all-time" ? "semua-waktu" : `${selectedYear}_${String(selectedMonth + 1).padStart(2, "0")}`;
+    XLSX.writeFile(wb, `finance_${fileSuffix}.xlsx`);
   }
 
   return (
@@ -322,16 +329,33 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-gray-900">Finance</h1>
-          <p className="text-sm text-gray-500">Laporan keuangan bulanan</p>
+          <p className="text-sm text-gray-500">
+            {viewMode === "all-time" ? "Laporan keuangan — semua waktu" : "Laporan keuangan bulanan"}
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
+          {/* All-time toggle */}
+          <button
+            onClick={toggleViewMode}
+            aria-pressed={viewMode === "all-time"}
+            className={`flex items-center gap-2 text-sm font-medium border rounded-lg px-4 py-2 transition-colors ${
+              viewMode === "all-time"
+                ? "bg-maroon-700 border-maroon-700 text-white hover:bg-maroon-600"
+                : "border-gray-200 bg-white hover:bg-gray-50 text-gray-700"
+            }`}
+          >
+            <CalendarRange className="w-4 h-4" />
+            Semua Waktu
+          </button>
+
           {/* Month filter */}
           <div className="relative">
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(Number(e.target.value))}
-              className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer"
+              disabled={viewMode === "all-time"}
+              className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {MONTHS.map((m, i) => (
                 <option key={i} value={i}>{m}</option>
@@ -345,7 +369,8 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer"
+              disabled={viewMode === "all-time"}
+              className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {yearOptions.map((y) => (
                 <option key={y} value={y}>{y}</option>
