@@ -334,12 +334,12 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-2">
           {/* All-time toggle */}
           <button
             onClick={toggleViewMode}
             aria-pressed={viewMode === "all-time"}
-            className={`flex items-center gap-2 text-sm font-medium border rounded-lg px-4 py-2 transition-colors ${
+            className={`col-span-2 sm:col-span-1 flex items-center justify-center sm:justify-start gap-2 text-sm font-medium border rounded-lg px-4 py-2 transition-colors ${
               viewMode === "all-time"
                 ? "bg-maroon-700 border-maroon-700 text-white hover:bg-maroon-600"
                 : "border-gray-200 bg-white hover:bg-gray-50 text-gray-700"
@@ -349,55 +349,56 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
             Semua Waktu
           </button>
 
-          {/* Month filter */}
-          <div className="relative">
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(Number(e.target.value))}
-              disabled={viewMode === "all-time"}
-              className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {MONTHS.map((m, i) => (
-                <option key={i} value={i}>{m}</option>
-              ))}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
-          </div>
+          {/* Month + Year filter */}
+          <div className="col-span-2 grid grid-cols-2 gap-2 sm:contents">
+            <div className="relative">
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                disabled={viewMode === "all-time"}
+                className="w-full appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {MONTHS.map((m, i) => (
+                  <option key={i} value={i}>{m}</option>
+                ))}
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+            </div>
 
-          {/* Year filter */}
-          <div className="relative">
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(Number(e.target.value))}
-              disabled={viewMode === "all-time"}
-              className="appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {yearOptions.map((y) => (
-                <option key={y} value={y}>{y}</option>
-              ))}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+            <div className="relative">
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(Number(e.target.value))}
+                disabled={viewMode === "all-time"}
+                className="w-full appearance-none text-sm font-medium border border-gray-200 rounded-lg pl-4 pr-8 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-ring/30 focus:border-ring cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {yearOptions.map((y) => (
+                  <option key={y} value={y}>{y}</option>
+                ))}
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+            </div>
           </div>
 
           <button
             onClick={handleExportExcel}
-            className="flex items-center gap-2 text-sm font-medium border border-gray-200 rounded-lg px-4 py-2 bg-white hover:bg-gray-50 transition-colors"
+            className="col-span-2 sm:col-span-1 flex items-center justify-center sm:justify-start gap-2 text-sm font-medium border border-gray-200 rounded-lg px-4 py-2 bg-white hover:bg-gray-50 transition-colors"
           >
             <Download className="w-4 h-4 text-gray-500" />
-            <span className="hidden sm:inline text-gray-700">Export Excel</span>
+            <span className="text-gray-700">Export Excel</span>
           </button>
         </div>
       </div>
 
       {/* Package filter */}
       {packageOptions.length > 0 && (
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
           <div className="flex items-center gap-2">
             <Package className="w-4 h-4 text-gray-500" />
             <span className="text-sm font-medium text-gray-700">Filter Paket</span>
           </div>
           <Select value={packageFilter} onValueChange={setPackageFilter}>
-            <SelectTrigger className="w-48 h-10 bg-white border-gray-200 hover:border-gray-300 focus:border-maroon-500 focus:ring-maroon-500/20">
+            <SelectTrigger className="w-full sm:w-48 h-10 bg-white border-gray-200 hover:border-gray-300 focus:border-maroon-500 focus:ring-maroon-500/20">
               <SelectValue placeholder="Pilih paket..." />
             </SelectTrigger>
             <SelectContent className="bg-white border border-gray-200 shadow-sm">
