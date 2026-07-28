@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Download, ChevronDown, Package } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { formatRupiah, formatDate } from "@/lib/utils";
+import { REVENUE_STATUSES, getMonthRange } from "@/lib/booking-stats";
 import type { CurrentUser, Expense } from "@/lib/types/database";
 import { SummaryCards } from "./summary-cards";
 import { IncomeTable } from "./income-table";
@@ -57,8 +58,6 @@ const MONTHS = [
   "Juli", "Agustus", "September", "Oktober", "November", "Desember",
 ];
 
-const PAID_STATUSES = ["PAID", "SHOOT_DONE", "PHOTOS_DELIVERED", "ADDON_UNPAID", "CLOSED"];
-
 export function FinanceClient({ currentUser, vendors, initialData }: Props) {
   const now = new Date();
   const [selectedMonth, setSelectedMonth] = useState(initialData.month);
@@ -82,18 +81,16 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
   const fetchData = useCallback(async () => {
     setLoading(true);
 
-    const startDate = `${selectedYear}-${String(selectedMonth + 1).padStart(2, "0")}-01`;
-    const lastDay = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-    const endDate = `${selectedYear}-${String(selectedMonth + 1).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+    const { startDate, endDate } = getMonthRange(selectedYear, selectedMonth);
 
     const [{ data: bookings }, { data: expenseData }] = await Promise.all([
       supabase
         .from("bookings")
         .select("id, booking_number, booking_date, transaction_date, created_at, status, total, payment_method, payment_account_name, customers(name), packages(name)")
-        .gte("created_at", `${startDate}T00:00:00`)
-        .lte("created_at", `${endDate}T23:59:59`)
-        .in("status", PAID_STATUSES)
-        .order("created_at"),
+        .gte("booking_date", startDate)
+        .lte("booking_date", endDate)
+        .in("status", REVENUE_STATUSES)
+        .order("booking_date"),
       supabase
         .from("expenses")
         .select("id, date, description, amount, category, notes, source, source_id, vendor_id, vendors(id, name)")

@@ -262,7 +262,9 @@ export function BookingsClient({ currentUser, initialPrint, initialData }: Props
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Bookings</h1>
-          <p className="text-sm text-gray-500">{total} total booking</p>
+          <p className="text-sm text-gray-500">
+            {dateFrom || dateTo ? `${total} booking pada periode dipilih` : `${total} total booking (semua waktu)`}
+          </p>
         </div>
         <Link href="/bookings/new">
           <Button className="bg-maroon-700 hover:bg-maroon-600 text-white gap-2">

@@ -1,5 +1,6 @@
 import { requireMenu } from "@/lib/require-menu";
 import { getCachedActiveVendors } from "@/lib/cached-queries";
+import { REVENUE_STATUSES, getMonthRange } from "@/lib/booking-stats";
 import { createClient } from "@/utils/supabase/server";
 import { FinanceClient, type IncomeBooking, type PackageStat } from "./_components/finance-client";
 import type { Expense } from "@/lib/types/database";
@@ -7,16 +8,12 @@ import type { Expense } from "@/lib/types/database";
 export const metadata = { title: "Finance — Yoonjaespace" };
 export const dynamic = "force-dynamic";
 
-const PAID_STATUSES = ["PAID", "SHOOT_DONE", "PHOTOS_DELIVERED", "ADDON_UNPAID", "CLOSED"];
-
 export default async function FinancePage() {
   const supabase = await createClient();
   const now = new Date();
   const month = now.getMonth();
   const year = now.getFullYear();
-  const startDate = `${year}-${String(month + 1).padStart(2, "0")}-01`;
-  const lastDay = new Date(year, month + 1, 0).getDate();
-  const endDate = `${year}-${String(month + 1).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
+  const { startDate, endDate } = getMonthRange(year, month);
 
   const [currentUser, vendors, bookingsResult, expensesResult] = await Promise.all([
     requireMenu("finance"),
@@ -24,10 +21,10 @@ export default async function FinancePage() {
     supabase
       .from("bookings")
       .select("id, booking_number, booking_date, transaction_date, created_at, status, total, payment_method, payment_account_name, customers(name), packages(name)")
-      .gte("created_at", `${startDate}T00:00:00`)
-      .lte("created_at", `${endDate}T23:59:59`)
-      .in("status", PAID_STATUSES)
-      .order("created_at"),
+      .gte("booking_date", startDate)
+      .lte("booking_date", endDate)
+      .in("status", REVENUE_STATUSES)
+      .order("booking_date"),
     supabase
       .from("expenses")
       .select("id, date, description, amount, category, notes, source, source_id, vendor_id, vendors(id, name)")

@@ -9,6 +9,7 @@ import { requireMenu } from "@/lib/require-menu";
 import { getCachedStudioInfo } from "@/lib/cached-queries";
 import { formatRupiah, formatTime } from "@/lib/utils";
 import { BOOKING_STATUS_COLOR, BOOKING_STATUS_LABEL } from "@/lib/constants";
+import { REVENUE_STATUSES, VALID_BOOKING_STATUSES, getMonthRange } from "@/lib/booking-stats";
 import type { BookingStatus } from "@/lib/types/database";
 
 export const metadata = { title: "Dashboard — Yoonjaespace" };
@@ -41,11 +42,7 @@ export default async function DashboardPage() {
   // WIB = UTC+7 — server runs in UTC, offset manually for correct date/time in Indonesia
   const now = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
   const today = toLocalDateStr(now);
-  const monthStart = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}-01`;
-  const lastDay = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 0)).getUTCDate();
-  const monthEnd = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
-
-  const PAID_STATUSES = ["PAID", "SHOOT_DONE", "PHOTOS_DELIVERED", "ADDON_UNPAID", "CLOSED"];
+  const { startDate: monthStart, endDate: monthEnd } = getMonthRange(now.getUTCFullYear(), now.getUTCMonth());
 
   // Parallel fetch — 6 independent queries at once
   const [
@@ -56,12 +53,13 @@ export default async function DashboardPage() {
     { data: printOrderRows },
     studioInfo,
   ] = await Promise.all([
-    // 1. Total bookings this month (count only)
+    // 1. Total bookings this month (count only) — excludes CANCELED to match revenue basis below
     supabase
       .from("bookings")
       .select("id", { count: "exact", head: true })
       .gte("booking_date", monthStart)
-      .lte("booking_date", monthEnd),
+      .lte("booking_date", monthEnd)
+      .in("status", VALID_BOOKING_STATUSES),
 
     // 2. Revenue: fetch all totals then sum in JS (more reliable than aggregate syntax)
     supabase
@@ -69,7 +67,7 @@ export default async function DashboardPage() {
       .select("total")
       .gte("booking_date", monthStart)
       .lte("booking_date", monthEnd)
-      .in("status", PAID_STATUSES),
+      .in("status", REVENUE_STATUSES),
 
     // 3. Belum lunas count (BOOKED status)
     supabase
