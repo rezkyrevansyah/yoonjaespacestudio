@@ -92,12 +92,15 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
 
     if (viewMode === "month") {
       const { startDate, endDate } = getMonthRange(selectedYear, selectedMonth);
-      bookingsQuery = bookingsQuery.gte("booking_date", startDate).lte("booking_date", endDate);
+      bookingsQuery = bookingsQuery.or(
+        `and(transaction_date.gte.${startDate},transaction_date.lte.${endDate}),` +
+        `and(transaction_date.is.null,created_at.gte.${startDate}T00:00:00,created_at.lte.${endDate}T23:59:59)`
+      );
       expensesQuery = expensesQuery.gte("date", startDate).lte("date", endDate);
     }
 
     const [{ data: bookings }, { data: expenseData }] = await Promise.all([
-      bookingsQuery.order("booking_date"),
+      bookingsQuery.order("transaction_date"),
       expensesQuery.order("date"),
     ]);
 
@@ -331,6 +334,9 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
           <h1 className="text-xl font-bold text-gray-900">Finance</h1>
           <p className="text-sm text-gray-500">
             {viewMode === "all-time" ? "Laporan keuangan — semua waktu" : "Laporan keuangan bulanan"}
+          </p>
+          <p className="text-xs text-gray-400 mt-0.5">
+            Berdasarkan tanggal transaksi, bukan tanggal sesi foto
           </p>
         </div>
 

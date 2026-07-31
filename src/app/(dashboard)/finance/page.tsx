@@ -21,10 +21,12 @@ export default async function FinancePage() {
     supabase
       .from("bookings")
       .select("id, booking_number, booking_date, transaction_date, created_at, status, total, payment_method, payment_account_name, customers(name), packages(name)")
-      .gte("booking_date", startDate)
-      .lte("booking_date", endDate)
+      .or(
+        `and(transaction_date.gte.${startDate},transaction_date.lte.${endDate}),` +
+        `and(transaction_date.is.null,created_at.gte.${startDate}T00:00:00,created_at.lte.${endDate}T23:59:59)`
+      )
       .in("status", REVENUE_STATUSES)
-      .order("booking_date"),
+      .order("transaction_date"),
     supabase
       .from("expenses")
       .select("id, date, description, amount, category, notes, source, source_id, vendor_id, vendors(id, name)")

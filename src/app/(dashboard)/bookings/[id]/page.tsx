@@ -25,7 +25,7 @@ export default async function BookingDetailPage({
       .select(`
         id, public_token, booking_number, booking_date, start_time, end_time, status, print_order_status,
         is_rescheduled, google_drive_link, person_count, notes, behind_the_scenes, subtotal, total,
-        dp_amount, dp_paid_at, voucher_id, manual_discount, staff_id, created_by, created_at,
+        dp_amount, dp_paid_at, transaction_date, voucher_id, manual_discount, staff_id, created_by, created_at,
         customers(id, name, phone, email, instagram, address, domicile),
         packages(id, name, price, duration_minutes),
         photo_for:photo_for(id, name),

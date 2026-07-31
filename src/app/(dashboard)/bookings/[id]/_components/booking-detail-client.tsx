@@ -63,6 +63,7 @@ export interface BookingDetail {
   total: number;
   dp_amount: number | null;
   dp_paid_at: string | null;
+  transaction_date: string | null;
   voucher_id: string | null;
   manual_discount: number;
   staff_id: string | null;

@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { formatRupiah } from "@/lib/utils";
+import { formatRupiah, toDateStr } from "@/lib/utils";
 import type { BookingDetail, BookingAddonRow, AvailableAddon } from "./booking-detail-client";
 import type { CurrentUser } from "@/lib/types/database";
 import {
@@ -65,6 +65,8 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
   const [markingPaid, setMarkingPaid] = useState(false);
   const [cancelingPaid, setCancelingPaid] = useState(false);
   const [showCancelLunasDialog, setShowCancelLunasDialog] = useState(false);
+  const [showMarkPaidDialog, setShowMarkPaidDialog] = useState(false);
+  const [paidDateInput, setPaidDateInput] = useState("");
 
   const isFullyPaid = booking.status === "PAID";
 
@@ -118,9 +120,9 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
       const paidAt = dpDateInput
         ? new Date(dpDateInput + "T00:00:00").toISOString()
         : new Date().toISOString();
-      // New DP: default to Lunas + update status. Edit: optionally update dp_paid_at if user provided a date.
+      // New DP: default to Lunas + update status + record as the transaction date. Edit: optionally update dp_paid_at if user provided a date.
       const updatePayload = isNew
-        ? { dp_amount: amount, dp_paid_at: paidAt, status: booking.status === "BOOKED" ? "DP_PAID" : booking.status }
+        ? { dp_amount: amount, dp_paid_at: paidAt, transaction_date: dpDateInput || toDateStr(new Date()), status: booking.status === "BOOKED" ? "DP_PAID" : booking.status }
         : { dp_amount: amount, ...(dpDateInput ? { dp_paid_at: paidAt } : {}) };
       const { error } = await supabase
         .from("bookings")
@@ -131,7 +133,12 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
       setDpAmount(amount);
       if (isNew) {
         setDpPaidAt(paidAt);
-        onUpdate({ dp_amount: amount, dp_paid_at: paidAt, status: updatePayload.status as typeof booking.status ?? booking.status });
+        onUpdate({
+          dp_amount: amount,
+          dp_paid_at: paidAt,
+          transaction_date: updatePayload.transaction_date,
+          status: updatePayload.status as typeof booking.status ?? booking.status,
+        });
       } else {
         if (dpDateInput) setDpPaidAt(paidAt);
         onUpdate({ dp_amount: amount, ...(dpDateInput ? { dp_paid_at: paidAt } : {}) });
@@ -164,6 +171,9 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
       const now = new Date().toISOString();
       let newPaidAt: string | null;
       let newStatus = booking.status;
+      // Marking as paid is a new transaction event; reverting is a cancellation, so
+      // transaction_date is left untouched in that direction.
+      const transactionUpdate: { transaction_date?: string } = {};
 
       if (dpIsLunas) {
         newPaidAt = null;
@@ -171,16 +181,17 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
       } else {
         newPaidAt = now;
         if (booking.status === "BOOKED") newStatus = "DP_PAID";
+        transactionUpdate.transaction_date = toDateStr(new Date());
       }
 
       const { error } = await supabase
         .from("bookings")
-        .update({ dp_paid_at: newPaidAt, status: newStatus })
+        .update({ dp_paid_at: newPaidAt, status: newStatus, ...transactionUpdate })
         .eq("id", booking.id);
       if (error) throw error;
 
       setDpPaidAt(newPaidAt);
-      onUpdate({ dp_paid_at: newPaidAt, status: newStatus });
+      onUpdate({ dp_paid_at: newPaidAt, status: newStatus, ...transactionUpdate });
 
       await supabase.from("activity_log").insert({
         user_id: currentUser.id,
@@ -425,11 +436,12 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
     }
   }
 
-  async function handleMarkFullyPaid() {
+  async function handleMarkFullyPaid(paidDateStr: string) {
     setMarkingPaid(true);
     try {
       const now = new Date().toISOString();
-      const bookingUpdate: Record<string, unknown> = { status: "PAID" };
+      const transactionDate = paidDateStr || toDateStr(new Date());
+      const bookingUpdate: Record<string, unknown> = { status: "PAID", transaction_date: transactionDate };
       if (hasDp) bookingUpdate.dp_paid_at = now;
 
       const { error: bookingErr } = await supabase
@@ -452,6 +464,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
       onUpdate({
         status: "PAID",
         dp_paid_at: hasDp ? now : booking.dp_paid_at,
+        transaction_date: transactionDate,
         booking_addons: updatedAddons,
       });
 
@@ -466,6 +479,7 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
       });
 
       toast({ title: "Lunas Semua", description: `Booking ${booking.booking_number} sudah lunas` });
+      setShowMarkPaidDialog(false);
     } catch {
       toast({ title: "Gagal menandai lunas", variant: "destructive" });
     } finally {
@@ -845,7 +859,10 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
             </div>
           ) : (
             <Button
-              onClick={handleMarkFullyPaid}
+              onClick={() => {
+                setPaidDateInput(toDateStr(new Date()));
+                setShowMarkPaidDialog(true);
+              }}
               disabled={markingPaid}
               className="w-full bg-green-700 hover:bg-green-600 text-white gap-2"
               size="sm"
@@ -860,6 +877,51 @@ export function TabPricing({ booking, currentUser, availableAddons, onUpdate }: 
           )}
         </div>
       </div>
+
+      {/* Dialog: Tandai Lunas Semua */}
+      <AlertDialog open={showMarkPaidDialog} onOpenChange={setShowMarkPaidDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Tandai Lunas Semua?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Booking dan semua add-on akan ditandai lunas. Pilih tanggal transaksi
+              pelunasan ini terjadi.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div>
+            <label className="text-xs text-gray-500 mb-1 block">Tanggal Transaksi</label>
+            <div className="flex gap-2">
+              <input
+                type="date"
+                value={paidDateInput}
+                onChange={(e) => setPaidDateInput(e.target.value)}
+                className="flex-1 min-w-0 rounded-md border border-gray-200 px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-maroon-400"
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="shrink-0 gap-1"
+                onClick={() => setPaidDateInput(toDateStr(new Date()))}
+              >
+                <CalendarDays className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Hari Ini</span>
+              </Button>
+            </div>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={markingPaid}>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => handleMarkFullyPaid(paidDateInput)}
+              className="bg-green-700 hover:bg-green-600"
+              disabled={markingPaid || !paidDateInput}
+            >
+              {markingPaid && <Loader2 className="h-4 w-4 animate-spin mr-2" />}
+              Ya, Tandai Lunas
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Dialog: Batalkan Lunas Semua */}
       <AlertDialog open={showCancelLunasDialog} onOpenChange={setShowCancelLunasDialog}>
