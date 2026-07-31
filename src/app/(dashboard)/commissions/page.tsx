@@ -30,11 +30,13 @@ export default async function CommissionsPage() {
     getCachedActiveUsers(),
     supabase
       .from("bookings")
-      .select("id, booking_number, booking_date, total, staff_id, commission_amount, customers(name), packages(id, name, commission_bonus)")
-      .gte("booking_date", period.start)
-      .lte("booking_date", period.end)
+      .select("id, booking_number, booking_date, transaction_date, created_at, total, staff_id, commission_amount, customers(name), packages(id, name, commission_bonus)")
+      .or(
+        `and(transaction_date.gte.${period.start},transaction_date.lte.${period.end}),` +
+        `and(transaction_date.is.null,created_at.gte.${period.start}T00:00:00,created_at.lte.${period.end}T23:59:59)`
+      )
       .in("status", REVENUE_STATUSES)
-      .order("booking_date"),
+      .order("transaction_date"),
     supabase
       .from("commissions")
       .select("id, staff_id, total_amount, status")
