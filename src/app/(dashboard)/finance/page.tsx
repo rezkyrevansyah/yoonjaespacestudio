@@ -15,7 +15,7 @@ export default async function FinancePage() {
   const year = now.getFullYear();
   const { startDate, endDate } = getMonthRange(year, month);
 
-  const [currentUser, vendors, bookingsResult, expensesResult, sessionCountResult] = await Promise.all([
+  const [currentUser, vendors, bookingsResult, expensesResult, sessionBookingsResult] = await Promise.all([
     requireMenu("finance"),
     getCachedActiveVendors(),
     supabase
@@ -30,19 +30,21 @@ export default async function FinancePage() {
       .gte("date", startDate)
       .lte("date", endDate)
       .order("date"),
-    // Booking count by session date (booking_date) — compared against income booking count
-    // (by transaction_date) so the UI can explain why the two numbers differ.
+    // Bookings by session date (booking_date) — compared against income bookings
+    // (by transaction_date) so the UI can explain why the two counts differ and
+    // let staff drill into which specific bookings landed in another month.
     supabase
       .from("bookings")
-      .select("id", { count: "exact", head: true })
+      .select("id, booking_number, booking_date, transaction_date, created_at, status, total, payment_method, payment_account_name, customers(name), packages(name)")
       .gte("booking_date", startDate)
       .lte("booking_date", endDate)
-      .in("status", REVENUE_STATUSES),
+      .in("status", REVENUE_STATUSES)
+      .order("booking_date"),
   ]);
 
   const incomeBookings = (bookingsResult.data ?? []) as unknown as IncomeBooking[];
   const expenses = (expensesResult.data ?? []) as unknown as Expense[];
-  const sessionBookingCount = sessionCountResult.count ?? 0;
+  const sessionBookings = (sessionBookingsResult.data ?? []) as unknown as IncomeBooking[];
 
   // Compute package stats server-side
   const statsMap = new Map<string, PackageStat>();
@@ -64,7 +66,7 @@ export default async function FinancePage() {
     <FinanceClient
       currentUser={currentUser}
       vendors={vendors ?? []}
-      initialData={{ incomeBookings, expenses, packageStats, month, year, sessionBookingCount }}
+      initialData={{ incomeBookings, expenses, packageStats, month, year, sessionBookings }}
     />
   );
 }

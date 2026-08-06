@@ -11,6 +11,7 @@ import { IncomeTable } from "./income-table";
 import { ExpenseTable } from "./expense-table";
 import { PopularPackages } from "./popular-packages";
 import { ExpenseModal } from "./expense-modal";
+import { BookingDiffDialog } from "./booking-diff-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface Vendor {
@@ -48,7 +49,7 @@ interface Props {
     packageStats: PackageStat[];
     month: number;
     year: number;
-    sessionBookingCount: number;
+    sessionBookings: IncomeBooking[];
   };
 }
 
@@ -68,7 +69,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
   const [incomeBookings, setIncomeBookings] = useState<IncomeBooking[]>(initialData.incomeBookings);
   const [expenses, setExpenses] = useState<Expense[]>(initialData.expenses);
   const [packageStats, setPackageStats] = useState<PackageStat[]>(initialData.packageStats);
-  const [sessionBookingCount, setSessionBookingCount] = useState<number>(initialData.sessionBookingCount);
+  const [sessionBookings, setSessionBookings] = useState<IncomeBooking[]>(initialData.sessionBookings);
   const [loading, setLoading] = useState(false);
   const [packageFilter, setPackageFilter] = useState<string>("all");
 
@@ -77,6 +78,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
   // Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [diffDialogOpen, setDiffDialogOpen] = useState(false);
 
   // Year options: current year ± 2
   const yearOptions = Array.from({ length: 5 }, (_, i) => now.getFullYear() - 2 + i);
@@ -91,26 +93,29 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
     let expensesQuery = supabase
       .from("expenses")
       .select("id, date, description, amount, category, notes, source, source_id, vendor_id, vendors(id, name)");
-    let sessionCountQuery = viewMode === "month"
-      ? supabase.from("bookings").select("id", { count: "exact", head: true }).in("status", REVENUE_STATUSES)
+    let sessionBookingsQuery = viewMode === "month"
+      ? supabase
+          .from("bookings")
+          .select("id, booking_number, booking_date, transaction_date, created_at, status, total, payment_method, payment_account_name, customers(name), packages(name)")
+          .in("status", REVENUE_STATUSES)
       : null;
 
     if (viewMode === "month") {
       const { startDate, endDate } = getMonthRange(selectedYear, selectedMonth);
       bookingsQuery = bookingsQuery.or(revenuePeriodFilter(startDate, endDate));
       expensesQuery = expensesQuery.gte("date", startDate).lte("date", endDate);
-      sessionCountQuery = sessionCountQuery!.gte("booking_date", startDate).lte("booking_date", endDate);
+      sessionBookingsQuery = sessionBookingsQuery!.gte("booking_date", startDate).lte("booking_date", endDate);
     }
 
-    const [{ data: bookings }, { data: expenseData }, sessionCountResult] = await Promise.all([
+    const [{ data: bookings }, { data: expenseData }, sessionBookingsResult] = await Promise.all([
       bookingsQuery.order("transaction_date"),
       expensesQuery.order("date"),
-      sessionCountQuery ?? Promise.resolve({ count: null }),
+      sessionBookingsQuery ? sessionBookingsQuery.order("booking_date") : Promise.resolve({ data: null }),
     ]);
 
     setIncomeBookings((bookings ?? []) as unknown as IncomeBooking[]);
     setExpenses((expenseData ?? []) as unknown as Expense[]);
-    setSessionBookingCount(sessionCountResult.count ?? 0);
+    setSessionBookings((sessionBookingsResult.data ?? []) as unknown as IncomeBooking[]);
 
     // Package stats from the income bookings
     const statsMap = new Map<string, PackageStat>();
@@ -433,14 +438,22 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
       )}
 
       {/* Selisih jumlah booking vs jumlah income, jika ada */}
-      {!loading && viewMode === "month" && sessionBookingCount !== incomeBookings.length && (
+      {!loading && viewMode === "month" && sessionBookings.length !== incomeBookings.length && (
         <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3">
           <Info className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
-          <p className="text-sm text-blue-800">
-            <strong>{sessionBookingCount} booking</strong> punya sesi foto di {MONTHS[selectedMonth]} {selectedYear}, tapi hanya{" "}
-            <strong>{incomeBookings.length} booking</strong> yang transaksinya (DP/pelunasan) tercatat di bulan yang sama —
-            sisanya dibayar di bulan lain, jadi income-nya tercatat di bulan transaksi tersebut, bukan bulan sesi foto.
-          </p>
+          <div className="flex-1 space-y-1.5">
+            <p className="text-sm text-blue-800">
+              <strong>{sessionBookings.length} booking</strong> punya sesi foto di {MONTHS[selectedMonth]} {selectedYear}, tapi hanya{" "}
+              <strong>{incomeBookings.length} booking</strong> yang transaksinya (DP/pelunasan) tercatat di bulan yang sama —
+              sisanya dibayar di bulan lain, jadi income-nya tercatat di bulan transaksi tersebut, bukan bulan sesi foto.
+            </p>
+            <button
+              onClick={() => setDiffDialogOpen(true)}
+              className="text-xs font-semibold text-blue-700 hover:text-blue-900 underline underline-offset-2"
+            >
+              Lihat Detail Selisih
+            </button>
+          </div>
         </div>
       )}
 
@@ -450,6 +463,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
         totalExpense={totalExpense}
         grossProfit={grossProfit}
         bookingCount={filteredIncomeBookings.length}
+        sessionBookingCount={viewMode === "month" ? sessionBookings.length : null}
         loading={loading}
       />
 
@@ -475,6 +489,15 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
         vendors={vendors}
         onClose={() => setModalOpen(false)}
         onSave={handleSaveExpense}
+      />
+
+      {/* Booking diff drill-down */}
+      <BookingDiffDialog
+        open={diffDialogOpen}
+        onClose={() => setDiffDialogOpen(false)}
+        sessionBookings={sessionBookings}
+        incomeBookings={incomeBookings}
+        monthLabel={`${MONTHS[selectedMonth]} ${selectedYear}`}
       />
     </div>
   );

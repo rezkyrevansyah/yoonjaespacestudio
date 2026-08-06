@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { TrendingUp, TrendingDown, DollarSign, CalendarCheck, Info } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, CalendarCheck, Camera, Info } from "lucide-react";
 import { formatRupiah } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -10,6 +10,7 @@ interface Props {
   totalExpense: number;
   grossProfit: number;
   bookingCount: number;
+  sessionBookingCount: number | null;
   loading: boolean;
 }
 
@@ -83,9 +84,9 @@ function SummaryCard({ label, value, sub, infoText, icon, gradient, textColor, l
   );
 }
 
-export function SummaryCards({ totalIncome, totalExpense, grossProfit, bookingCount, loading }: Props) {
+export function SummaryCards({ totalIncome, totalExpense, grossProfit, bookingCount, sessionBookingCount, loading }: Props) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       <SummaryCard
         label="Total Income"
         value={formatRupiah(totalIncome)}
@@ -124,6 +125,18 @@ export function SummaryCards({ totalIncome, totalExpense, grossProfit, bookingCo
         textColor="text-white"
         loading={loading}
       />
+      {sessionBookingCount !== null && (
+        <SummaryCard
+          label="Jumlah Booking"
+          value={String(sessionBookingCount)}
+          sub="sesi foto bulan ini"
+          infoText="Dihitung berdasarkan tanggal sesi foto (booking_date), bukan tanggal transaksi. Bisa beda dengan jumlah booking di card Income Booking karena ada booking yang sesinya bulan ini tapi dibayar di bulan lain, atau sebaliknya."
+          icon={<Camera className="w-6 h-6 text-purple-600" />}
+          gradient="bg-gradient-to-br from-purple-500 to-purple-600"
+          textColor="text-white"
+          loading={loading}
+        />
+      )}
     </div>
   );
 }
