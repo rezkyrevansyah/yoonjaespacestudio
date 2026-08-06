@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Download, ChevronDown, Package, CalendarRange } from "lucide-react";
+import { Download, ChevronDown, Package, CalendarRange, Info } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { formatRupiah, formatDate } from "@/lib/utils";
 import { REVENUE_STATUSES, getMonthRange, revenuePeriodFilter } from "@/lib/booking-stats";
@@ -48,6 +48,7 @@ interface Props {
     packageStats: PackageStat[];
     month: number;
     year: number;
+    sessionBookingCount: number;
   };
 }
 
@@ -67,6 +68,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
   const [incomeBookings, setIncomeBookings] = useState<IncomeBooking[]>(initialData.incomeBookings);
   const [expenses, setExpenses] = useState<Expense[]>(initialData.expenses);
   const [packageStats, setPackageStats] = useState<PackageStat[]>(initialData.packageStats);
+  const [sessionBookingCount, setSessionBookingCount] = useState<number>(initialData.sessionBookingCount);
   const [loading, setLoading] = useState(false);
   const [packageFilter, setPackageFilter] = useState<string>("all");
 
@@ -89,20 +91,26 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
     let expensesQuery = supabase
       .from("expenses")
       .select("id, date, description, amount, category, notes, source, source_id, vendor_id, vendors(id, name)");
+    let sessionCountQuery = viewMode === "month"
+      ? supabase.from("bookings").select("id", { count: "exact", head: true }).in("status", REVENUE_STATUSES)
+      : null;
 
     if (viewMode === "month") {
       const { startDate, endDate } = getMonthRange(selectedYear, selectedMonth);
       bookingsQuery = bookingsQuery.or(revenuePeriodFilter(startDate, endDate));
       expensesQuery = expensesQuery.gte("date", startDate).lte("date", endDate);
+      sessionCountQuery = sessionCountQuery!.gte("booking_date", startDate).lte("booking_date", endDate);
     }
 
-    const [{ data: bookings }, { data: expenseData }] = await Promise.all([
+    const [{ data: bookings }, { data: expenseData }, sessionCountResult] = await Promise.all([
       bookingsQuery.order("transaction_date"),
       expensesQuery.order("date"),
+      sessionCountQuery ?? Promise.resolve({ count: null }),
     ]);
 
     setIncomeBookings((bookings ?? []) as unknown as IncomeBooking[]);
     setExpenses((expenseData ?? []) as unknown as Expense[]);
+    setSessionBookingCount(sessionCountResult.count ?? 0);
 
     // Package stats from the income bookings
     const statsMap = new Map<string, PackageStat>();
@@ -421,6 +429,18 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
               ))}
             </SelectContent>
           </Select>
+        </div>
+      )}
+
+      {/* Selisih jumlah booking vs jumlah income, jika ada */}
+      {!loading && viewMode === "month" && sessionBookingCount !== incomeBookings.length && (
+        <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3">
+          <Info className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+          <p className="text-sm text-blue-800">
+            <strong>{sessionBookingCount} booking</strong> punya sesi foto di {MONTHS[selectedMonth]} {selectedYear}, tapi hanya{" "}
+            <strong>{incomeBookings.length} booking</strong> yang transaksinya (DP/pelunasan) tercatat di bulan yang sama —
+            sisanya dibayar di bulan lain, jadi income-nya tercatat di bulan transaksi tersebut, bukan bulan sesi foto.
+          </p>
         </div>
       )}
 

@@ -15,7 +15,7 @@ export default async function FinancePage() {
   const year = now.getFullYear();
   const { startDate, endDate } = getMonthRange(year, month);
 
-  const [currentUser, vendors, bookingsResult, expensesResult] = await Promise.all([
+  const [currentUser, vendors, bookingsResult, expensesResult, sessionCountResult] = await Promise.all([
     requireMenu("finance"),
     getCachedActiveVendors(),
     supabase
@@ -30,10 +30,19 @@ export default async function FinancePage() {
       .gte("date", startDate)
       .lte("date", endDate)
       .order("date"),
+    // Booking count by session date (booking_date) — compared against income booking count
+    // (by transaction_date) so the UI can explain why the two numbers differ.
+    supabase
+      .from("bookings")
+      .select("id", { count: "exact", head: true })
+      .gte("booking_date", startDate)
+      .lte("booking_date", endDate)
+      .in("status", REVENUE_STATUSES),
   ]);
 
   const incomeBookings = (bookingsResult.data ?? []) as unknown as IncomeBooking[];
   const expenses = (expensesResult.data ?? []) as unknown as Expense[];
+  const sessionBookingCount = sessionCountResult.count ?? 0;
 
   // Compute package stats server-side
   const statsMap = new Map<string, PackageStat>();
@@ -55,7 +64,7 @@ export default async function FinancePage() {
     <FinanceClient
       currentUser={currentUser}
       vendors={vendors ?? []}
-      initialData={{ incomeBookings, expenses, packageStats, month, year }}
+      initialData={{ incomeBookings, expenses, packageStats, month, year, sessionBookingCount }}
     />
   );
 }

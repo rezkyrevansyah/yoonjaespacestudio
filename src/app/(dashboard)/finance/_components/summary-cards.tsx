@@ -90,7 +90,7 @@ export function SummaryCards({ totalIncome, totalExpense, grossProfit, bookingCo
         label="Total Income"
         value={formatRupiah(totalIncome)}
         sub={`${bookingCount} booking`}
-        infoText="Hanya booking berstatus Paid, Shoot Done, Photos Delivered, Addon Unpaid, atau Closed yang dihitung sebagai income. Booking dengan status Booked/DP Paid (belum lunas) atau Canceled tidak termasuk — karena itu jumlahnya bisa lebih sedikit dari total booking di halaman Bookings."
+        infoText="Dihitung berdasarkan tanggal transaksi (DP/pelunasan), bukan tanggal sesi foto. Booking dengan sesi foto bulan ini tapi dibayar di bulan lain tidak ikut terhitung di sini — begitu juga sebaliknya. Hanya status Paid, Shoot Done, Photos Delivered, Addon Unpaid, atau Closed yang dihitung; Booked/DP Paid (belum lunas) dan Canceled tidak termasuk."
         icon={<TrendingUp className="w-6 h-6 text-green-600" />}
         gradient="bg-gradient-to-br from-green-500 to-green-600"
         textColor="text-white"
