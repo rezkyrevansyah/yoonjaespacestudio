@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Download, ChevronDown, Package, CalendarRange } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { formatRupiah, formatDate } from "@/lib/utils";
-import { REVENUE_STATUSES, getMonthRange } from "@/lib/booking-stats";
+import { REVENUE_STATUSES, getMonthRange, revenuePeriodFilter } from "@/lib/booking-stats";
 import type { CurrentUser, Expense } from "@/lib/types/database";
 import { SummaryCards } from "./summary-cards";
 import { IncomeTable } from "./income-table";
@@ -92,10 +92,7 @@ export function FinanceClient({ currentUser, vendors, initialData }: Props) {
 
     if (viewMode === "month") {
       const { startDate, endDate } = getMonthRange(selectedYear, selectedMonth);
-      bookingsQuery = bookingsQuery.or(
-        `and(transaction_date.gte.${startDate},transaction_date.lte.${endDate}),` +
-        `and(transaction_date.is.null,created_at.gte.${startDate}T00:00:00,created_at.lte.${endDate}T23:59:59)`
-      );
+      bookingsQuery = bookingsQuery.or(revenuePeriodFilter(startDate, endDate));
       expensesQuery = expensesQuery.gte("date", startDate).lte("date", endDate);
     }
 

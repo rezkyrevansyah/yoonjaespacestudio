@@ -22,6 +22,18 @@ export function getMonthRange(year: number, month: number): { startDate: string;
   return { startDate, endDate };
 }
 
+// Canonical "which period does this booking's revenue belong to" rule.
+// Revenue is recognized on transaction_date (when money actually moved), falling
+// back to created_at only for legacy rows where transaction_date was never set.
+// Dashboard, Finance, and Commissions must all use this — do not filter revenue
+// periods by booking_date, which is the photoshoot session date, not payment date.
+export function revenuePeriodFilter(startDate: string, endDate: string): string {
+  return (
+    `and(transaction_date.gte.${startDate},transaction_date.lte.${endDate}),` +
+    `and(transaction_date.is.null,created_at.gte.${startDate}T00:00:00,created_at.lte.${endDate}T23:59:59)`
+  );
+}
+
 function toDateStr(date: Date): string {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");

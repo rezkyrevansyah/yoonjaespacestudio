@@ -1,6 +1,6 @@
 import { requireMenu } from "@/lib/require-menu";
 import { getCachedActiveUsers } from "@/lib/cached-queries";
-import { REVENUE_STATUSES } from "@/lib/booking-stats";
+import { REVENUE_STATUSES, revenuePeriodFilter } from "@/lib/booking-stats";
 import { getPeriodRange } from "@/lib/commission-period";
 import { createClient } from "@/utils/supabase/server";
 import { CommissionsClient, type InitialCommissionData } from "./_components/commissions-client";
@@ -31,10 +31,7 @@ export default async function CommissionsPage() {
     supabase
       .from("bookings")
       .select("id, booking_number, booking_date, transaction_date, created_at, total, staff_id, commission_amount, customers(name), packages(id, name, commission_bonus)")
-      .or(
-        `and(transaction_date.gte.${period.start},transaction_date.lte.${period.end}),` +
-        `and(transaction_date.is.null,created_at.gte.${period.start}T00:00:00,created_at.lte.${period.end}T23:59:59)`
-      )
+      .or(revenuePeriodFilter(period.start, period.end))
       .in("status", REVENUE_STATUSES)
       .order("transaction_date"),
     supabase

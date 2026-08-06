@@ -9,7 +9,7 @@ import { requireMenu } from "@/lib/require-menu";
 import { getCachedStudioInfo } from "@/lib/cached-queries";
 import { formatRupiah, formatTime } from "@/lib/utils";
 import { BOOKING_STATUS_COLOR, BOOKING_STATUS_LABEL } from "@/lib/constants";
-import { REVENUE_STATUSES, VALID_BOOKING_STATUSES, getMonthRange } from "@/lib/booking-stats";
+import { REVENUE_STATUSES, VALID_BOOKING_STATUSES, getMonthRange, revenuePeriodFilter } from "@/lib/booking-stats";
 import type { BookingStatus } from "@/lib/types/database";
 
 export const metadata = { title: "Dashboard — Yoonjaespace" };
@@ -53,7 +53,8 @@ export default async function DashboardPage() {
     { data: printOrderRows },
     studioInfo,
   ] = await Promise.all([
-    // 1. Total bookings this month (count only) — excludes CANCELED to match revenue basis below
+    // 1. Total bookings this month (count only) — scheduling metric, stays on booking_date
+    // (photoshoot session date), not a revenue figure so it must NOT use transaction_date.
     supabase
       .from("bookings")
       .select("id", { count: "exact", head: true })
@@ -62,14 +63,15 @@ export default async function DashboardPage() {
       .in("status", VALID_BOOKING_STATUSES),
 
     // 2. Revenue: fetch all totals then sum in JS (more reliable than aggregate syntax)
+    // Period is by transaction_date (payment date), matching Finance/Commissions — this is
+    // the one card that must agree with Finance, so it must NOT use booking_date.
     supabase
       .from("bookings")
-      .select("total")
-      .gte("booking_date", monthStart)
-      .lte("booking_date", monthEnd)
+      .select("total, transaction_date, created_at")
+      .or(revenuePeriodFilter(monthStart, monthEnd))
       .in("status", REVENUE_STATUSES),
 
-    // 3. Belum lunas count (BOOKED status)
+    // 3. Belum lunas count (BOOKED status) — scheduling metric, stays on booking_date
     supabase
       .from("bookings")
       .select("id", { count: "exact", head: true })

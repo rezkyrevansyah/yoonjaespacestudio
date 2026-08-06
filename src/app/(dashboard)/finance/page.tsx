@@ -1,6 +1,6 @@
 import { requireMenu } from "@/lib/require-menu";
 import { getCachedActiveVendors } from "@/lib/cached-queries";
-import { REVENUE_STATUSES, getMonthRange } from "@/lib/booking-stats";
+import { REVENUE_STATUSES, getMonthRange, revenuePeriodFilter } from "@/lib/booking-stats";
 import { createClient } from "@/utils/supabase/server";
 import { FinanceClient, type IncomeBooking, type PackageStat } from "./_components/finance-client";
 import type { Expense } from "@/lib/types/database";
@@ -21,10 +21,7 @@ export default async function FinancePage() {
     supabase
       .from("bookings")
       .select("id, booking_number, booking_date, transaction_date, created_at, status, total, payment_method, payment_account_name, customers(name), packages(name)")
-      .or(
-        `and(transaction_date.gte.${startDate},transaction_date.lte.${endDate}),` +
-        `and(transaction_date.is.null,created_at.gte.${startDate}T00:00:00,created_at.lte.${endDate}T23:59:59)`
-      )
+      .or(revenuePeriodFilter(startDate, endDate))
       .in("status", REVENUE_STATUSES)
       .order("transaction_date"),
     supabase
